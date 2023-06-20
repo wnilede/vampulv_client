@@ -1,0 +1,29 @@
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter-All",
+            "preLaunchTask": "Flutter-Launch-All",
+            "type": "dart",
+            "request": "attach",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Flutter-Windows",
+            "preLaunchTask": "Flutter-Launch-Windows",
+            "type": "dart",
+            "request": "attach",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "Flutter-Android",
+            "preLaunchTask": "Flutter-Launch-Android",
+            "type": "dart",
+            "request": "attach",
+            "program": "lib/main.dart"
+        }
+    ],
+}
