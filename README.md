@@ -1,3 +1,3 @@
-# vampulv
+# Vampulv
 
-A new Flutter project.
+Game with secret roles.
