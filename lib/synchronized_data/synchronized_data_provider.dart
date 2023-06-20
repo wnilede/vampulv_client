@@ -55,7 +55,7 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
     type: NetworkMessageType.addDevice,
     message: json.encode(const ConnectedDevice(controls: null)),
   ));
-  messageSender.channel?.stream.listen(
+  messageSender.socket.listen(
     (data) {
       print("Data '$data' recieved on websocket.");
       // Convert the messages recieved to NetworkMessages and apply them.

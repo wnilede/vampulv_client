@@ -1,12 +1,17 @@
+import 'dart:html';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/message_sender.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MessageSenderNotifier extends StateNotifier<MessageSender> {
-  MessageSenderNotifier(WebSocketChannel? channel) : super(MessageSender(channel: channel));
+  MessageSenderNotifier(WebSocket? socket) : super(MessageSender(socket: socket));
 
-  set channel(WebSocketChannel channel) {
-    state = state.copyWith(channel: channel);
+  set socket(WebSocket socket) {
+    state = state.copyWith(socket: socket);
+  }
+
+  void listen() {
+    state.socket.
   }
 }
 
@@ -14,11 +19,9 @@ final messageSenderProvider = StateNotifierProvider<MessageSenderNotifier, Messa
   const port = 6353;
 
   print('Connecting as client');
-  final channel = WebSocketChannel.connect(
-    Uri.parse('wss://localhost:$port'),
-  );
-  ref.onDispose(channel.sink.close);
+  final socket = WebSocket('ws://localhost:$port');
+  ref.onDispose(socket.close);
   print('Connected successfully');
 
-  return MessageSenderNotifier(channel);
+  return MessageSenderNotifier(socket);
 });
