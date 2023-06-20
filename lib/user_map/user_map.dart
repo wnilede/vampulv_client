@@ -2,10 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vampulv/message_sender_provider.dart';
 import 'package:vampulv/player.dart';
-import 'package:vampulv/synchronized_data.dart';
-
-import '../message_sender.dart';
+import 'package:vampulv/synchronized_data/synchronized_data_provider.dart';
 
 class UserMap extends ConsumerWidget {
   final Widget Function(Player player)? playerAppearance;
@@ -22,7 +21,7 @@ class UserMap extends ConsumerWidget {
         children: [
           const Text('Lobby'),
           Text(players.map((e) => e.toString()).join()),
-          Text(ref.watch(messageSenderProvider).socket.toString()),
+          Text(ref.watch(messageSenderProvider).toString()),
           Stack(
             children: players
                 .map((player) => Positioned(

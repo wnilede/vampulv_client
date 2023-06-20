@@ -21,7 +21,7 @@ Game _$GameFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Game {
   List<Player> get users => throw _privateConstructorUsedError;
-  List<SynchronizedDataChange> get events => throw _privateConstructorUsedError;
+  List<NetworkMessage> get events => throw _privateConstructorUsedError;
   bool get started => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,8 +34,7 @@ abstract class $GameCopyWith<$Res> {
   factory $GameCopyWith(Game value, $Res Function(Game) then) =
       _$GameCopyWithImpl<$Res, Game>;
   @useResult
-  $Res call(
-      {List<Player> users, List<SynchronizedDataChange> events, bool started});
+  $Res call({List<Player> users, List<NetworkMessage> events, bool started});
 }
 
 /// @nodoc
@@ -63,7 +62,7 @@ class _$GameCopyWithImpl<$Res, $Val extends Game>
       events: null == events
           ? _value.events
           : events // ignore: cast_nullable_to_non_nullable
-              as List<SynchronizedDataChange>,
+              as List<NetworkMessage>,
       started: null == started
           ? _value.started
           : started // ignore: cast_nullable_to_non_nullable
@@ -78,8 +77,7 @@ abstract class _$$_GameCopyWith<$Res> implements $GameCopyWith<$Res> {
       __$$_GameCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<Player> users, List<SynchronizedDataChange> events, bool started});
+  $Res call({List<Player> users, List<NetworkMessage> events, bool started});
 }
 
 /// @nodoc
@@ -103,7 +101,7 @@ class __$$_GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res, _$_Game>
       events: null == events
           ? _value._events
           : events // ignore: cast_nullable_to_non_nullable
-              as List<SynchronizedDataChange>,
+              as List<NetworkMessage>,
       started: null == started
           ? _value.started
           : started // ignore: cast_nullable_to_non_nullable
@@ -117,7 +115,7 @@ class __$$_GameCopyWithImpl<$Res> extends _$GameCopyWithImpl<$Res, _$_Game>
 class _$_Game extends _Game {
   const _$_Game(
       {required final List<Player> users,
-      required final List<SynchronizedDataChange> events,
+      required final List<NetworkMessage> events,
       required this.started})
       : _users = users,
         _events = events,
@@ -133,9 +131,9 @@ class _$_Game extends _Game {
     return EqualUnmodifiableListView(_users);
   }
 
-  final List<SynchronizedDataChange> _events;
+  final List<NetworkMessage> _events;
   @override
-  List<SynchronizedDataChange> get events {
+  List<NetworkMessage> get events {
     if (_events is EqualUnmodifiableListView) return _events;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_events);
@@ -184,7 +182,7 @@ class _$_Game extends _Game {
 abstract class _Game extends Game {
   const factory _Game(
       {required final List<Player> users,
-      required final List<SynchronizedDataChange> events,
+      required final List<NetworkMessage> events,
       required final bool started}) = _$_Game;
   const _Game._() : super._();
 
@@ -193,7 +191,7 @@ abstract class _Game extends Game {
   @override
   List<Player> get users;
   @override
-  List<SynchronizedDataChange> get events;
+  List<NetworkMessage> get events;
   @override
   bool get started;
   @override

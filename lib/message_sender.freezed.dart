@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MessageSender {
-  Socket? get socket => throw _privateConstructorUsedError;
+  WebSocketChannel? get channel => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MessageSenderCopyWith<MessageSender> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $MessageSenderCopyWith<$Res> {
           MessageSender value, $Res Function(MessageSender) then) =
       _$MessageSenderCopyWithImpl<$Res, MessageSender>;
   @useResult
-  $Res call({Socket? socket});
+  $Res call({WebSocketChannel? channel});
 }
 
 /// @nodoc
@@ -45,13 +45,13 @@ class _$MessageSenderCopyWithImpl<$Res, $Val extends MessageSender>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? socket = freezed,
+    Object? channel = freezed,
   }) {
     return _then(_value.copyWith(
-      socket: freezed == socket
-          ? _value.socket
-          : socket // ignore: cast_nullable_to_non_nullable
-              as Socket?,
+      channel: freezed == channel
+          ? _value.channel
+          : channel // ignore: cast_nullable_to_non_nullable
+              as WebSocketChannel?,
     ) as $Val);
   }
 }
@@ -64,7 +64,7 @@ abstract class _$$_MessageSenderCopyWith<$Res>
       __$$_MessageSenderCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Socket? socket});
+  $Res call({WebSocketChannel? channel});
 }
 
 /// @nodoc
@@ -78,13 +78,13 @@ class __$$_MessageSenderCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? socket = freezed,
+    Object? channel = freezed,
   }) {
     return _then(_$_MessageSender(
-      socket: freezed == socket
-          ? _value.socket
-          : socket // ignore: cast_nullable_to_non_nullable
-              as Socket?,
+      channel: freezed == channel
+          ? _value.channel
+          : channel // ignore: cast_nullable_to_non_nullable
+              as WebSocketChannel?,
     ));
   }
 }
@@ -92,14 +92,14 @@ class __$$_MessageSenderCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MessageSender extends _MessageSender {
-  _$_MessageSender({this.socket}) : super._();
+  _$_MessageSender({this.channel}) : super._();
 
   @override
-  final Socket? socket;
+  final WebSocketChannel? channel;
 
   @override
   String toString() {
-    return 'MessageSender(socket: $socket)';
+    return 'MessageSender(channel: $channel)';
   }
 
   @override
@@ -107,11 +107,11 @@ class _$_MessageSender extends _MessageSender {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MessageSender &&
-            (identical(other.socket, socket) || other.socket == socket));
+            (identical(other.channel, channel) || other.channel == channel));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, socket);
+  int get hashCode => Object.hash(runtimeType, channel);
 
   @JsonKey(ignore: true)
   @override
@@ -121,11 +121,11 @@ class _$_MessageSender extends _MessageSender {
 }
 
 abstract class _MessageSender extends MessageSender {
-  factory _MessageSender({final Socket? socket}) = _$_MessageSender;
+  factory _MessageSender({final WebSocketChannel? channel}) = _$_MessageSender;
   _MessageSender._() : super._();
 
   @override
-  Socket? get socket;
+  WebSocketChannel? get channel;
   @override
   @JsonKey(ignore: true)
   _$$_MessageSenderCopyWith<_$_MessageSender> get copyWith =>

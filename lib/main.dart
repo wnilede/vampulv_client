@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/synchronized_data.dart';
+import 'package:vampulv/synchronized_data/synchronized_data_provider.dart';
 
 import 'lobby.dart';
 

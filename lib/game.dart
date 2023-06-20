@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/player.dart';
-import 'package:vampulv/synchronized_data_change.dart';
+import 'package:vampulv/synchronized_data/network_message.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
@@ -10,13 +10,13 @@ part 'game.g.dart';
 class Game with _$Game {
   const factory Game({
     required List<Player> users,
-    required List<SynchronizedDataChange> events,
+    required List<NetworkMessage> events,
     required bool started,
   }) = _Game;
   factory Game.fromJson(Map<String, Object?> json) => _$GameFromJson(json);
   const Game._();
 
-  Game applyChange(SynchronizedDataChange change) {
+  Game applyChange(NetworkMessage change) {
     return copyWith(events: [
       ...events,
       change,

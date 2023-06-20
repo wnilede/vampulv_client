@@ -11,8 +11,7 @@ _$_Game _$$_GameFromJson(Map<String, dynamic> json) => _$_Game(
           .map((e) => Player.fromJson(e as Map<String, dynamic>))
           .toList(),
       events: (json['events'] as List<dynamic>)
-          .map(
-              (e) => SynchronizedDataChange.fromJson(e as Map<String, dynamic>))
+          .map((e) => NetworkMessage.fromJson(e as Map<String, dynamic>))
           .toList(),
       started: json['started'] as bool,
     );

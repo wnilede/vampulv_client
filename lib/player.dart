@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'player.freezed.dart';
@@ -13,13 +12,3 @@ class Player with _$Player {
 
   factory Player.fromJson(Map<String, Object?> json) => _$PlayerFromJson(json);
 }
-
-class PlayerNotifier extends StateNotifier<Player> {
-  PlayerNotifier()
-      : super(const Player(
-          name: '',
-          position: -1,
-        ));
-}
-
-final currentPlayerProvider = StateNotifierProvider<PlayerNotifier, Player>((ref) => PlayerNotifier());
