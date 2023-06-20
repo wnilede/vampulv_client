@@ -15,7 +15,7 @@ final messageSenderProvider = StateNotifierProvider<MessageSenderNotifier, Messa
 
   print('Connecting as client');
   final channel = WebSocketChannel.connect(
-    Uri.parse('wss://localhost:$port'),
+    Uri.parse('ws://192.168.8.122:$port'),
   );
   ref.onDispose(channel.sink.close);
   print('Connected successfully');
