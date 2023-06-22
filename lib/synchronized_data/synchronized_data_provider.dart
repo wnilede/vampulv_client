@@ -37,6 +37,8 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
         break;
       case NetworkMessageType.changeDeviceControls:
         break;
+      case NetworkMessageType.addPlayer:
+        break;
       default:
         throw ArgumentError.value(event.type);
     }
@@ -47,6 +49,7 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
   SynchronizedDataNotifier notifier = SynchronizedDataNotifier();
 
   final messageSender = ref.watch(messageSenderProvider);
+  messageSender.sendString("Change room:default");
   messageSender.sendChange(NetworkMessage(
     type: NetworkMessageType.addPlayer,
     message: json.encode(PlayerConfiguration(name: 'unnamed', position: 0)),
@@ -55,6 +58,6 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
     type: NetworkMessageType.addDevice,
     message: json.encode(const ConnectedDevice(controls: null)),
   ));
-  messageSender.subscribe(notifier.applyChange);
+  ref.watch(messageSenderProvider.notifier).subscribe(notifier.applyChange);
   return notifier;
 });
