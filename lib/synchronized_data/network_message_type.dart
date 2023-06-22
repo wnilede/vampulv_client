@@ -1,5 +1,6 @@
 enum NetworkMessageType {
-  addPlayer(isGameChange: true),
+  addPlayer(isGameChange: false),
+  movePlayer(isGameChange: false),
   addDevice(isGameChange: false),
   changeDeviceControls(isGameChange: false);
 

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/connected_device.dart';
-import 'package:vampulv/game.dart';
+import 'package:vampulv/game_configuration.dart';
+import 'package:vampulv/synchronized_data/network_message.dart';
 
 part 'synchronized_data.freezed.dart';
 part 'synchronized_data.g.dart';
@@ -9,8 +10,10 @@ part 'synchronized_data.g.dart';
 @freezed
 class SynchronizedData with _$SynchronizedData {
   const factory SynchronizedData({
-    required List<ConnectedDevice> connectedDevices,
-    required Game game,
+    @Default([]) List<ConnectedDevice> connectedDevices,
+    required GameConfiguration gameConfiguration,
+    @Default([]) List<NetworkMessage> gameEvents,
+    @Default(false) bool gameHasBegun,
   }) = _SynchronizedData;
 
   factory SynchronizedData.fromJson(Map<String, Object?> json) => _$SynchronizedDataFromJson(json);
