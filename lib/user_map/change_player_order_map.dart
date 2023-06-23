@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/message_sender_provider.dart';
@@ -16,34 +18,47 @@ class ChangePlayerOrderMap extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerConfigurations = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration.players));
-    final playerWidgets = playerConfigurations
-        .map((player) => Draggable(
-              feedback: Text(player.name),
-              data: player,
-              child: Center(child: Text(player.name)),
+    final gameConfigurations = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
+    final playerWidgets = gameConfigurations.players
+        .asMap()
+        .entries
+        .map((indexPlayerPair) => Draggable(
+              feedback: Text(indexPlayerPair.value.name),
+              data: indexPlayerPair.key,
+              child: Center(child: Text(indexPlayerPair.value.name)),
             ))
         .toList();
-    final betweenPlayers = playerConfigurations
+    final betweenPlayers = gameConfigurations.players
         .asMap()
         .entries
         .map((final indexPlayerPair) => DragTarget(
-              onAccept: (PlayerConfiguration data) {
-                ref.read(messageSenderProvider).sendChange(NetworkMessage(
-                      type: NetworkMessageType.movePlayer,
-                      message: ("{oldPosition:${data.position},newPosition:${indexPlayerPair.key}}"),
+              onAccept: (int data) {
+                // Some of these would break the following algorithm. Unneccessary to send message if nothing changes anyway.
+                if (data == indexPlayerPair.key || data == indexPlayerPair.key - 1 || data == gameConfigurations.players.length - 1 && indexPlayerPair.key == 0) return;
+                final List<PlayerConfiguration> newPlayerOrder = [];
+                for (int i = 1; i < gameConfigurations.players.length; i++) {
+                  newPlayerOrder.add(gameConfigurations.players[(i + data) % gameConfigurations.players.length]);
+                  if (i == indexPlayerPair.key) {
+                    newPlayerOrder.add(gameConfigurations.players[data]);
+                  }
+                }
+                ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                      type: NetworkMessageType.setGameConfiguration,
+                      body: gameConfigurations.copyWith(players: newPlayerOrder),
                     ));
               },
               builder: (BuildContext context, List<PlayerConfiguration?> candidateData, List rejectedData) {
-                return const Expanded(child: Placeholder());
+                return const Placeholder();
               },
             ))
         .toList();
-    List<Widget> children = [];
-    for (var i = 0; i < playerWidgets.length; i++) {
-      children.add(betweenPlayers[i]);
-      children.add(playerWidgets[i]);
-    }
-    return CircularLayout(children: children);
+    return gameConfigurations.players.isEmpty
+        ? const Text('There are no players yet')
+        : Stack(
+            children: [
+              CircularLayout(children: playerWidgets),
+              CircularLayout(rotationOffset: math.pi / gameConfigurations.players.length, children: betweenPlayers),
+            ],
+          );
   }
 }

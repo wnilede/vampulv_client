@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/connected_device.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/message_sender_provider.dart';
-import 'package:vampulv/player_configuration.dart';
 import 'package:vampulv/synchronized_data/network_message.dart';
 import 'package:vampulv/synchronized_data/network_message_type.dart';
 import 'package:vampulv/synchronized_data/synchronized_data.dart';
@@ -29,15 +27,14 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
       return;
     }
     switch (event.type) {
-      case NetworkMessageType.addDevice:
+      case NetworkMessageType.setDevices:
+        List<int> identifiers = event.message.split(';').map((identifier) => int.parse(identifier)).toList();
         state = state.copyWith(connectedDevices: [
-          ...state.connectedDevices,
-          ConnectedDevice.fromJson(json.decode(event.message)),
+          ...state.connectedDevices.where((device) => identifiers.contains(device.identifier)),
+          ...identifiers.where((identifier) => state.connectedDevices.any((device) => device.identifier == identifier)).map((identifier) => ConnectedDevice(identifier: identifier)),
         ]);
         break;
       case NetworkMessageType.changeDeviceControls:
-        break;
-      case NetworkMessageType.addPlayer:
         break;
       default:
         throw ArgumentError.value(event.type);
@@ -50,14 +47,6 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
 
   final messageSender = ref.watch(messageSenderProvider);
   messageSender.sendString("Change room:default");
-  messageSender.sendChange(NetworkMessage(
-    type: NetworkMessageType.addPlayer,
-    message: json.encode(PlayerConfiguration(name: 'unnamed', position: 0)),
-  ));
-  messageSender.sendChange(NetworkMessage(
-    type: NetworkMessageType.addDevice,
-    message: json.encode(const ConnectedDevice(controls: null)),
-  ));
   ref.watch(messageSenderProvider.notifier).subscribe(notifier.applyChange);
   return notifier;
 });

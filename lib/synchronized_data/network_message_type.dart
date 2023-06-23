@@ -1,11 +1,10 @@
 enum NetworkMessageType {
-  addPlayer(isGameChange: false),
-  movePlayer(isGameChange: false),
-  addDevice(isGameChange: false),
+  setDevices(isGameChange: false), // This is unique in that it is sent by the server.
+  setGameConfiguration(isGameChange: false),
   changeDeviceControls(isGameChange: false);
 
   // ignore: unused_element
-  const NetworkMessageType({required this.isGameChange, this.isSynchronizedDataChange = true});
+  const NetworkMessageType({this.isGameChange = true, this.isSynchronizedDataChange = true});
 
   final bool isSynchronizedDataChange;
   final bool isGameChange;

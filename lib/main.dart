@@ -22,12 +22,8 @@ class MainApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       home: Scaffold(
-        body: Column(
-          children: [
-            if (!ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))) const Text('Not connected'),
-            ref.watch(synchronizedDataProvider).gameHasBegun ? const Placeholder() : const Lobby(),
-          ],
-        ),
+        appBar: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected)) ? null : AppBar(title: const Text('Not connected')),
+        body: ref.watch(synchronizedDataProvider).gameHasBegun ? const Placeholder() : const Lobby(),
       ),
     );
   }

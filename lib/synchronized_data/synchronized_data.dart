@@ -10,10 +10,10 @@ part 'synchronized_data.g.dart';
 @freezed
 class SynchronizedData with _$SynchronizedData {
   const factory SynchronizedData({
-    @Default([]) List<ConnectedDevice> connectedDevices,
-    required GameConfiguration gameConfiguration,
-    @Default([]) List<NetworkMessage> gameEvents,
-    @Default(false) bool gameHasBegun,
+    @Default([]) List<ConnectedDevice> connectedDevices, // A list of connected devices identifiers are sent by the server whenever anyone connects or disconnect, which is how devices are added and removed. Entire devices are sent from clients to change existing devices.
+    required GameConfiguration gameConfiguration, // Are sent as a whole by clients.
+    @Default([]) List<NetworkMessage> gameEvents, // Are sent one event at a time.
+    @Default(false) bool gameHasBegun, // Are only sent as a part of a whole SynchronizedData object.
   }) = _SynchronizedData;
 
   factory SynchronizedData.fromJson(Map<String, Object?> json) => _$SynchronizedDataFromJson(json);
