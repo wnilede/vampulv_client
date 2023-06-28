@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/player_configuration.dart';
-import 'package:vampulv/role.dart';
+import 'package:vampulv/roles/role_type.dart';
 
 part 'game_configuration.freezed.dart';
 part 'game_configuration.g.dart';
@@ -14,5 +14,6 @@ class GameConfiguration with _$GameConfiguration {
     @Default(2) int maxLives,
   }) = _GameConfiguration;
 
-  factory GameConfiguration.fromJson(Map<String, dynamic> json) => _$GameConfigurationFromJson(json);
+  factory GameConfiguration.fromJson(Map<String, dynamic> json) =>
+      _$GameConfigurationFromJson(json);
 }

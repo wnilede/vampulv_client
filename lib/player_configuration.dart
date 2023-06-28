@@ -6,6 +6,7 @@ part 'player_configuration.g.dart';
 @freezed
 class PlayerConfiguration with _$PlayerConfiguration {
   factory PlayerConfiguration({
+    required int id,
     required String name,
     required int position,
   }) = _PlayerConfiguration;
