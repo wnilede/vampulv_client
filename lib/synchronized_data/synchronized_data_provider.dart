@@ -36,6 +36,9 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
         break;
       case NetworkMessageType.changeDeviceControls:
         break;
+      case NetworkMessageType.setSynchronizedData:
+        state = SynchronizedData.fromJson(event.body);
+        break;
       default:
         throw ArgumentError.value(event.type);
     }

@@ -3,12 +3,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vampulv/connected_device_provider.dart';
 import 'package:vampulv/message_sender.dart';
 import 'package:vampulv/synchronized_data/network_message.dart';
+import 'package:vampulv/synchronized_data/network_message_type.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MessageSenderNotifier extends StateNotifier<MessageSender> {
-  MessageSenderNotifier({WebSocketSink? sink, Stream<dynamic>? stream}) : super(MessageSender(sink: sink, stream: stream));
+  final Ref ref;
+
+  MessageSenderNotifier(this.ref, {WebSocketSink? sink, Stream<dynamic>? stream}) : super(MessageSender(sink: sink, stream: stream));
 
   void _setSinkAndStream(WebSocketSink? sink, Stream<dynamic>? stream) {
     state = state.copyWith(sink: sink, stream: stream);
@@ -30,6 +34,11 @@ class MessageSenderNotifier extends StateNotifier<MessageSender> {
           return;
         }
         print("Data '$data' recieved and parsed sucessfully.");
+        if (parsedData.type == NetworkMessageType.setIdentifier) {
+          // This is ugly and the logic should not be here, but the one listening is SynchronizedData which should have this logic even less. Should be changed.
+          ref.read(connectedDeviceIdentifierProvider.notifier).state = int.parse(parsedData.message);
+          return;
+        }
         onData(parsedData);
       },
       onError: (Object error, StackTrace stackTrace) {
@@ -51,7 +60,7 @@ class MessageSenderNotifier extends StateNotifier<MessageSender> {
 
 final messageSenderProvider = StateNotifierProvider<MessageSenderNotifier, MessageSender>((ref) {
   const port = 6353;
-  final notifier = MessageSenderNotifier();
+  final notifier = MessageSenderNotifier(ref);
 
   print('Connecting as client');
   final channel = WebSocketChannel.connect(
