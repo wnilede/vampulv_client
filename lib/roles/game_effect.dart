@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game.dart';
 
-part 'gameeffect.freezed.dart';
+part 'game_effect.freezed.dart';
 
 @freezed
 class GameEffect with _$GameEffect {

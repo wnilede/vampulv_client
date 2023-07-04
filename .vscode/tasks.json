@@ -17,6 +17,18 @@
             "label": "Flutter-Launch-Android",
             "type": "shell",
             "command": "flutter run -d 'ce0716075b9e140e05'"
+        },
+        {
+            "label": "watch build_runner automatically run on startup",
+            "type": "shell",
+            "command": "flutter pub run build_runner watch",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         }
     ]
 }
