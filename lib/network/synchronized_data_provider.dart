@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/connected_device.dart';
+import 'package:vampulv/network/connected_device.dart';
 import 'package:vampulv/game_configuration.dart';
-import 'package:vampulv/message_sender_provider.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
-import 'package:vampulv/synchronized_data/network_message_type.dart';
-import 'package:vampulv/synchronized_data/synchronized_data.dart';
+import 'package:vampulv/network/message_sender_provider.dart';
+import 'package:vampulv/network/network_message.dart';
+import 'package:vampulv/network/network_message_type.dart';
+import 'package:vampulv/network/synchronized_data.dart';
 
 class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
   SynchronizedDataNotifier({List<NetworkMessage> gameEvents = const []})

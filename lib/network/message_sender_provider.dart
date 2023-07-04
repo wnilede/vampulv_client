@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/connected_device_provider.dart';
-import 'package:vampulv/message_sender.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
-import 'package:vampulv/synchronized_data/network_message_type.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
+import 'package:vampulv/network/message_sender.dart';
+import 'package:vampulv/network/network_message.dart';
+import 'package:vampulv/network/network_message_type.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MessageSenderNotifier extends StateNotifier<MessageSender> {
@@ -64,7 +64,7 @@ final messageSenderProvider = StateNotifierProvider<MessageSenderNotifier, Messa
 
   print('Connecting as client');
   final channel = WebSocketChannel.connect(
-    Uri.parse('ws://192.168.8.108:$port'),
+    Uri.parse('ws://192.168.8.111:$port'),
   );
   channel.ready.asStream().handleError((error, stackTrace) {
     if (error is TimeoutException || error is SocketException) {

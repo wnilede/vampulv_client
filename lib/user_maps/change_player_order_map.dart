@@ -2,12 +2,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/message_sender_provider.dart';
+import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/player_configuration.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
-import 'package:vampulv/synchronized_data/network_message_type.dart';
-import 'package:vampulv/synchronized_data/synchronized_data_provider.dart';
+import 'package:vampulv/network/network_message.dart';
+import 'package:vampulv/network/network_message_type.dart';
+import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 
 class ChangePlayerOrderMap extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/player.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
+import 'package:vampulv/network/network_message.dart';
 import 'package:xrandom/xrandom.dart';
 
 part 'game.freezed.dart';

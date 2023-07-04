@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/message_sender_provider.dart';
+import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/rule.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
-import 'package:vampulv/synchronized_data/network_message_type.dart';
+import 'package:vampulv/network/network_message.dart';
+import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/user_maps/user_map.dart';
 
 class Vampulv extends Role {

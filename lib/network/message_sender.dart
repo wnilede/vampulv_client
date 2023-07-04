@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/synchronized_data/network_message.dart';
+import 'package:vampulv/network/network_message.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'message_sender.freezed.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/connected_device.dart';
-import 'package:vampulv/synchronized_data/synchronized_data_provider.dart';
+import 'package:vampulv/network/connected_device.dart';
+import 'package:vampulv/network/synchronized_data_provider.dart';
 
 // Provides the identifier of the connected device that we are.
 final StateProvider<int?> connectedDeviceIdentifierProvider = StateProvider<int?>((ref) => null);

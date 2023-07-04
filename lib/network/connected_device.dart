@@ -9,5 +9,6 @@ class ConnectedDevice with _$ConnectedDevice {
     int? controlledPlayerId,
     required int identifier,
   }) = _ConnectedDevice;
+
   factory ConnectedDevice.fromJson(Map<String, Object?> json) => _$ConnectedDeviceFromJson(json);
 }
