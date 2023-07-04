@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/user_map/change_player_order_map.dart';
+import 'package:vampulv/user_maps/change_player_order_map.dart';
 
 class Lobby extends StatelessWidget {
   const Lobby({super.key});

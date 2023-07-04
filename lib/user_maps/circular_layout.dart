@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 
 class CircularLayout extends StatelessWidget {
   final List<Widget> children;
+  final Widget? inside;
   final double rotationOffset;
 
-  const CircularLayout({this.rotationOffset = 0, required this.children, super.key}) : assert(children.length > 0);
+  /// If true, the children will be sized as though the circles is inside them rather than they inside circles. Use this when you can guarantee that everything visible in the children fit inside the largest circle fitting inside theire constraints.
+  final bool largerChildren;
+
+  const CircularLayout({this.rotationOffset = 0, this.largerChildren = false, this.inside, required this.children, super.key})
+      : assert(children.length > 0),
+        assert(inside == null || children.length >= 3);
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +33,25 @@ class CircularLayout extends StatelessWidget {
       // The side lengths of the children, assuming they are squares. Should be relatively easy to add calculations to acount for all rectangular children. Perhaps we could allow a list of width:height ratios to be passed in together with the children?
       final childSize = childRadius * math.sqrt2;
 
+      // The side lengths of the child inside the circle.
+      final centerChildSize = (radius - 2 * childRadius) * math.sqrt2;
+
       return Stack(
+        alignment: AlignmentDirectional.center,
         children: [
           // This is weird, but I could not figure out how to set the size of the stack in any other way.
           SizedBox(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
           ),
+          if (inside != null)
+            Center(
+              child: SizedBox(
+                width: centerChildSize,
+                height: centerChildSize,
+                child: inside,
+              ),
+            ),
           ...children
               .asMap()
               .entries

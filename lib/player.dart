@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/player_configuration.dart';
-import 'package:vampulv/roles/role_type.dart';
+import 'package:vampulv/roles/role.dart';
 
 part 'player.freezed.dart';
 
