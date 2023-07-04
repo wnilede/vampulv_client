@@ -8,7 +8,7 @@ import 'package:vampulv/player_configuration.dart';
 import 'package:vampulv/synchronized_data/network_message.dart';
 import 'package:vampulv/synchronized_data/network_message_type.dart';
 import 'package:vampulv/synchronized_data/synchronized_data_provider.dart';
-import 'package:vampulv/user_map/circular_layout.dart';
+import 'package:vampulv/user_maps/circular_layout.dart';
 
 class ChangePlayerOrderMap extends ConsumerWidget {
   final Widget Function(Player player)? playerAppearance;

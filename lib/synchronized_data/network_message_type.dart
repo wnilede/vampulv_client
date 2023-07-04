@@ -3,7 +3,8 @@ enum NetworkMessageType {
   setIdentifier(isGameChange: false),
   setGameConfiguration(isGameChange: false),
   changeDeviceControls(isGameChange: false),
-  setSynchronizedData(isGameChange: false);
+  setSynchronizedData(isGameChange: false),
+  inputToGame(isGameChange: true);
 
   // ignore: unused_element
   const NetworkMessageType({this.isGameChange = true, this.isSynchronizedDataChange = true});
