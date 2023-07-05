@@ -1,9 +1,10 @@
 import 'dart:math' as math;
 
+import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/player.dart';
 import 'package:vampulv/player_configuration.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
@@ -11,54 +12,59 @@ import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 
 class ChangePlayerOrderMap extends ConsumerWidget {
-  final Widget Function(Player player)? playerAppearance;
-  final Widget Function(Player playerLeft, Player playerRight)? betweenPlayers;
+  final int? selectedPlayerId;
+  final void Function(PlayerConfiguration player)? onTap;
 
-  const ChangePlayerOrderMap({this.playerAppearance, this.betweenPlayers, super.key});
+  const ChangePlayerOrderMap({this.selectedPlayerId, this.onTap, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameConfigurations = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
-    final playerWidgets = gameConfigurations.players
+    final gameConfiguration = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
+    if (gameConfiguration.players.isEmpty) {
+      return const Center(child: Text('There are no players yet'));
+    }
+    final playerWidgets = gameConfiguration.players
         .asMap()
         .entries
-        .map((indexPlayerPair) => Draggable(
-              feedback: Text(indexPlayerPair.value.name),
-              data: indexPlayerPair.key,
-              child: Center(child: Text(indexPlayerPair.value.name)),
+        .map((indexPlayerPair) => GestureDetector(
+              key: ValueKey(indexPlayerPair.value.id),
+              onTap: () => onTap?.call(gameConfiguration.players[indexPlayerPair.key]),
+              child: LongPressDraggable(
+                feedback: Text(indexPlayerPair.value.name),
+                data: indexPlayerPair.key,
+                child: FittedBox(child: Text(indexPlayerPair.value.name, style: TextStyle(color: indexPlayerPair.value.id == selectedPlayerId ? Colors.blue : Colors.black))),
+              ),
             ))
         .toList();
-    final betweenPlayers = gameConfigurations.players
+    final betweenPlayers = gameConfiguration.players
         .asMap()
         .entries
         .map((final indexPlayerPair) => DragTarget(
-              onAccept: (int data) {
+              onAccept: (int indexFrom) {
+                final int indexTo = indexPlayerPair.key;
                 // Some of these would break the following algorithm. Unneccessary to send message if nothing changes anyway.
-                if (data == indexPlayerPair.key || data == indexPlayerPair.key - 1 || data == gameConfigurations.players.length - 1 && indexPlayerPair.key == 0) return;
-                final List<PlayerConfiguration> newPlayerOrder = [];
-                for (int i = 1; i < gameConfigurations.players.length; i++) {
-                  newPlayerOrder.add(gameConfigurations.players[(i + data) % gameConfigurations.players.length]);
-                  if (i == indexPlayerPair.key) {
-                    newPlayerOrder.add(gameConfigurations.players[data]);
-                  }
-                }
+                if (indexFrom == indexTo || indexFrom == indexTo + 1 || indexFrom == 0 && indexTo == gameConfiguration.players.length - 1) return;
+                final List<PlayerConfiguration> newPlayerOrder = [
+                  ...gameConfiguration.players,
+                ];
+                newPlayerOrder.insert(indexTo + (indexFrom > indexTo ? 1 : 0), newPlayerOrder.removeAt(indexFrom));
                 ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
                       type: NetworkMessageType.setGameConfiguration,
-                      body: gameConfigurations.copyWith(players: newPlayerOrder),
+                      body: gameConfiguration.copyWith(players: newPlayerOrder),
                     ));
               },
-              builder: (BuildContext context, List<PlayerConfiguration?> candidateData, List rejectedData) {
-                return const Placeholder();
+              builder: (BuildContext context, List<int?> candidateData, List rejectedData) {
+                return const SizedBox();
               },
             ))
         .toList();
-    return gameConfigurations.players.isEmpty
-        ? const Text('There are no players yet')
-        : Stack(
-            children: [
-              CircularLayout(children: playerWidgets),
-              CircularLayout(rotationOffset: math.pi / gameConfigurations.players.length, children: betweenPlayers),
-            ],
-          );
+    final controlledPlayerId = ref.watch(connectedDeviceProvider)?.controlledPlayerId ?? gameConfiguration.players.map((player) => player.id).min();
+    final rotationCurrent = -gameConfiguration.players.indexWhere((player) => player.id == controlledPlayerId) * 2 * math.pi / gameConfiguration.players.length;
+    return Stack(
+      children: [
+        CircularLayout(rotationOffset: rotationCurrent, children: playerWidgets),
+        CircularLayout(rotationOffset: rotationCurrent + math.pi / gameConfiguration.players.length, children: betweenPlayers),
+      ],
+    );
   }
 }

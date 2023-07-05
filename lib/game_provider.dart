@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game.dart';
 import 'package:vampulv/game_configuration.dart';
-import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:xrandom/xrandom.dart';
 
 class GameNotifier extends StateNotifier<Game?> {
   GameNotifier() : super(null);
@@ -14,16 +12,7 @@ class GameNotifier extends StateNotifier<Game?> {
   }
 
   void recreateGame(GameConfiguration gameConfiguration, List<NetworkMessage> gameEvents) {
-    state = Game(
-      randomGenerator: Xorshift32(gameConfiguration.randomSeed),
-      players: gameConfiguration.players
-          .map((playerConfiguration) => Player(
-                configuration: playerConfiguration,
-                lives: gameConfiguration.maxLives,
-                roles: [],
-              ))
-          .toList(),
-    );
+    state = Game.fromEvents(gameConfiguration, gameEvents);
   }
 
   set game(Game? game) {

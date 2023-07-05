@@ -8,11 +8,13 @@ environment:
   flutter: ">=3.0.0"
 
 dependencies:
+  darq: ^2.0.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.1
+  quiver: ^3.2.1
   stack_trace: ^1.11.0
   web_socket_channel: ^2.4.0
   xrandom: ^0.7.2

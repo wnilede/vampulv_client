@@ -9,9 +9,10 @@ part 'game_configuration.g.dart';
 class GameConfiguration with _$GameConfiguration {
   factory GameConfiguration({
     @Default([]) List<PlayerConfiguration> players,
-    @Default({}) Map<RoleType, int> roles,
+    @Default([]) List<RoleType> roles,
     required int randomSeed,
     @Default(2) int maxLives,
+    @Default(2) int rolesPerPlayer,
   }) = _GameConfiguration;
 
   factory GameConfiguration.fromJson(Map<String, dynamic> json) => _$GameConfigurationFromJson(json);

@@ -1,11 +1,16 @@
 import 'package:vampulv/game.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
+import 'package:vampulv/roles/vampulv.dart';
 
 abstract class Role {
   //Game changesBeforeNight(Game game) => game;
   List<RoleReaction> reactions;
   Role({this.reactions = const []});
+  factory Role.fromType(RoleType roleType) => switch (roleType) {
+        RoleType.vampulv => Vampulv(),
+        _ => throw UnimplementedError(),
+      };
 }
 
 class RoleReaction<T extends Event> {
