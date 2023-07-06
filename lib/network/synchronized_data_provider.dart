@@ -1,16 +1,20 @@
 import 'dart:math';
 
+import 'package:darq/darq.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/network/connected_device.dart';
 import 'package:vampulv/game_configuration.dart';
-import 'package:vampulv/network/message_bodies/changedevicecontrolsbody.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
+import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/synchronized_data.dart';
 
 class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
-  SynchronizedDataNotifier({List<NetworkMessage> gameEvents = const []})
+  Ref ref;
+
+  SynchronizedDataNotifier({required this.ref, List<NetworkMessage> gameEvents = const []})
       : super(SynchronizedData(
           gameConfiguration: GameConfiguration(randomSeed: Random().nextInt(1 << 32)),
         ));
@@ -34,10 +38,19 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
       case NetworkMessageType.setDevices:
         List<int> identifiers = event.message.split(';').map((identifier) => int.parse(identifier)).toList();
         // Keep the devices with identifiers in the list, and create new devices for the identifiers without a device.
+        final oldDevices = state.connectedDevices.where((device) => identifiers.contains(device.identifier)).toList();
+        final newDevices = identifiers.where((identifier) => state.connectedDevices.every((device) => device.identifier != identifier)).map((identifier) => ConnectedDevice(identifier: identifier)).toList();
         state = state.copyWith(connectedDevices: [
-          ...state.connectedDevices.where((device) => identifiers.contains(device.identifier)),
-          ...identifiers.where((identifier) => state.connectedDevices.every((device) => device.identifier != identifier)).map((identifier) => ConnectedDevice(identifier: identifier)),
+          ...oldDevices,
+          ...newDevices,
         ]);
+        // If new devices have been added, we send all of the synchronized data, but to prevent multiple devices from sending, only the one with the lowest identifier that was not just added sends.
+        if (newDevices.isNotEmpty && oldDevices.isNotEmpty && ref.read(connectedDeviceIdentifierProvider) == oldDevices.map((device) => device.identifier).min()) {
+          ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                type: NetworkMessageType.setSynchronizedData,
+                body: state,
+              ));
+        }
         break;
       case NetworkMessageType.changeDeviceControls:
         final body = ChangeDeviceControlsBody.fromJson(event.body);
@@ -61,7 +74,7 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
 }
 
 final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchronizedDataProvider = StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData>((ref) {
-  SynchronizedDataNotifier notifier = SynchronizedDataNotifier();
+  SynchronizedDataNotifier notifier = SynchronizedDataNotifier(ref: ref);
 
   final messageSender = ref.watch(messageSenderProvider);
   messageSender.sendString("Change room:default");

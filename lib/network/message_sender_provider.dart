@@ -20,7 +20,7 @@ class MessageSenderNotifier extends StateNotifier<MessageSender> {
 
   void subscribe(void Function(NetworkMessage) onData) {
     if (!state.isConnected) {
-      // Should we throw instead of return? The reasoning for silently ignoring it is that whatever calls this chould be notified when we connect, and then call this function again.
+      // Should we throw instead of return? The reasoning for silently ignoring it is that whatever calls this should be notified when we connect, and then call this function again.
       return;
     }
     state.stream!.listen(

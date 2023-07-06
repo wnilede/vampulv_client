@@ -4,7 +4,7 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 
-import 'lobby.dart';
+import 'lobby/lobby.dart';
 
 void main() {
   FlutterError.demangleStackTrace = (StackTrace stack) {
@@ -21,10 +21,13 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected)) ? null : AppBar(title: const Text('Not connected')),
-        body: ref.watch(synchronizedDataProvider).gameHasBegun ? const Placeholder() : const Lobby(),
-      ),
+      home: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))
+          ? ref.watch(synchronizedDataProvider).gameHasBegun
+              ? const Placeholder()
+              : const Lobby()
+          : const Scaffold(
+              body: Center(child: Text('Not connected')),
+            ),
     );
   }
 }
