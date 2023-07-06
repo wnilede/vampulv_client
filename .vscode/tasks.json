@@ -19,6 +19,11 @@
             "command": "flutter run -d 'ce0716075b9e140e05'"
         },
         {
+            "label": "Flutter-Launch-Chrome",
+            "type": "shell",
+            "command": "flutter run -d 'chrome'"
+        },
+        {
             "label": "watch build_runner automatically run on startup",
             "type": "shell",
             "command": "flutter pub run build_runner watch",

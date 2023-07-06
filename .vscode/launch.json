@@ -24,6 +24,13 @@
             "type": "dart",
             "request": "attach",
             "program": "lib/main.dart"
+        },
+        {
+            "name": "Flutter-Chrome",
+            "preLaunchTask": "Flutter-Launch-Chrome",
+            "type": "dart",
+            "request": "attach",
+            "program": "lib/main.dart"
         }
     ],
 }
