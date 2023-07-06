@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game_configuration.dart';
+import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -43,6 +44,16 @@ class MessageSender with _$MessageSender {
     sendChange(NetworkMessage.fromObject(
       type: NetworkMessageType.inputToGame,
       body: value,
+    ));
+  }
+
+  void sendDeviceControls(int deviceToChangeId, int playerToControlId) {
+    sendChange(NetworkMessage.fromObject(
+      type: NetworkMessageType.changeDeviceControls,
+      body: ChangeDeviceControlsBody(
+        deviceToChangeId: deviceToChangeId,
+        playerToControlId: playerToControlId,
+      ),
     ));
   }
 }

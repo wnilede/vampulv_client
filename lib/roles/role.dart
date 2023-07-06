@@ -2,14 +2,17 @@ import 'package:vampulv/game.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/vampulv.dart';
+import 'package:vampulv/roles/villager.dart';
 
 abstract class Role {
   //Game changesBeforeNight(Game game) => game;
   List<RoleReaction> reactions;
-  Role({this.reactions = const []});
+  RoleType type;
+  Role({required this.type, this.reactions = const []});
   factory Role.fromType(RoleType roleType) => switch (roleType) {
         RoleType.vampulv => Vampulv(),
-        _ => throw UnimplementedError(),
+        RoleType.villager => Villager(),
+        _ => throw UnimplementedError("Have not created class for role type '$roleType' yet."),
       };
 }
 

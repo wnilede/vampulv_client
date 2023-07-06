@@ -16,7 +16,7 @@ class SynchronizedDataNotifier extends StateNotifier<SynchronizedData> {
 
   SynchronizedDataNotifier({required this.ref, List<NetworkMessage> gameEvents = const []})
       : super(SynchronizedData(
-          gameConfiguration: GameConfiguration(randomSeed: Random().nextInt(1 << 32)),
+          gameConfiguration: GameConfiguration(randomSeed: Random().nextInt(1 << 32 - 1)),
         ));
 
   void applyChange(NetworkMessage event) {
@@ -81,3 +81,5 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
   ref.watch(messageSenderProvider.notifier).subscribe(notifier.applyChange);
   return notifier;
 });
+
+final Provider<GameConfiguration> gameConfigurationProvider = Provider((ref) => ref.watch(synchronizedDataProvider.select((sd) => sd.gameConfiguration)));

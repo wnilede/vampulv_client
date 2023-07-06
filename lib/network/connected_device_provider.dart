@@ -19,6 +19,7 @@ final Provider<ConnectedDevice?> connectedDeviceProvider = Provider<ConnectedDev
 /// Provides the player we control
 final controlledPlayerProvider = Provider<Player?>((ref) {
   final controlledPlayerId = ref.watch(connectedDeviceProvider.select((connectedDevice) => connectedDevice?.controlledPlayerId));
+  if (controlledPlayerId == null) return null;
   final controlledPlayer = ref.watch(gameProvider)?.players.singleWhere((player) => player.configuration.id == controlledPlayerId);
 
   return controlledPlayer;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
-import 'package:vampulv/game_view_player.dart';
+import 'package:vampulv/game_view/game_view.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 
@@ -24,7 +24,7 @@ class MainApp extends ConsumerWidget {
     return MaterialApp(
       home: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))
           ? ref.watch(synchronizedDataProvider).gameHasBegun
-              ? const GameViewPlayer()
+              ? const GameView()
               : const Lobby()
           : const Scaffold(
               body: Center(child: Text('Not connected')),

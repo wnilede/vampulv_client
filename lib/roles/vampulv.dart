@@ -14,6 +14,7 @@ import 'package:vampulv/user_maps/user_map.dart';
 class Vampulv extends Role {
   Vampulv()
       : super(
+          type: RoleType.vampulv,
           reactions: [
             RoleReaction(
               priority: 100,
