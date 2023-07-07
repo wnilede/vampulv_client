@@ -34,7 +34,13 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
     int? deviceIdentifier = ref.watch(connectedDeviceIdentifierProvider);
     return Column(
       children: [
-        if (gameConfiguration.players.isEmpty) const Expanded(child: Center(child: Text('There are no players yet'))),
+        if (gameConfiguration.players.isEmpty)
+          const Expanded(
+              child: Center(
+                  child: Text(
+            'There are no players yet',
+            textAlign: TextAlign.center,
+          ))),
         if (gameConfiguration.players.isNotEmpty)
           () {
             final playerWidgets = gameConfiguration.players.indexed
@@ -99,7 +105,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                         ]),
                       ));
                 },
-                child: const Text('Lägg till spelare'),
+                child: const Text('Lägg till spelare', textAlign: TextAlign.center),
               ),
             ),
             Expanded(
@@ -123,7 +129,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                           body: gameConfiguration.copyWith(players: gameConfiguration.players.where((player) => player.id != selectedPlayerId).toList()),
                         ));
                       },
-                child: const Text('Ta bort spelare'),
+                child: const Text('Ta bort spelare', textAlign: TextAlign.center),
               ),
             ),
             Expanded(
@@ -139,7 +145,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                               ),
                             ));
                       },
-                child: const Text('Styr spelare'),
+                child: const Text('Styr spelare', textAlign: TextAlign.center),
               ),
             ),
             Expanded(
@@ -155,7 +161,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                               ),
                             ));
                       },
-                child: const Text('Sluta styr spelare'),
+                child: const Text('Sluta styr spelare', textAlign: TextAlign.center),
               ),
             ),
           ],

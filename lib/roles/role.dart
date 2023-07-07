@@ -19,8 +19,8 @@ abstract class Role {
 class RoleReaction<T extends Event> {
   int priority;
 
-  /// Must return Game to set entire game, Player to set owner or InputHandler to add an input handler to the owner.
-  dynamic Function(Game game, Player owner) applyer;
+  /// Must return null to change nothing, Game to set entire game, Player to set owner or InputHandler to add an input handler to the owner.
+  dynamic Function(Event event, Game game, Player owner) applyer;
 
   RoleReaction({required this.priority, required this.applyer});
 }

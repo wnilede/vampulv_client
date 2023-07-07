@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
+import 'package:vampulv/game_provider.dart';
 import 'package:vampulv/game_view/game_view.dart';
+import 'package:vampulv/lobby/lobby.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-
-import 'lobby/lobby.dart';
 
 void main() {
   FlutterError.demangleStackTrace = (StackTrace stack) {
@@ -22,6 +22,7 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
+      theme: ref.watch(gameProvider.select((game) => game?.isNight ?? false)) ? ThemeData.dark() : ThemeData.light(),
       home: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))
           ? ref.watch(synchronizedDataProvider).gameHasBegun
               ? const GameView()

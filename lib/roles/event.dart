@@ -11,5 +11,5 @@ enum EventType {
   // The order determines which order they are evaluated in
   nightBegins,
   vampulvsAttacks,
-  nightEnds,
+  dayBegins,
 }

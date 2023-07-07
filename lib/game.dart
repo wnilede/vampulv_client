@@ -25,7 +25,7 @@ class Game with _$Game {
   const Game._();
 
   factory Game.fromConfiguration(GameConfiguration configuration) {
-    assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer);
+    assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer, 'There are not enough roles for all players.');
     final randomGenerator = Xorshift32(configuration.randomSeed);
     final players = <Player>[];
     final shuffledRoles = configuration.roles.randomize().toList();
@@ -45,18 +45,18 @@ class Game with _$Game {
     return Game(
       randomGenerator: randomGenerator,
       players: players,
-    )._runUntilInput();
+    )._runUntilInput().applyEvent(Event(type: EventType.nightBegins));
   }
 
-  factory Game.fromEvents(GameConfiguration configuration, List<NetworkMessage> events) {
+  factory Game.fromInputs(GameConfiguration configuration, List<NetworkMessage> inputs) {
     Game game = Game.fromConfiguration(configuration);
-    for (NetworkMessage event in events) {
-      game = game.applyChange(event);
+    for (NetworkMessage input in inputs) {
+      game = game.applyInput(input);
     }
     return game;
   }
 
-  Game applyChange(NetworkMessage change) {
+  Game applyEvent(Event event) {
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,
@@ -84,43 +84,44 @@ class Game with _$Game {
     Game resultingGame = this;
     while (ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) {
       if (playerReactionPairs.isEmpty || ruleReactions.isNotEmpty && ruleReactions[0].priority > playerReactionPairs[0].$2.priority) {
-        final reactionResult = ruleReactions[0].applyer(resultingGame);
-        switch (reactionResult) {
-          case Game:
-            resultingGame = reactionResult;
-            break;
-          case Event:
-            resultingGame = resultingGame.copyWith(unhandledEvents: unhandledEvents.append(reactionResult).toList());
-            break;
-          default:
-            throw UnsupportedError("When calling applyer on reaction in rule, the returned type was '${reactionResult.runtimeType}'.");
+        final reactionResult = ruleReactions[0].applyer(event, resultingGame);
+        if (reactionResult == null) {
+        } else if (reactionResult is Event) {
+          resultingGame = resultingGame.copyWith(unhandledEvents: unhandledEvents.append(reactionResult).toList());
+        } else if (reactionResult is Game) {
+          resultingGame = reactionResult;
+        } else {
+          throw UnsupportedError("When calling applyer on reaction in rule, the returned type was '${reactionResult.runtimeType}'.");
         }
-        resultingGame = ruleReactions[0].applyer(resultingGame);
         ruleReactions.removeAt(0);
       } else {
         final owner = playerReactionPairs[0].$1;
-        dynamic reactionResult = playerReactionPairs[0].$2.applyer(resultingGame, owner);
-        switch (reactionResult) {
-          case Game:
-            resultingGame = reactionResult;
-            break;
-          case InputHandler:
+        dynamic reactionResult = playerReactionPairs[0].$2.applyer(event, resultingGame, owner);
+        if (reactionResult == null) {
+        } else if (reactionResult is Player || reactionResult is InputHandler) {
+          if (reactionResult is InputHandler) {
+            // If input handler, what we actually change are the player, so use the logic for that.
             reactionResult = owner.copyWith(unhandledInputHandlers: owner.unhandledInputHandlers.append(reactionResult).toList());
-          case Player:
-            final newPlayers = [
-              ...resultingGame.players,
-            ];
-            newPlayers[newPlayers.indexWhere(((player) => player.configuration.id == owner.configuration.id))] = reactionResult;
-            resultingGame = resultingGame.copyWith(players: newPlayers);
-            break;
-          default:
-            throw UnsupportedError("When calling applyer on reaction in role, the returned type was '${reactionResult.runtimeType}'.");
+          }
+          final newPlayers = [
+            ...resultingGame.players,
+          ];
+          newPlayers[newPlayers.indexWhere(((player) => player.configuration.id == owner.configuration.id))] = reactionResult;
+          resultingGame = resultingGame.copyWith(players: newPlayers);
+        } else if (reactionResult is Game) {
+          resultingGame = reactionResult;
+        } else {
+          throw UnsupportedError("When calling applyer on reaction in role owned by '${owner.configuration.name}', the returned type was '${reactionResult.runtimeType}'.");
         }
         playerReactionPairs.removeAt(0);
       }
       _runUntilInput();
     }
     return resultingGame;
+  }
+
+  Game applyInput(NetworkMessage input) {
+    return this;
   }
 
   Game _runUntilInput() {
@@ -137,7 +138,7 @@ class Game with _$Game {
 
   Game? _runOneStep() {
     if (isNight && players.every((player) => player.unhandledInputHandlers.isEmpty) && unhandledEvents.isEmpty) {
-      return copyWith(isNight: false);
+      return copyWith(isNight: false).applyEvent(Event(type: EventType.dayBegins));
     }
     return null;
   }

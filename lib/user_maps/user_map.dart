@@ -64,7 +64,7 @@ class _UserMapState extends ConsumerState<UserMap> {
                                   ? Colors.orange[400]
                                   : selectedIndices.contains(i)
                                       ? Colors.orange[700]
-                                      : Colors.orange[300],
+                                      : const Color.fromARGB(255, 245, 198, 128),
                             ),
                           ))),
               // The players.

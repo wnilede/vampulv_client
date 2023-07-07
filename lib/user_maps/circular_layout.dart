@@ -11,8 +11,8 @@ class CircularLayout extends StatelessWidget {
   final bool largerChildren;
 
   const CircularLayout({this.rotationOffset = 0, this.largerChildren = false, this.inside, required this.children, super.key})
-      : assert(children.length > 0),
-        assert(inside == null || children.length >= 3);
+      : assert(children.length > 0, 'Circular layouts require at least one child.'),
+        assert(inside == null || children.length >= 3, 'There can be no insides in circular layouts with fewer than 3 children.');
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,11 @@ class CircularLayout extends StatelessWidget {
       // The radius of the circles circumscribing the children.
       final childRadius = radius * sin;
 
-      // The side lengths of the children, assuming they are squares. Should be relatively easy to add calculations to acount for all rectangular children. Perhaps we could allow a list of width:height ratios to be passed in together with the children?
-      final childSize = childRadius * math.sqrt2;
+      // The side lengths of the children, assuming they are squares. Should be relatively easy to add calculations to account for all rectangular children. Perhaps we could allow a list of width:height ratios to be passed in together with the children?
+      final childSize = childRadius * (largerChildren ? 2 : math.sqrt2);
 
       // The side lengths of the child inside the circle.
-      final centerChildSize = (radius - 2 * childRadius) * math.sqrt2;
+      final centerChildSize = (radius - childRadius) * (largerChildren ? 2 : math.sqrt2);
 
       return Stack(
         alignment: AlignmentDirectional.center,

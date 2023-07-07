@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/player.dart';
@@ -18,10 +17,12 @@ class Vampulv extends Role {
           reactions: [
             RoleReaction(
               priority: 100,
-              applyer: (game, owner) => InputHandler(
-                resultApplyer: (world, _) => world,
-                widget: const VampulvChoosingWidget(),
-              ),
+              applyer: (event, game, owner) => event.type == EventType.nightBegins
+                  ? InputHandler(
+                      resultApplyer: (world, _) => world,
+                      widget: const VampulvChoosingWidget(),
+                    )
+                  : null,
             ),
           ],
         );
@@ -32,7 +33,7 @@ class VampulvRule extends Rule {
       : super(reactions: [
           RuleReaction(
             priority: 50,
-            applyer: (Game game) => Event(type: EventType.vampulvsAttacks),
+            applyer: (event, game) => event.type == EventType.nightBegins ? Event(type: EventType.vampulvsAttacks) : null,
           )
         ]);
 }

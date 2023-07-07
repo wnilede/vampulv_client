@@ -7,12 +7,12 @@ import 'package:vampulv/network/synchronized_data_provider.dart';
 class GameNotifier extends StateNotifier<Game?> {
   GameNotifier() : super(null);
 
-  void applyEvent(NetworkMessage event) {
-    state = state?.applyChange(event);
+  void applyInput(NetworkMessage event) {
+    state = state?.applyInput(event);
   }
 
   void recreateGame(GameConfiguration gameConfiguration, List<NetworkMessage> gameEvents) {
-    state = Game.fromEvents(gameConfiguration, gameEvents);
+    state = Game.fromInputs(gameConfiguration, gameEvents);
   }
 
   set game(Game? game) {

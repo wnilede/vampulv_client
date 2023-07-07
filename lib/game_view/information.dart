@@ -12,6 +12,7 @@ class Information extends ConsumerWidget {
     final player = ref.watch(controlledPlayerProvider);
     return ListView(
       children: [
+        Text(player == null ? 'Du är inte med i spelet' : 'Spelar som ${player.configuration.name}'),
         if (player != null) const Text('Dina roller'),
         if (player != null)
           SizedBox(
