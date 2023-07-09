@@ -2,17 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/network/network_message.dart';
+import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 
 class GameNotifier extends StateNotifier<Game?> {
   GameNotifier() : super(null);
 
-  void applyInput(NetworkMessage event) {
-    state = state?.applyInput(event);
+  void applyInput(PlayerInput input) {
+    state = state?.applyInput(input);
   }
 
   void recreateGame(GameConfiguration gameConfiguration, List<NetworkMessage> gameEvents) {
-    state = Game.fromInputs(gameConfiguration, gameEvents);
+    state = Game.fromNetworkMessages(gameConfiguration, gameEvents);
   }
 
   set game(Game? game) {

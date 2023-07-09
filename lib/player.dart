@@ -12,5 +12,10 @@ class Player with _$Player {
     required List<Role> roles,
     required int lives,
     @Default([]) List<InputHandler> unhandledInputHandlers,
+    @Default(false) bool isWinner,
   }) = _Player;
+
+  const Player._();
+
+  InputHandler? get currentInputHandler => unhandledInputHandlers.firstOrNull;
 }

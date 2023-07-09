@@ -12,4 +12,5 @@ enum EventType {
   nightBegins,
   vampulvsAttacks,
   dayBegins,
+  gameEnds,
 }

@@ -8,6 +8,6 @@ class DoInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider);
-    return controlledPlayer?.unhandledInputHandlers.firstOrNull?.widget ?? const Center(child: Text('Väntar på andra spelare...', textAlign: TextAlign.center));
+    return controlledPlayer?.currentInputHandler?.widget ?? const Center(child: Text('Väntar på andra spelare...', textAlign: TextAlign.center));
   }
 }

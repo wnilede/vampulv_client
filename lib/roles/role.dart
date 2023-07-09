@@ -1,6 +1,7 @@
 import 'package:vampulv/game.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
+import 'package:vampulv/roles/seer.dart';
 import 'package:vampulv/roles/vampulv.dart';
 import 'package:vampulv/roles/villager.dart';
 
@@ -12,6 +13,7 @@ abstract class Role {
   factory Role.fromType(RoleType roleType) => switch (roleType) {
         RoleType.vampulv => Vampulv(),
         RoleType.villager => Villager(),
+        RoleType.seer => Seer(),
         _ => throw UnimplementedError("Have not created class for role type '$roleType' yet."),
       };
 }
@@ -30,7 +32,7 @@ enum RoleType {
   villager('Bybo', 'Normal medborgare i byn', 'Om alla dina kort är bybor så är du en borgmästare. Borgmästare har en extra röst när det röstas om avrättning.'),
   idiot('Idiot', 'Rösta alltid för att avrätta dig själv', 'Vid röstning om avrättning av dig själv måste du alltid rösta för.'),
   pacifist('Pasifist', 'Rösta nej till avrättningar', 'Vid röstning om avrättning måste du alltid rösta emot.'),
-  drunk('Fyllo', 'Få nya roller tredje natten', 'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, då fyllot ser ut som en bybo.'),
+  drunk('Fyllo', 'Få nya roller tredje natten', 'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en bybo.'),
   lonelyWolf('Självisk vampyr', 'Döda alla andra', 'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet.'),
   prince('Prins', 'Skydd mot avrättning', 'När du ska bli avrättad första gången visas det för alla att du är prins och du blir inte avrättad.'),
   priest('Präst', 'Skydda en person per natt', 'Varje natt väljer du om du vill aktivera din kraft och i så fall väljer du en person som du inte valde förra natten. Denna person kan inte bli skadad av vampulvernas kraft under den natten.'),

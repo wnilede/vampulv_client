@@ -19,7 +19,7 @@ class Vampulv extends Role {
               priority: 100,
               applyer: (event, game, owner) => event.type == EventType.nightBegins
                   ? InputHandler(
-                      resultApplyer: (world, _) => world,
+                      resultApplyer: (input, game, player) => null,
                       widget: const VampulvChoosingWidget(),
                     )
                   : null,

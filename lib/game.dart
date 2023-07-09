@@ -2,6 +2,9 @@ import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/logentry.dart';
+import 'package:vampulv/network/network_message_type.dart';
+import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/roles/event.dart';
@@ -19,7 +22,9 @@ class Game with _$Game {
     required List<Player> players,
     @Default([]) List<Rule> rules,
     @Default([]) List<Event> unhandledEvents,
+    @Default([]) List<LogEntry> log,
     @Default(false) bool isNight,
+    @Default(false) bool isFinished,
   }) = _Game;
 
   const Game._();
@@ -48,15 +53,28 @@ class Game with _$Game {
     )._runUntilInput().applyEvent(Event(type: EventType.nightBegins));
   }
 
-  factory Game.fromInputs(GameConfiguration configuration, List<NetworkMessage> inputs) {
+  factory Game.fromNetworkMessages(GameConfiguration configuration, List<NetworkMessage> messages) {
     Game game = Game.fromConfiguration(configuration);
-    for (NetworkMessage input in inputs) {
-      game = game.applyInput(input);
+    for (final message in messages) {
+      if (!message.type.isGameChange) continue;
+      if (message.type == NetworkMessageType.inputToGame) {
+        game = game.applyInput(PlayerInput.fromJson(message.body));
+      } else {
+        throw UnimplementedError("Cannot yet handle network messages of type '${message.type.name}'.");
+      }
     }
     return game;
   }
 
   Game applyEvent(Event event) {
+    return _applyEventOnly(event)._runUntilInput();
+  }
+
+  Game applyInput(PlayerInput input) {
+    return _applyResultFromApplyer(playerFromId(input.ownerId).currentInputHandler!.resultApplyer(input, this, playerFromId(input.ownerId)), input.ownerId);
+  }
+
+  Game _applyEventOnly(Event event) {
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,
@@ -84,44 +102,69 @@ class Game with _$Game {
     Game resultingGame = this;
     while (ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) {
       if (playerReactionPairs.isEmpty || ruleReactions.isNotEmpty && ruleReactions[0].priority > playerReactionPairs[0].$2.priority) {
-        final reactionResult = ruleReactions[0].applyer(event, resultingGame);
-        if (reactionResult == null) {
-        } else if (reactionResult is Event) {
-          resultingGame = resultingGame.copyWith(unhandledEvents: unhandledEvents.append(reactionResult).toList());
-        } else if (reactionResult is Game) {
-          resultingGame = reactionResult;
-        } else {
-          throw UnsupportedError("When calling applyer on reaction in rule, the returned type was '${reactionResult.runtimeType}'.");
-        }
+        _applyResultFromApplyer(ruleReactions[0].applyer(event, resultingGame), null);
         ruleReactions.removeAt(0);
       } else {
         final owner = playerReactionPairs[0].$1;
-        dynamic reactionResult = playerReactionPairs[0].$2.applyer(event, resultingGame, owner);
-        if (reactionResult == null) {
-        } else if (reactionResult is Player || reactionResult is InputHandler) {
-          if (reactionResult is InputHandler) {
-            // If input handler, what we actually change are the player, so use the logic for that.
-            reactionResult = owner.copyWith(unhandledInputHandlers: owner.unhandledInputHandlers.append(reactionResult).toList());
-          }
-          final newPlayers = [
-            ...resultingGame.players,
-          ];
-          newPlayers[newPlayers.indexWhere(((player) => player.configuration.id == owner.configuration.id))] = reactionResult;
-          resultingGame = resultingGame.copyWith(players: newPlayers);
-        } else if (reactionResult is Game) {
-          resultingGame = reactionResult;
-        } else {
-          throw UnsupportedError("When calling applyer on reaction in role owned by '${owner.configuration.name}', the returned type was '${reactionResult.runtimeType}'.");
-        }
+        _applyResultFromApplyer(playerReactionPairs[0].$2.applyer(event, resultingGame, owner), owner.configuration.id);
         playerReactionPairs.removeAt(0);
       }
-      _runUntilInput();
     }
     return resultingGame;
   }
 
-  Game applyInput(NetworkMessage input) {
-    return this;
+  /// Valid types for the result
+  /// - null to change nothing
+  /// - Game to set entire game
+  /// - Event to add it to the game
+  /// - LogEntry to log it to the game
+  /// - String to add a log entry visible to caller if it exists or to everyone otherwise
+  /// - Player to set caller
+  /// - InputHandler to add an input handler to the caller
+  /// - iterable of valid values to set them all in order
+  Game _applyResultFromApplyer(dynamic result, int? callerId) {
+    if (result == null) {
+      return this;
+    }
+    if (result is InputHandler) {
+      if (callerId == null) {
+        throw UnsupportedError("Cannot apply InputHandler without an owner.");
+      }
+      Player caller = playerFromId(callerId);
+      // If input handler, what we actually change are the player, so use the logic for that.
+      result = caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList());
+    }
+    if (result is Player) {
+      if (callerId == null) {
+        throw UnsupportedError("Cannot apply Player without an owner.");
+      }
+      final newPlayers = [
+        ...players,
+      ];
+      newPlayers[newPlayers.indexWhere(((player) => player.configuration.id == callerId))] = result;
+      return copyWith(players: newPlayers);
+    }
+    if (result is String) {
+      // If String, what we actually want to do is add a LogEntry.
+      result = LogEntry(value: result, playerVisibleTo: callerId);
+    }
+    if (result is LogEntry) {
+      return copyWith(log: log.append(result).toList());
+    }
+    if (result is Event) {
+      return copyWith(unhandledEvents: unhandledEvents.append(result).toList());
+    }
+    if (result is Game) {
+      return result;
+    }
+    if (result is Iterable) {
+      Game gameSoFar = this;
+      for (final partResult in result) {
+        gameSoFar = gameSoFar._applyResultFromApplyer(partResult, callerId);
+      }
+      return gameSoFar;
+    }
+    throw UnsupportedError("When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).configuration.name}'}, the returned type was '${result.runtimeType}'.");
   }
 
   Game _runUntilInput() {
@@ -137,9 +180,22 @@ class Game with _$Game {
   }
 
   Game? _runOneStep() {
-    if (isNight && players.every((player) => player.unhandledInputHandlers.isEmpty) && unhandledEvents.isEmpty) {
-      return copyWith(isNight: false).applyEvent(Event(type: EventType.dayBegins));
+    if (isNight && players.every((player) => player.unhandledInputHandlers.isEmpty)) {
+      if (unhandledEvents.isEmpty) {
+        return copyWith(isNight: false).applyEvent(Event(type: EventType.dayBegins));
+      } else {
+        return _applyEventOnly(unhandledEvents.min((event1, event2) {
+          if (event1.type == event2.type) {
+            assert(event1.priority == null || event2.priority == null, "There are more than one unhandled event of type '${event1.type}', and at least one of them has priority null.");
+            assert(event1.priority != event2.priority, "There are multiple unhandled events of type '${event1.type}' with the same priority.");
+            return event2.priority! - event1.priority!;
+          }
+          return event1.type.index - event2.type.index;
+        }));
+      }
     }
     return null;
   }
+
+  Player playerFromId(int id) => players.singleWhere((player) => player.configuration.id == id);
 }
