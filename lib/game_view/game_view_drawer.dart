@@ -19,11 +19,11 @@ class GameViewDrawer extends ConsumerWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).primaryColor,
             ),
-            child: Text('Vampulv'),
+            child: const Text('Vampulv'),
           ),
           if (ref.watch(controlledPlayerProvider) != null)
             ListTile(

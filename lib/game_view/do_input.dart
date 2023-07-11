@@ -16,6 +16,18 @@ class DoInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider);
+    if (ref.watch(gameProvider.select((game) => game!.isFinished))) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Spelet är slut')),
+        drawer: drawer,
+        body: Center(
+          child: Text(
+            controlledPlayer!.isWinner ? 'Du vann!' : 'Du förlorade!',
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
+        ),
+      );
+    }
     final isNight = ref.watch(gameProvider.select((game) => game!.isNight));
     return Scaffold(
       appBar: AppBar(title: controlledPlayer?.currentInputHandler?.description == null ? null : Text(controlledPlayer!.currentInputHandler!.description)),
