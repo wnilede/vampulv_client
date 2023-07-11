@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vampulv/role_description.dart';
-import 'package:vampulv/roles/role.dart';
+import 'package:vampulv/roles/role_type.dart';
 
 class RoleCardView extends StatelessWidget {
   final RoleType role;

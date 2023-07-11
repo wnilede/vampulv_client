@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vampulv/game_view/change_controlled_player.dart';
 import 'package:vampulv/game_view/do_input.dart';
 import 'package:vampulv/game_view/information.dart';
+import 'package:vampulv/game_view/spectator_overview.dart';
 
 class GameView extends StatefulWidget {
   const GameView({super.key});
@@ -15,7 +16,12 @@ class _GameViewState extends State<GameView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: switch (view) {
+            _GameView.spectatorOverview => const SpectatorAppBar(),
+            _ => null,
+          },
+        ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -57,6 +63,7 @@ class _GameViewState extends State<GameView> {
           _GameView.input => const DoInput(),
           _GameView.changeControlledPlayer => const ChangeControlledPlayer(),
           _GameView.aboutGame => const Information(),
+          _GameView.spectatorOverview => const SpectatorOverview(),
         },
       );
 
@@ -72,4 +79,5 @@ enum _GameView {
   input,
   changeControlledPlayer,
   aboutGame,
+  spectatorOverview,
 }

@@ -8,8 +8,8 @@ import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/roles/event.dart';
-import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/rule.dart';
+import 'package:vampulv/roles/standard_rules.dart';
 import 'package:xrandom/xrandom.dart';
 
 part 'game.freezed.dart';
@@ -42,7 +42,7 @@ class Game with _$Game {
               configuration.rolesPerPlayer * i,
               configuration.rolesPerPlayer * (i + 1),
             )
-            .map((roleType) => Role.fromType(roleType))
+            .map((roleType) => roleType.produceRole())
             .toList(),
         lives: configuration.maxLives,
       ));
@@ -50,7 +50,16 @@ class Game with _$Game {
     return Game(
       randomGenerator: randomGenerator,
       players: players,
-    )._runUntilInput().applyEvent(Event(type: EventType.nightBegins));
+      rules: configuration.roles //
+          .distinct()
+          .map((role) => role.produceRule())
+          .nonNulls
+          .append(StandardRule())
+          .toList(),
+    ) //
+        ._runUntilInput()
+        .applyEvent(Event(type: EventType.gameBegins))
+        .applyEvent(Event(type: EventType.nightBegins));
   }
 
   factory Game.fromNetworkMessages(GameConfiguration configuration, List<NetworkMessage> messages) {
@@ -71,7 +80,10 @@ class Game with _$Game {
   }
 
   Game applyInput(PlayerInput input) {
-    return _applyResultFromApplyer(playerFromId(input.ownerId).currentInputHandler!.resultApplyer(input, this, playerFromId(input.ownerId)), input.ownerId);
+    final caller = playerFromId(input.ownerId);
+    return _applyResultFromApplyer(caller.currentInputHandler!.resultApplyer(input, this, caller), input.ownerId)
+        .game //
+        .copyWithPlayer(caller.removeCurrentInputHandler);
   }
 
   Game _applyEventOnly(Event event) {
@@ -80,6 +92,7 @@ class Game with _$Game {
           (rule) => rule.reactions,
         )
         .flatten()
+        .where((rule) => rule.filter == event.type || rule.filter == null)
         .orderBy((reaction) => reaction.priority)
         .toList();
     final playerReactionPairs = players
@@ -97,20 +110,21 @@ class Game with _$Game {
               ),
         )
         .flatten()
-        .orderBy((playerRole) => playerRole.$2.priority)
+        .where((playerReaction) => playerReaction.$2.filter == event.type || playerReaction.$2.filter == null)
+        .orderBy((playerReaction) => playerReaction.$2.priority)
         .toList();
-    Game resultingGame = this;
-    while (ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) {
+    _ApplyResultResult resultingGame = _ApplyResultResult(this);
+    while ((ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) && !resultingGame.canceled) {
       if (playerReactionPairs.isEmpty || ruleReactions.isNotEmpty && ruleReactions[0].priority > playerReactionPairs[0].$2.priority) {
-        _applyResultFromApplyer(ruleReactions[0].applyer(event, resultingGame), null);
+        resultingGame = resultingGame.game._applyResultFromApplyer(ruleReactions[0].applyer(event, resultingGame.game), null);
         ruleReactions.removeAt(0);
       } else {
         final owner = playerReactionPairs[0].$1;
-        _applyResultFromApplyer(playerReactionPairs[0].$2.applyer(event, resultingGame, owner), owner.configuration.id);
+        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.applyer(event, resultingGame.game, owner), owner.configuration.id);
         playerReactionPairs.removeAt(0);
       }
     }
-    return resultingGame;
+    return resultingGame.game;
   }
 
   /// Valid types for the result
@@ -121,46 +135,48 @@ class Game with _$Game {
   /// - String to add a log entry visible to caller if it exists or to everyone otherwise
   /// - Player to set caller
   /// - InputHandler to add an input handler to the caller
+  /// - EventResult.cancel to cancel the event and stop evaluating reactions for it
   /// - iterable of valid values to set them all in order
-  Game _applyResultFromApplyer(dynamic result, int? callerId) {
+  ///
+  /// Returns the new game and whether the event was cancelled.
+  _ApplyResultResult _applyResultFromApplyer(dynamic result, int? callerId) {
     if (result == null) {
-      return this;
+      return _ApplyResultResult(this);
+    }
+    if (result == EventResult.cancel) {
+      return _ApplyResultResult(this, canceled: false);
     }
     if (result is InputHandler) {
       if (callerId == null) {
-        throw UnsupportedError("Cannot apply InputHandler without an owner.");
+        throw UnsupportedError('Cannot apply InputHandler without an owner.');
       }
-      Player caller = playerFromId(callerId);
-      // If input handler, what we actually change are the player, so use the logic for that.
-      result = caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList());
+      final caller = playerFromId(callerId);
+      return _ApplyResultResult(copyWithPlayer(caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList())));
     }
     if (result is Player) {
       if (callerId == null) {
-        throw UnsupportedError("Cannot apply Player without an owner.");
+        throw UnsupportedError('Cannot apply Player without an owner.');
       }
-      final newPlayers = [
-        ...players,
-      ];
-      newPlayers[newPlayers.indexWhere(((player) => player.configuration.id == callerId))] = result;
-      return copyWith(players: newPlayers);
+      return _ApplyResultResult(copyWithPlayer(result));
     }
     if (result is String) {
       // If String, what we actually want to do is add a LogEntry.
       result = LogEntry(value: result, playerVisibleTo: callerId);
     }
     if (result is LogEntry) {
-      return copyWith(log: log.append(result).toList());
+      return _ApplyResultResult(copyWith(log: log.append(result).toList()));
     }
     if (result is Event) {
-      return copyWith(unhandledEvents: unhandledEvents.append(result).toList());
+      return _ApplyResultResult(copyWith(unhandledEvents: unhandledEvents.append(result).toList()));
     }
     if (result is Game) {
-      return result;
+      return _ApplyResultResult(result);
     }
     if (result is Iterable) {
-      Game gameSoFar = this;
+      _ApplyResultResult gameSoFar = _ApplyResultResult(this);
       for (final partResult in result) {
-        gameSoFar = gameSoFar._applyResultFromApplyer(partResult, callerId);
+        gameSoFar = gameSoFar.game._applyResultFromApplyer(partResult, callerId);
+        if (gameSoFar.canceled) break;
       }
       return gameSoFar;
     }
@@ -198,4 +214,17 @@ class Game with _$Game {
   }
 
   Player playerFromId(int id) => players.singleWhere((player) => player.configuration.id == id);
+
+  Game copyWithPlayer(Player player) {
+    final newPlayers = [
+      ...players,
+    ];
+    newPlayers[players.indexWhere((existingPlayer) => existingPlayer.configuration.id == player.configuration.id)] = player;
+    return copyWith(players: newPlayers);
+  }
+}
+
+@freezed
+class _ApplyResultResult with _$_ApplyResultResult {
+  factory _ApplyResultResult(Game game, {@Default(false) bool canceled}) = __ApplyResultResult;
 }

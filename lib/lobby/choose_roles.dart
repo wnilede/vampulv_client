@@ -6,7 +6,7 @@ import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/role_description.dart';
 import 'package:vampulv/role_list_item.dart';
-import 'package:vampulv/roles/role.dart';
+import 'package:vampulv/roles/role_type.dart';
 
 class ChooseRoles extends ConsumerStatefulWidget {
   const ChooseRoles({super.key});

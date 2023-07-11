@@ -77,7 +77,7 @@ final StateNotifierProvider<SynchronizedDataNotifier, SynchronizedData> synchron
   SynchronizedDataNotifier notifier = SynchronizedDataNotifier(ref: ref);
 
   final messageSender = ref.watch(messageSenderProvider);
-  messageSender.sendString("Change room:default");
+  messageSender.sendString('Change room:default');
   ref.watch(messageSenderProvider.notifier).subscribe(notifier.applyChange);
   return notifier;
 });

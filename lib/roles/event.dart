@@ -9,8 +9,15 @@ class Event {
 
 enum EventType {
   // The order determines which order they are evaluated in
-  nightBegins,
-  vampulvsAttacks,
-  dayBegins,
   gameEnds,
+  gameBegins,
+  vampulvsAttacks,
+  playerIsHurt,
+  playerDies,
+  nightBegins,
+  dayBegins,
+}
+
+enum EventResult {
+  cancel,
 }

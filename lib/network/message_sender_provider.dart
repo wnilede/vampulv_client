@@ -12,7 +12,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class MessageSenderNotifier extends StateNotifier<MessageSender> {
   final Ref ref;
 
-  MessageSenderNotifier(this.ref, {WebSocketSink? sink, Stream<dynamic>? stream}) : super(MessageSender(sink: sink, stream: stream));
+  MessageSenderNotifier(this.ref, {WebSocketSink? sink, Stream<dynamic>? stream}) : super(MessageSender(ref: ref, sink: sink, stream: stream));
 
   void _setSinkAndStream(WebSocketSink? sink, Stream<dynamic>? stream) {
     state = state.copyWith(sink: sink, stream: stream);

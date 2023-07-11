@@ -17,5 +17,7 @@ class Player with _$Player {
 
   const Player._();
 
+  bool get alive => lives > 0;
   InputHandler? get currentInputHandler => unhandledInputHandlers.firstOrNull;
+  Player get removeCurrentInputHandler => copyWith(unhandledInputHandlers: unhandledInputHandlers.skip(1).toList());
 }

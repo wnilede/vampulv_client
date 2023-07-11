@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/roles/role.dart';
+import 'package:vampulv/roles/role_type.dart';
 
 class RoleDescription extends StatelessWidget {
   final RoleType role;

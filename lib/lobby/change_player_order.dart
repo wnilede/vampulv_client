@@ -68,10 +68,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                     ...gameConfiguration.players,
                   ];
                   newPlayerOrder.insert(indexTo + (indexFrom > indexTo ? 1 : 0), newPlayerOrder.removeAt(indexFrom));
-                  ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
-                        type: NetworkMessageType.setGameConfiguration,
-                        body: gameConfiguration.copyWith(players: newPlayerOrder),
-                      ));
+                  ref.read(messageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
                 },
                 builder: (BuildContext context, List<int?> candidateData, List rejectedData) {
                   return const SizedBox();
@@ -94,16 +91,13 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
             Expanded(
               child: MaterialButton(
                 onPressed: () {
-                  ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
-                        type: NetworkMessageType.setGameConfiguration,
-                        body: gameConfiguration.copyWith(players: [
-                          ...gameConfiguration.players,
-                          PlayerConfiguration(
-                            id: count().where((i) => gameConfiguration.players.every((player) => player.id != i)).first as int,
-                            name: '${math.Random().nextInt(900) + 100}',
-                          )
-                        ]),
-                      ));
+                  ref.read(messageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: [
+                        ...gameConfiguration.players,
+                        PlayerConfiguration(
+                          id: count().where((i) => gameConfiguration.players.every((player) => player.id != i)).first as int,
+                          name: '${math.Random().nextInt(900) + 100}',
+                        )
+                      ]));
                 },
                 child: const Text('Lägg till spelare', textAlign: TextAlign.center),
               ),
@@ -117,17 +111,11 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                         // If someone controls the player that is to be removed, we must remove that link first.
                         for (final device in ref.read(synchronizedDataProvider).connectedDevices) {
                           if (device.controlledPlayerId == selectedPlayerId) {
-                            messageSender.sendChange(NetworkMessage.fromObject(
-                              type: NetworkMessageType.changeDeviceControls,
-                              body: ChangeDeviceControlsBody(deviceToChangeId: device.identifier, playerToControlId: null),
-                            ));
+                            messageSender.sendDeviceControls(device.identifier, null);
                           }
                         }
                         // Send the actual change.
-                        messageSender.sendChange(NetworkMessage.fromObject(
-                          type: NetworkMessageType.setGameConfiguration,
-                          body: gameConfiguration.copyWith(players: gameConfiguration.players.where((player) => player.id != selectedPlayerId).toList()),
-                        ));
+                        messageSender.sendGameConfiguration(gameConfiguration.copyWith(players: gameConfiguration.players.where((player) => player.id != selectedPlayerId).toList()));
                       },
                 child: const Text('Ta bort spelare', textAlign: TextAlign.center),
               ),
@@ -137,13 +125,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null || deviceIdentifier == null || selectedPlayerId == ref.read(connectedDeviceProvider)?.controlledPlayerId
                     ? null
                     : () {
-                        ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
-                              type: NetworkMessageType.changeDeviceControls,
-                              body: ChangeDeviceControlsBody(
-                                deviceToChangeId: deviceIdentifier,
-                                playerToControlId: selectedPlayerId,
-                              ),
-                            ));
+                        ref.read(messageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);
                       },
                 child: const Text('Styr spelare', textAlign: TextAlign.center),
               ),
@@ -153,13 +135,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null || ref.read(connectedDeviceProvider)?.controlledPlayerId == null
                     ? null
                     : () {
-                        ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
-                              type: NetworkMessageType.changeDeviceControls,
-                              body: ChangeDeviceControlsBody(
-                                deviceToChangeId: deviceIdentifier!,
-                                playerToControlId: null,
-                              ),
-                            ));
+                        ref.read(messageSenderProvider).sendDeviceControls(deviceIdentifier!, null);
                       },
                 child: const Text('Sluta styr spelare', textAlign: TextAlign.center),
               ),

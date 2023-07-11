@@ -7,6 +7,7 @@ import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
+import 'package:vampulv/roles/role_type.dart';
 import 'package:vampulv/user_maps/user_map.dart';
 
 class Seer extends Role {
@@ -41,10 +42,7 @@ class SeerChoosingWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return UserMap(
       onDone: (List<Player> selected) {
-        ref.read(messageSenderProvider).sendChange(NetworkMessage(
-              type: NetworkMessageType.inputToGame,
-              message: '${selected.single.configuration.id}',
-            ));
+        ref.read(messageSenderProvider).sendPlayerInput('${selected.single.configuration.id}');
       },
       description: 'Välj vem du vill se huruvida de är vampulv',
       numberSelected: 1,

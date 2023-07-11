@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 
@@ -32,8 +33,9 @@ class _UserMapState extends ConsumerState<UserMap> {
 
   @override
   Widget build(BuildContext context) {
-    List<Player> players = ref.watch(gameProvider.select((game) => game!.players));
-    bool hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
+    final players = ref.watch(gameProvider.select((game) => game!.players));
+    final controlledPlayer = ref.watch(controlledPlayerProvider);
+    final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
     Widget descriptionText = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -46,69 +48,73 @@ class _UserMapState extends ConsumerState<UserMap> {
       ],
     );
     return LayoutBuilder(builder: (context, constraints) {
-      bool buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
+      final buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
+      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.configuration.id == controlledPlayer.configuration.id) * 2 * math.pi / players.length;
+      final Widget playersWidget = CircularLayout(
+          largerChildren: true,
+          rotationOffset: rotationCurrent,
+          inside: FittedBox(child: descriptionText),
+          children: List.generate(
+              players.length,
+              (i) => GestureDetector(
+                    onTap: () {
+                      if (selectedIndices.contains(i)) {
+                        setState(() {
+                          selectedIndices.remove(i);
+                        });
+                      } else if (widget.numberSelected == 1) {
+                        setState(() {
+                          selectedIndices = [
+                            i
+                          ];
+                        });
+                      } else if (selectedIndices.length < widget.numberSelected) {
+                        setState(() {
+                          selectedIndices.add(i);
+                        });
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: widget.numberSelected == 0
+                            ? Colors.orange[400]
+                            : selectedIndices.contains(i)
+                                ? Colors.orange[700]
+                                : const Color.fromARGB(255, 245, 198, 128),
+                      ),
+                      child: FractionallySizedBox(
+                        widthFactor: math.sqrt1_2,
+                        heightFactor: math.sqrt1_2,
+                        child: widget.playerAppearance == null
+                            ? FittedBox(
+                                child: Text(
+                                  players[i].configuration.name,
+                                ),
+                              )
+                            : widget.playerAppearance!(players[i]),
+                      ),
+                    ),
+                  )));
       return Flex(
         direction: buttonsBelow ? Axis.vertical : Axis.horizontal,
         children: [
           Expanded(
-            child: Stack(children: [
-              // The backgrounds of the players.
-              CircularLayout(
-                  largerChildren: true,
-                  children: List.generate(
-                      players.length,
-                      (i) => Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: widget.numberSelected == 0
-                                  ? Colors.orange[400]
-                                  : selectedIndices.contains(i)
-                                      ? Colors.orange[700]
-                                      : const Color.fromARGB(255, 245, 198, 128),
-                            ),
-                          ))),
-              // The players.
-              CircularLayout(
-                  inside: FittedBox(child: descriptionText),
-                  children: List.generate(
-                      players.length,
-                      (i) => GestureDetector(
-                            onTap: () {
-                              if (selectedIndices.contains(i)) {
-                                setState(() {
-                                  selectedIndices.remove(i);
-                                });
-                              } else if (widget.numberSelected == 1) {
-                                setState(() {
-                                  selectedIndices = [
-                                    i
-                                  ];
-                                });
-                              } else if (selectedIndices.length < widget.numberSelected) {
-                                setState(() {
-                                  selectedIndices.add(i);
-                                });
-                              }
-                            },
-                            child: widget.playerAppearance == null
-                                ? FittedBox(
-                                    child: Text(
-                                      players[i].configuration.name,
-                                    ),
-                                  )
-                                : widget.playerAppearance!(players[i]),
-                          ))),
-              // The things between the players.
-              if (widget.betweenPlayers != null)
-                CircularLayout(
-                    rotationOffset: math.pi / players.length,
-                    children: List.generate(
-                        players.length,
-                        (i) => widget.betweenPlayers!(
-                              players[i],
-                              players[i + 1 == players.length ? 0 : i + 1],
-                            ))),
-            ]),
+            child: widget.betweenPlayers == null
+                ? playersWidget
+                : Stack(children: [
+                    playersWidget,
+                    // The things between the players.
+                    if (widget.betweenPlayers != null)
+                      CircularLayout(
+                          rotationOffset: rotationCurrent + math.pi / players.length,
+                          children: List.generate(
+                              players.length,
+                              (i) => widget.betweenPlayers!(
+                                    players[i],
+                                    players[i + 1 == players.length ? 0 : i + 1],
+                                  ))),
+                  ]),
           ),
           Flex(
             direction: buttonsBelow ? Axis.horizontal : Axis.vertical,

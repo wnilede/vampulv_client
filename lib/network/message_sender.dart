@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game_configuration.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
+import 'package:vampulv/network/player_input.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'message_sender.freezed.dart';
@@ -15,6 +18,7 @@ class MessageSender with _$MessageSender {
   factory MessageSender({
     WebSocketSink? sink,
     Stream<dynamic>? stream,
+    required final Ref ref,
   }) = _MessageSender;
   const MessageSender._();
 
@@ -41,13 +45,18 @@ class MessageSender with _$MessageSender {
   }
 
   void sendPlayerInput(Object value) {
+    final player = ref.read(controlledPlayerProvider);
+    if (player == null) return;
     sendChange(NetworkMessage.fromObject(
       type: NetworkMessageType.inputToGame,
-      body: value,
+      body: PlayerInput.fromObject(
+        ownerId: ref.read(controlledPlayerProvider)!.configuration.id,
+        body: value,
+      ),
     ));
   }
 
-  void sendDeviceControls(int deviceToChangeId, int playerToControlId) {
+  void sendDeviceControls(int deviceToChangeId, int? playerToControlId) {
     sendChange(NetworkMessage.fromObject(
       type: NetworkMessageType.changeDeviceControls,
       body: ChangeDeviceControlsBody(

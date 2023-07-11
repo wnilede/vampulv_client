@@ -8,9 +8,10 @@ abstract class Rule {
 
 class RuleReaction<T extends Event> {
   int priority;
+  EventType? filter;
 
-  /// Must return null to change nothing, Game to set entire game or Event to add it to the game.
+  /// Must return value that the game knows how to apply.
   dynamic Function(Event event, Game game) applyer;
 
-  RuleReaction({required this.priority, required this.applyer});
+  RuleReaction({required this.priority, required this.applyer, this.filter});
 }
