@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vampulv/game_view/change_controlled_player.dart';
 import 'package:vampulv/game_view/do_input.dart';
+import 'package:vampulv/game_view/game_view_drawer.dart';
 import 'package:vampulv/game_view/information.dart';
 import 'package:vampulv/game_view/spectator_overview.dart';
 
@@ -12,70 +13,29 @@ class GameView extends StatefulWidget {
 }
 
 class _GameViewState extends State<GameView> {
-  _GameView view = _GameView.input;
+  GameViewSelection view = GameViewSelection.aboutGame;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: switch (view) {
-            _GameView.spectatorOverview => const SpectatorAppBar(),
-            _ => null,
-          },
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Vampulv'),
-              ),
-              ListTile(
-                title: const Text('Game'),
-                selected: view == _GameView.input,
-                onTap: () {
-                  changeView(_GameView.input);
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Information'),
-                selected: view == _GameView.aboutGame,
-                onTap: () {
-                  changeView(_GameView.aboutGame);
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Ändra spelare'),
-                selected: view == _GameView.changeControlledPlayer,
-                onTap: () {
-                  changeView(_GameView.changeControlledPlayer);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ),
-        body: switch (view) {
-          _GameView.input => const DoInput(),
-          _GameView.changeControlledPlayer => const ChangeControlledPlayer(),
-          _GameView.aboutGame => const Information(),
-          _GameView.spectatorOverview => const SpectatorOverview(),
-        },
-      );
-
-  void changeView(_GameView view) {
-    if (this.view == view) return;
-    setState(() {
-      this.view = view;
-    });
+  Widget build(BuildContext context) {
+    final Widget drawer = GameViewDrawer(
+      selected: view,
+      onSelect: (value) {
+        if (view == value) return;
+        setState(() {
+          view = value;
+        });
+      },
+    );
+    return switch (view) {
+      GameViewSelection.input => DoInput(drawer: drawer),
+      GameViewSelection.changeControlledPlayer => ChangeControlledPlayer(drawer: drawer),
+      GameViewSelection.aboutGame => Information(drawer: drawer),
+      GameViewSelection.spectatorOverview => SpectatorOverview(drawer: drawer),
+    };
   }
 }
 
-enum _GameView {
+enum GameViewSelection {
   input,
   changeControlledPlayer,
   aboutGame,

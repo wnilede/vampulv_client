@@ -33,7 +33,7 @@ class Game with _$Game {
     assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer, 'There are not enough roles for all players.');
     final randomGenerator = Xorshift32(configuration.randomSeed);
     final players = <Player>[];
-    final shuffledRoles = configuration.roles.randomize().toList();
+    final shuffledRoles = configuration.roles.randomize(randomGenerator).toList();
     for (int i = 0; i < configuration.players.length; i++) {
       players.add(Player(
         configuration: configuration.players[i],
@@ -44,6 +44,7 @@ class Game with _$Game {
             )
             .map((roleType) => roleType.produceRole())
             .toList(),
+        maxLives: configuration.maxLives,
         lives: configuration.maxLives,
       ));
     }
@@ -83,7 +84,8 @@ class Game with _$Game {
     final caller = playerFromId(input.ownerId);
     return _applyResultFromApplyer(caller.currentInputHandler!.resultApplyer(input, this, caller), input.ownerId)
         .game //
-        .copyWithPlayer(caller.removeCurrentInputHandler);
+        .copyWithPlayer(caller.removeCurrentInputHandler)
+        ._runUntilInput();
   }
 
   Game _applyEventOnly(Event event) {
@@ -186,7 +188,7 @@ class Game with _$Game {
   Game _runUntilInput() {
     Game oldResult = this;
     while (true) {
-      final result = _runOneStep();
+      final result = oldResult._runOneStep();
       if (result == null) {
         return oldResult;
       } else {
@@ -198,16 +200,18 @@ class Game with _$Game {
   Game? _runOneStep() {
     if (isNight && players.every((player) => player.unhandledInputHandlers.isEmpty)) {
       if (unhandledEvents.isEmpty) {
-        return copyWith(isNight: false).applyEvent(Event(type: EventType.dayBegins));
+        return _applyEventOnly(Event(type: EventType.dayBegins));
       } else {
-        return _applyEventOnly(unhandledEvents.min((event1, event2) {
+        Event eventToApply = unhandledEvents.min((event1, event2) {
           if (event1.type == event2.type) {
             assert(event1.priority == null || event2.priority == null, "There are more than one unhandled event of type '${event1.type}', and at least one of them has priority null.");
             assert(event1.priority != event2.priority, "There are multiple unhandled events of type '${event1.type}' with the same priority.");
             return event2.priority! - event1.priority!;
           }
           return event1.type.index - event2.type.index;
-        }));
+        });
+        Game afterEvent = _applyEventOnly(eventToApply);
+        return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());
       }
     }
     return null;

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
@@ -19,6 +17,7 @@ class Seer extends Role {
               priority: 30,
               applyer: (event, game, player) => event.type == EventType.nightBegins
                   ? InputHandler(
+                      description: 'Välj spelare att använda spådamen på',
                       resultApplyer: (input, game, string) {
                         final seenPlayer = game.playerFromId(int.parse(input.message));
                         final seenPlayerIsVampulv = seenPlayer.roles.any((role) => role.type == RoleType.vampulv || role.type == RoleType.lycan);

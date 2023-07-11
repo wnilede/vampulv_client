@@ -7,25 +7,33 @@ import 'package:vampulv/player.dart';
 class InputHandler {
   Widget widget;
 
+  /// Appears for spectators viewing unhandled input handlers.
+  String description;
+
   /// Must return something that the game knows what to do with. See Game for more information.
   dynamic Function(PlayerInput input, Game game, Player owner) resultApplyer;
 
   InputHandler({
+    required this.description,
     required this.resultApplyer,
     required this.widget,
   });
 
-  static InputHandler confirmChild(Widget child) => InputHandler(
+  static InputHandler confirmChild({required String description, required Widget child}) => InputHandler(
+        description: description,
         widget: child,
         resultApplyer: (PlayerInput input, Game game, Player owner) {},
       );
-  static InputHandler confirmMessage(String message) => InputHandler.confirmChild(Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Text(
-            message,
-            textAlign: TextAlign.center,
+  static InputHandler confirmMessage(String message) => InputHandler.confirmChild(
+        description: "Läsa meddelande '$message'",
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Center(
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
-      ));
+      );
 }

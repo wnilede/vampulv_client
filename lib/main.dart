@@ -21,9 +21,8 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var isNight = ref.watch(gameProvider.select((game) => game?.isNight ?? false));
     return MaterialApp(
-      theme: isNight ? ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.red)) : ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)), //ThemeData.light(),
+      theme: ref.watch(gameProvider.select((game) => game?.isNight ?? false)) ? ThemeData.dark() : ThemeData.light(),
       home: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))
           ? ref.watch(synchronizedDataProvider).gameHasBegun
               ? const GameView()

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/role_card_view.dart';
 import 'package:vampulv/roles/event.dart';
@@ -20,11 +18,13 @@ class CardTurner extends Role {
               priority: 30,
               applyer: (event, game, player) => event.type == EventType.nightBegins
                   ? InputHandler(
+                      description: 'Välj spelare att använda kortvändaren på',
                       resultApplyer: (input, game, string) {
                         final seenPlayer = game.playerFromId(int.parse(input.message));
                         final seenRole = seenPlayer.roles[game.randomGenerator.nextInt(seenPlayer.roles.length)];
                         return InputHandler.confirmChild(
-                          Center(
+                          description: 'See kort visat av kortvändare',
+                          child: Center(
                             child: Column(
                               children: [
                                 Text('En av rollerna som ${seenPlayer.configuration.name} har är'),

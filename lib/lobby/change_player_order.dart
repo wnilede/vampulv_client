@@ -5,12 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiver/iterables.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
 import 'package:vampulv/network/message_sender.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/player_configuration.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 

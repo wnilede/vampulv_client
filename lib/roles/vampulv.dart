@@ -19,6 +19,7 @@ class Vampulv extends Role {
       priority: 100,
       applyer: (event, game, owner) => event.type == EventType.nightBegins
           ? InputHandler(
+              description: 'Välj spelare att attakera med vampulv',
               resultApplyer: (input, game, player) {
                 _setAttacked(int.tryParse(input.message));
                 return null;

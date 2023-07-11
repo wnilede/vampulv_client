@@ -11,13 +11,14 @@ class Player with _$Player {
     required PlayerConfiguration configuration,
     required List<Role> roles,
     required int lives,
+    required int maxLives,
     @Default([]) List<InputHandler> unhandledInputHandlers,
     @Default(false) bool isWinner,
+    @Default(true) bool alive,
   }) = _Player;
 
   const Player._();
 
-  bool get alive => lives > 0;
   InputHandler? get currentInputHandler => unhandledInputHandlers.firstOrNull;
   Player get removeCurrentInputHandler => copyWith(unhandledInputHandlers: unhandledInputHandlers.skip(1).toList());
 }
