@@ -6,6 +6,7 @@ import 'package:vampulv/game_provider.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
+import 'package:vampulv/user_maps/player_in_map.dart';
 
 class PlayerMap extends ConsumerStatefulWidget {
   /// Decides how the players should appear. If non-null, every player is inputed into this function, and the resulting widget is placed at the position designated for that player. Cannot be set together with other properties deciding how the players look.
@@ -19,10 +20,11 @@ class PlayerMap extends ConsumerStatefulWidget {
 
   final String? description;
   final bool canChooseFewer;
+  final bool deadPeopleSelectable;
   final void Function(List<Player> selected) onDone;
   final void Function()? onCancel;
 
-  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, super.key});
+  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, this.deadPeopleSelectable = false, super.key});
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
@@ -57,44 +59,32 @@ class _UserMapState extends ConsumerState<PlayerMap> {
           children: List.generate(
               players.length,
               (i) => GestureDetector(
-                    onTap: () {
-                      if (selectedIndices.contains(i)) {
-                        setState(() {
-                          selectedIndices.remove(i);
-                        });
-                      } else if (widget.numberSelected == 1) {
-                        setState(() {
-                          selectedIndices = [
-                            i
-                          ];
-                        });
-                      } else if (selectedIndices.length < widget.numberSelected) {
-                        setState(() {
-                          selectedIndices.add(i);
-                        });
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: widget.numberSelected == 0
-                            ? Colors.orange[400]
-                            : selectedIndices.contains(i)
-                                ? Colors.orange[700]
-                                : const Color.fromARGB(255, 245, 198, 128),
-                      ),
-                      child: FractionallySizedBox(
-                        widthFactor: math.sqrt1_2,
-                        heightFactor: math.sqrt1_2,
-                        child: widget.playerAppearance == null
-                            ? FittedBox(
-                                child: Text(
-                                  players[i].configuration.name,
-                                ),
-                              )
-                            : widget.playerAppearance!(players[i]),
-                      ),
-                    ),
+                    onTap: players[i].alive || widget.deadPeopleSelectable
+                        ? () {
+                            if (selectedIndices.contains(i)) {
+                              setState(() {
+                                selectedIndices.remove(i);
+                              });
+                            } else if (widget.numberSelected == 1) {
+                              setState(() {
+                                selectedIndices = [
+                                  i
+                                ];
+                              });
+                            } else if (selectedIndices.length < widget.numberSelected) {
+                              setState(() {
+                                selectedIndices.add(i);
+                              });
+                            }
+                          }
+                        : null,
+                    child: widget.playerAppearance == null
+                        ? PlayerInMap(
+                            players[i],
+                            selected: selectedIndices.contains(i),
+                            selectable: widget.numberSelected > 0 && (players[i].alive || widget.deadPeopleSelectable),
+                          )
+                        : widget.playerAppearance!(players[i]),
                   )));
       return Flex(
         direction: buttonsBelow ? Axis.vertical : Axis.horizontal,

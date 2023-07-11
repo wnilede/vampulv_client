@@ -49,7 +49,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                         });
                       },
                       child: LongPressDraggable(
-                        feedback: Text(indexPlayerPair.$2.name),
+                        feedback: Text(indexPlayerPair.$2.name, style: Theme.of(context).textTheme.titleLarge),
                         data: indexPlayerPair.$1,
                         child: FittedBox(child: Text(indexPlayerPair.$2.name, style: TextStyle(color: indexPlayerPair.$2.id == selectedPlayerId ? Colors.blue : Colors.black))),
                       ),
