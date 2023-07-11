@@ -18,8 +18,8 @@ class PlayerInMap extends StatelessWidget {
         color: selectable
             ? selected
                 ? Colors.orange[700]
-                : const Color.fromARGB(255, 245, 198, 128)
-            : Colors.orange[400],
+                : Colors.orange[400]
+            : const Color.fromARGB(255, 245, 198, 128),
       ),
       child: FractionallySizedBox(
         widthFactor: math.sqrt1_2,

@@ -48,7 +48,7 @@ class StandardRule extends Rule {
                 ),
                 cappedPlayers //
                     .where((player) => player.lives == 0)
-                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id, priority: 0)),
+                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id, priority: 0, appliedMorning: true)),
               ];
             },
           ),
@@ -76,7 +76,7 @@ class StandardRule extends Rule {
                                   if (newGame.players.every((player) => player.lynchingVote != null) && newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
                                     return [
                                       newGame,
-                                      DieEvent(playerId: event.proposedId, priority: 40),
+                                      DieEvent(playerId: event.proposedId, priority: 40, appliedMorning: false),
                                     ];
                                   }
                                   return newGame;

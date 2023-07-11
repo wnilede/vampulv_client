@@ -88,7 +88,7 @@ class Game with _$Game {
     final caller = playerFromId(input.ownerId);
     return _applyResultFromApplyer(caller.currentInputHandler!.resultApplyer(input, this, caller), input.ownerId)
         .game //
-        .copyWithPlayer(caller.removeCurrentInputHandler)
+        .copyWithPlayerModification(input.ownerId, (player) => player.removeCurrentInputHandler)
         ._runUntilInput();
   }
 
@@ -130,6 +130,7 @@ class Game with _$Game {
         playerReactionPairs.removeAt(0);
       }
     }
+    print("Event '${event.runtimeType}' applied");
     return resultingGame.game;
   }
 
@@ -173,7 +174,11 @@ class Game with _$Game {
       return _ApplyResultResult(copyWith(log: log.append(result).toList()));
     }
     if (result is Event) {
-      return _ApplyResultResult(copyWith(unhandledEvents: unhandledEvents.append(result).toList()));
+      if (result.appliedMorning) {
+        return _ApplyResultResult(copyWith(unhandledEvents: unhandledEvents.append(result).toList()));
+      } else {
+        return _ApplyResultResult(applyEvent(result));
+      }
     }
     if (result is Game) {
       return _ApplyResultResult(result);
@@ -229,6 +234,10 @@ class Game with _$Game {
     ];
     newPlayers[players.indexWhere((existingPlayer) => existingPlayer.configuration.id == player.configuration.id)] = player;
     return copyWith(players: newPlayers);
+  }
+
+  Game copyWithPlayerModification(int playerId, Player Function(Player) modification) {
+    return copyWithPlayer(modification(playerFromId(playerId)));
   }
 }
 

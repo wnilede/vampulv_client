@@ -53,7 +53,7 @@ class VampulvRule extends Rule {
                     .randomSubset(1, game.randomGenerator)
                     .single;
                 if (mostVotedForId == null) return null;
-                return HurtEvent(playerId: mostVotedForId, priority: 10);
+                return HurtEvent(playerId: mostVotedForId, priority: 10, appliedMorning: true);
               }),
           RuleReaction<GameEndsEvent>(
               priority: 10,
@@ -97,4 +97,6 @@ class VampulvChoosingWidget extends ConsumerWidget {
   }
 }
 
-class VampulvsAttackEvent extends Event {}
+class VampulvsAttackEvent extends Event {
+  VampulvsAttackEvent() : super(appliedMorning: true);
+}
