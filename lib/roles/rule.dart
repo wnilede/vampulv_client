@@ -7,11 +7,19 @@ abstract class Rule {
 }
 
 class RuleReaction<T extends Event> {
-  int priority;
-  EventType? filter;
+  final int priority;
+  final dynamic Function(T event, Game game) _onApply;
 
-  /// Must return value that the game knows how to apply.
-  dynamic Function(Event event, Game game) applyer;
+  const RuleReaction({
+    required this.priority,
 
-  RuleReaction({required this.priority, required this.applyer, this.filter});
+    /// Must return value that the game knows how to apply.
+    required dynamic Function(T, Game) onApply,
+  }) : _onApply = onApply;
+
+  bool passesFilter(Event event) {
+    return event is T;
+  }
+
+  dynamic apply(Event event, Game game) => _onApply(event as T, game);
 }

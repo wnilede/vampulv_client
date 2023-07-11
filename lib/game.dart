@@ -61,8 +61,8 @@ class Game with _$Game {
           .toList(),
     ) //
         ._runUntilInput()
-        .applyEvent(Event(type: EventType.gameBegins))
-        .applyEvent(Event(type: EventType.nightBegins));
+        .applyEvent(GameBeginsEvent())
+        .applyEvent(NightBeginsEvent());
   }
 
   factory Game.fromNetworkMessages(GameConfiguration configuration, List<NetworkMessage> messages) {
@@ -98,7 +98,7 @@ class Game with _$Game {
           (rule) => rule.reactions,
         )
         .flatten()
-        .where((rule) => rule.filter == event.type || rule.filter == null)
+        .where((rule) => rule.passesFilter(event))
         .orderBy((reaction) => reaction.priority)
         .toList();
     final playerReactionPairs = players
@@ -116,17 +116,17 @@ class Game with _$Game {
               ),
         )
         .flatten()
-        .where((playerReaction) => playerReaction.$2.filter == event.type || playerReaction.$2.filter == null)
+        .where((playerReaction) => playerReaction.$2.passesFilter(event))
         .orderBy((playerReaction) => playerReaction.$2.priority)
         .toList();
     _ApplyResultResult resultingGame = _ApplyResultResult(this);
     while ((ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) && !resultingGame.canceled) {
       if (playerReactionPairs.isEmpty || ruleReactions.isNotEmpty && ruleReactions[0].priority > playerReactionPairs[0].$2.priority) {
-        resultingGame = resultingGame.game._applyResultFromApplyer(ruleReactions[0].applyer(event, resultingGame.game), null);
+        resultingGame = resultingGame.game._applyResultFromApplyer(ruleReactions[0].apply(event, resultingGame.game), null);
         ruleReactions.removeAt(0);
       } else {
         final owner = playerReactionPairs[0].$1;
-        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.applyer(event, resultingGame.game, owner), owner.configuration.id);
+        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.apply(event, resultingGame.game, owner), owner.configuration.id);
         playerReactionPairs.removeAt(0);
       }
     }
@@ -204,15 +204,15 @@ class Game with _$Game {
   Game? _runOneStep() {
     if (isNight && players.every((player) => player.unhandledInputHandlers.isEmpty)) {
       if (unhandledEvents.isEmpty) {
-        return _applyEventOnly(Event(type: EventType.dayBegins));
+        return _applyEventOnly(DayBeginsEvent());
       } else {
         Event eventToApply = unhandledEvents.min((event1, event2) {
-          if (event1.type == event2.type) {
-            assert(event1.priority == null || event2.priority == null, "There are more than one unhandled event of type '${event1.type}', and at least one of them has priority null.");
-            assert(event1.priority != event2.priority, "There are multiple unhandled events of type '${event1.type}' with the same priority.");
+          if (event1.runtimeType == event2.runtimeType) {
+            assert(event1.priority == null || event2.priority == null, "There are more than one unhandled event of type '${event1.runtimeType}', and at least one of them has priority null.");
+            assert(event1.priority != event2.priority, "There are multiple unhandled events of type '${event1.runtimeType}' with the same priority.");
             return event2.priority! - event1.priority!;
           }
-          return event1.type.index - event2.type.index;
+          return Event.typeOrder.indexWhere((subType) => event1.runtimeType == subType) - Event.typeOrder.indexWhere((subType) => event2.runtimeType == subType);
         });
         Game afterEvent = _applyEventOnly(eventToApply);
         return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());

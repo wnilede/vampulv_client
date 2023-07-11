@@ -15,18 +15,16 @@ class Vampulv extends Role {
   int? playerIdAttacked;
 
   Vampulv() : super(type: RoleType.vampulv) {
-    reactions.add(RoleReaction(
+    reactions.add(RoleReaction<NightBeginsEvent>(
       priority: 100,
-      applyer: (event, game, owner) => event.type == EventType.nightBegins
-          ? InputHandler(
-              description: 'Välj spelare att attakera med vampulv',
-              resultApplyer: (input, game, player) {
-                _setAttacked(int.tryParse(input.message));
-                return null;
-              },
-              widget: const VampulvChoosingWidget(),
-            )
-          : null,
+      onApply: (event, game, owner) => InputHandler(
+        description: 'Välj spelare att attakera med vampulv',
+        resultApplyer: (input, game, player) {
+          _setAttacked(int.tryParse(input.message));
+          return null;
+        },
+        widget: const VampulvChoosingWidget(),
+      ),
     ));
   }
 
@@ -38,15 +36,13 @@ class Vampulv extends Role {
 class VampulvRule extends Rule {
   VampulvRule()
       : super(reactions: [
-          RuleReaction(
+          RuleReaction<NightBeginsEvent>(
             priority: 50,
-            filter: EventType.nightBegins,
-            applyer: (event, game) => Event(type: EventType.vampulvsAttacks),
+            onApply: (event, game) => VampulvsAttackEvent(),
           ),
-          RuleReaction(
+          RuleReaction<VampulvsAttackEvent>(
               priority: 10,
-              filter: EventType.vampulvsAttacks,
-              applyer: (event, game) {
+              onApply: (event, game) {
                 final mostVotedForId = game.players //
                     .map((player) => player.roles)
                     .flatten()
@@ -57,12 +53,11 @@ class VampulvRule extends Rule {
                     .randomSubset(1, game.randomGenerator)
                     .single;
                 if (mostVotedForId == null) return null;
-                return HurtEvent(playerId: mostVotedForId);
+                return HurtEvent(playerId: mostVotedForId, priority: 10);
               }),
-          RuleReaction(
+          RuleReaction<GameEndsEvent>(
               priority: 10,
-              filter: EventType.gameEnds,
-              applyer: (event, game) {
+              onApply: (event, game) {
                 final vampulvsWon = game.players.every(
                   (player) =>
                       !player.alive ||
@@ -101,3 +96,5 @@ class VampulvChoosingWidget extends ConsumerWidget {
     );
   }
 }
+
+class VampulvsAttackEvent extends Event {}

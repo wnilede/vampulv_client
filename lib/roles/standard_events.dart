@@ -5,25 +5,28 @@ class HurtEvent extends Event {
   int playerId;
   int livesLost;
 
-  HurtEvent({required this.playerId, this.livesLost = 1, super.priority}) : super(type: EventType.playerIsHurt);
+  HurtEvent({required this.playerId, this.livesLost = 1, required super.priority});
 }
 
 class DieEvent extends Event {
   int playerId;
 
-  DieEvent({required this.playerId, super.priority}) : super(type: EventType.playerDies);
+  DieEvent({required this.playerId, required super.priority});
 }
 
-class NightBeginsEvent extends Event {
-  int nightIndex;
-  NightBeginsEvent(this.nightIndex) : super(type: EventType.nightBegins);
-}
+class GameBeginsEvent extends Event {}
+
+class GameEndsEvent extends Event {}
+
+class NightBeginsEvent extends Event {}
+
+class DayBeginsEvent extends Event {}
 
 class ProposeLynchingEvent extends Event {
   int proposerId;
   int proposedId;
 
-  ProposeLynchingEvent({required this.proposedId, required this.proposerId}) : super(type: EventType.proposeLynching);
+  ProposeLynchingEvent({required this.proposedId, required this.proposerId});
 
   factory ProposeLynchingEvent.fromBody(ProposeLynchingBody body) => ProposeLynchingEvent(proposedId: body.proposedId, proposerId: body.proposerId);
 }

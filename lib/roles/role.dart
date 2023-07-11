@@ -11,11 +11,19 @@ abstract class Role {
 }
 
 class RoleReaction<T extends Event> {
-  int priority;
-  EventType? filter;
+  final int priority;
+  final dynamic Function(T event, Game game, Player owner) _onApply;
 
-  /// Must return value that the game knows how to apply.
-  dynamic Function(Event event, Game game, Player owner) applyer;
+  const RoleReaction({
+    required this.priority,
 
-  RoleReaction({required this.priority, required this.applyer, this.filter});
+    /// Must return value that the game knows how to apply.
+    required dynamic Function(T, Game, Player) onApply,
+  }) : _onApply = onApply;
+
+  bool passesFilter(Event event) {
+    return event is T;
+  }
+
+  dynamic apply(Event event, Game game, Player owner) => _onApply(event as T, game, owner);
 }

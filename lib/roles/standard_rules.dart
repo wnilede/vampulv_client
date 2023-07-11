@@ -2,7 +2,6 @@ import 'package:darq/darq.dart';
 import 'package:vampulv/binary_choice.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/player.dart';
-import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/rule.dart';
 import 'package:vampulv/roles/standard_events.dart';
 
@@ -10,33 +9,28 @@ class StandardRule extends Rule {
   StandardRule()
       : super(reactions: [
           // Set game night field when event is sent.
-          RuleReaction(
+          RuleReaction<DayBeginsEvent>(
             priority: 0,
-            filter: EventType.dayBegins,
-            applyer: (event, game) => game.copyWith(isNight: false),
+            onApply: (event, game) => game.copyWith(isNight: false),
           ),
           // Set game night field when event is sent.
-          RuleReaction(
+          RuleReaction<NightBeginsEvent>(
             priority: 0,
-            filter: EventType.nightBegins,
-            applyer: (event, game) => game.copyWith(isNight: true),
+            onApply: (event, game) => game.copyWith(isNight: true),
           ),
           // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this.
-          RuleReaction(
+          RuleReaction<HurtEvent>(
             priority: 0,
-            filter: EventType.playerIsHurt,
-            applyer: (event, game) {
-              final castedEvent = event as HurtEvent;
-              if (castedEvent.livesLost == 0) return null;
-              final Player previousPlayer = game.playerFromId(castedEvent.playerId);
-              return game.copyWithPlayer(previousPlayer.copyWith(lives: previousPlayer.lives - castedEvent.livesLost));
+            onApply: (event, game) {
+              if (event.livesLost == 0) return null;
+              final Player previousPlayer = game.playerFromId(event.playerId);
+              return game.copyWithPlayer(previousPlayer.copyWith(lives: previousPlayer.lives - event.livesLost));
             },
           ),
           // Cap lives for all players and send die events if neccessary.
-          RuleReaction(
+          RuleReaction<DayBeginsEvent>(
             priority: 40,
-            filter: EventType.dayBegins,
-            applyer: (event, game) {
+            onApply: (event, game) {
               final cappedPlayers = game.players.map(
                 (player) {
                   if (player.lives < 0) {
@@ -54,22 +48,19 @@ class StandardRule extends Rule {
                 ),
                 cappedPlayers //
                     .where((player) => player.lives == 0)
-                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id)),
+                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id, priority: 0)),
               ];
             },
           ),
           // Set player field when die event is sent.
-          RuleReaction(
+          RuleReaction<DieEvent>(
             priority: 0,
-            filter: EventType.playerDies,
-            applyer: (event, game) => game.copyWithPlayer(game.playerFromId((event as DieEvent).playerId).copyWith(alive: false)),
+            onApply: (event, game) => game.copyWithPlayer(game.playerFromId(event.playerId).copyWith(alive: false)),
           ),
           // Add input handlers for voting when lynching is proposed.
-          RuleReaction(
+          RuleReaction<ProposeLynchingEvent>(
             priority: 0,
-            filter: EventType.proposeLynching,
-            applyer: (event, game) {
-              event as ProposeLynchingEvent;
+            onApply: (event, game) {
               Player proposed = game.playerFromId(event.proposedId);
               Player proposer = game.playerFromId(event.proposerId);
               return game.copyWith(
@@ -85,7 +76,7 @@ class StandardRule extends Rule {
                                   if (newGame.players.every((player) => player.lynchingVote != null) && newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
                                     return [
                                       newGame,
-                                      DieEvent(playerId: event.proposedId)
+                                      DieEvent(playerId: event.proposedId, priority: 40),
                                     ];
                                   }
                                   return newGame;
