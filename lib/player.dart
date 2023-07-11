@@ -15,6 +15,8 @@ class Player with _$Player {
     @Default([]) List<InputHandler> unhandledInputHandlers,
     @Default(false) bool isWinner,
     @Default(true) bool alive,
+    bool? lynchingVote,
+    @Default(1) int votesInLynching,
   }) = _Player;
 
   const Player._();

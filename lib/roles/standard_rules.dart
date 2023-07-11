@@ -1,3 +1,6 @@
+import 'package:darq/darq.dart';
+import 'package:vampulv/binary_choice.dart';
+import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/rule.dart';
@@ -60,6 +63,42 @@ class StandardRule extends Rule {
             priority: 0,
             filter: EventType.playerDies,
             applyer: (event, game) => game.copyWithPlayer(game.playerFromId((event as DieEvent).playerId).copyWith(alive: false)),
+          ),
+          // Add input handlers for voting when lynching is proposed.
+          RuleReaction(
+            priority: 0,
+            filter: EventType.proposeLynching,
+            applyer: (event, game) {
+              event as ProposeLynchingEvent;
+              Player proposed = game.playerFromId(event.proposedId);
+              Player proposer = game.playerFromId(event.proposerId);
+              return game.copyWith(
+                  players: game.players
+                      .map((player) => player.copyWith(
+                          lynchingVote: null,
+                          unhandledInputHandlers: player.unhandledInputHandlers
+                              .append(InputHandler(
+                                description: 'Rösta i lynchning av ${proposed.configuration.name}',
+                                resultApplyer: (playerInput, game, player) {
+                                  // If this is the last player casting the vote, count the votes and send die event if neccessary.
+                                  final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
+                                  if (newGame.players.every((player) => player.lynchingVote != null) && newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
+                                    return [
+                                      newGame,
+                                      DieEvent(playerId: event.proposedId)
+                                    ];
+                                  }
+                                  return newGame;
+                                },
+                                widget: BinaryChoice(
+                                  title: '${proposer.configuration.name} föreslår lynchning av ${proposed.configuration.name}',
+                                  trueChoice: 'För',
+                                  falseChoice: 'Emot',
+                                ),
+                              ))
+                              .toList()))
+                      .toList());
+            },
           ),
         ]);
 }

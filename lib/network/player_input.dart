@@ -22,7 +22,7 @@ class PlayerInput with _$PlayerInput {
   }) {
     return PlayerInput(
       ownerId: ownerId,
-      message: json.encode(body),
+      message: body is String ? body : json.encode(body),
     );
   }
 }

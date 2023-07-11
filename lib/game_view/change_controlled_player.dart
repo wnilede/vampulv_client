@@ -13,7 +13,7 @@ class ChangeControlledPlayer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
         appBar: AppBar(title: const Text('Ändra spelare')),
         drawer: drawer,
-        body: UserMap(
+        body: PlayerMap(
           onDone: (selected) {
             int? deviceId = ref.read(connectedDeviceIdentifierProvider);
             if (deviceId == null) return;

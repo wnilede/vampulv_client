@@ -3,12 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
+import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/rule.dart';
+import 'package:vampulv/roles/standard_events.dart';
 import 'package:vampulv/roles/standard_rules.dart';
 import 'package:xrandom/xrandom.dart';
 
@@ -69,6 +71,8 @@ class Game with _$Game {
       if (!message.type.isGameChange) continue;
       if (message.type == NetworkMessageType.inputToGame) {
         game = game.applyInput(PlayerInput.fromJson(message.body));
+      } else if (message.type == NetworkMessageType.proposeLynching) {
+        game = game.applyEvent(ProposeLynchingEvent.fromBody((ProposeLynchingBody.fromJson(message.body))));
       } else {
         throw UnimplementedError("Cannot yet handle network messages of type '${message.type.name}'.");
       }

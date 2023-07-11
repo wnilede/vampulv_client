@@ -7,7 +7,7 @@ import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 
-class UserMap extends ConsumerStatefulWidget {
+class PlayerMap extends ConsumerStatefulWidget {
   /// Decides how the players should appear. If non-null, every player is inputed into this function, and the resulting widget is placed at the position designated for that player. Cannot be set together with other properties deciding how the players look.
   final Widget Function(Player player)? playerAppearance;
 
@@ -22,13 +22,13 @@ class UserMap extends ConsumerStatefulWidget {
   final void Function(List<Player> selected) onDone;
   final void Function()? onCancel;
 
-  const UserMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, super.key});
+  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, super.key});
 
   @override
-  ConsumerState<UserMap> createState() => _UserMapState();
+  ConsumerState<PlayerMap> createState() => _UserMapState();
 }
 
-class _UserMapState extends ConsumerState<UserMap> {
+class _UserMapState extends ConsumerState<PlayerMap> {
   List<int> selectedIndices = [];
 
   @override

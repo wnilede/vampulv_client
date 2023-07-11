@@ -47,7 +47,7 @@ class CardTurnerChoosingWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return UserMap(
+    return PlayerMap(
       onDone: (List<Player> selected) {
         ref.read(messageSenderProvider).sendPlayerInput('${selected.single.configuration.id}');
       },

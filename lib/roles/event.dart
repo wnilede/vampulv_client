@@ -7,10 +7,12 @@ class Event {
   Event({required this.type, this.priority});
 }
 
+// Perhaps this enum is unneccessary? Should it be removed?
 enum EventType {
-  // The order determines which order they are evaluated in
+  // The order determines which order they are evaluated in.
   gameEnds,
   gameBegins,
+  proposeLynching,
   vampulvsAttacks,
   playerIsHurt,
   playerDies,

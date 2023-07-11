@@ -4,7 +4,8 @@ enum NetworkMessageType {
   setGameConfiguration(isGameChange: false),
   changeDeviceControls(isGameChange: false),
   setSynchronizedData(isGameChange: false),
-  inputToGame(isGameChange: true);
+  inputToGame(isGameChange: true),
+  proposeLynching(isGameChange: true);
 
   // ignore: unused_element
   const NetworkMessageType({this.isGameChange = true, this.isSynchronizedDataChange = true});
