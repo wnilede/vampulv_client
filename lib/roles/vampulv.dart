@@ -88,9 +88,9 @@ class VampulvChoosingWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlayerMap(
       onDone: (List<Player> selected) {
-        ref.read(messageSenderProvider).sendPlayerInput(selected.isEmpty ? 'none' : '${selected.single.configuration.id}');
+        ref.read(currentMessageSenderProvider).sendPlayerInput(selected.isEmpty ? 'none' : '${selected.single.configuration.id}');
       },
-      description: 'Välj vem vampyrerna ska attakera',
+      description: 'Välj vem vampulverna ska attakera',
       numberSelected: 1,
       canChooseFewer: true,
     );

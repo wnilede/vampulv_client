@@ -21,7 +21,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
 
   @override
   Widget build(BuildContext context) {
-    GameConfiguration gameConfiguration = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
+    GameConfiguration gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
     if (selectedIndex != null && (selectedAmongAll && selectedIndex! >= RoleType.values.length || !selectedAmongAll && selectedIndex! >= gameConfiguration.roles.length)) {
       selectedIndex = null;
     }
@@ -65,7 +65,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
           onPressed: selectedIndex == null
               ? null
               : () {
-                  ref.read(messageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
+                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
                         roles: (selectedAmongAll
                                 ? gameConfiguration.roles.append(
                                     RoleType.values[selectedIndex!],

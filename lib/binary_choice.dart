@@ -22,13 +22,13 @@ class BinaryChoice extends ConsumerWidget {
               children: [
                 Expanded(
                   child: MaterialButton(
-                    onPressed: () => ref.read(messageSenderProvider).sendPlayerInput('false'),
+                    onPressed: () => ref.read(currentMessageSenderProvider).sendPlayerInput('false'),
                     child: Text(falseChoice, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
                   ),
                 ),
                 Expanded(
                   child: MaterialButton(
-                    onPressed: () => ref.read(messageSenderProvider).sendPlayerInput('true'),
+                    onPressed: () => ref.read(currentMessageSenderProvider).sendPlayerInput('true'),
                     child: Text(trueChoice, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
                   ),
                 ),

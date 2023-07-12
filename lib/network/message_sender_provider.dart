@@ -2,17 +2,43 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_sender.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class MessageSenderNotifier extends StateNotifier<MessageSender> {
-  final Ref ref;
+part 'message_sender_provider.g.dart';
 
-  MessageSenderNotifier(this.ref, {WebSocketSink? sink, Stream<dynamic>? stream}) : super(MessageSender(ref: ref, sink: sink, stream: stream));
+@Riverpod(keepAlive: true)
+class CurrentMessageSender extends _$CurrentMessageSender {
+  @override
+  MessageSender build() {
+    const port = 6353;
+
+    print('Connecting as client');
+    final channel = WebSocketChannel.connect(
+      Uri.parse('ws://192.168.8.111:$port'),
+    );
+    channel.ready.asStream().handleError((error, stackTrace) {
+      if (error is TimeoutException || error is SocketException) {
+        print('Could not connect');
+      } else {
+        // Could not handle error, so we are rethrowing it.
+        throw error!;
+      }
+    }).listen((_) {
+      print('Connected successfully');
+      _setSinkAndStream(
+        channel.sink,
+        channel.stream,
+      );
+    });
+    ref.onDispose(channel.sink.close);
+
+    return MessageSender(ref: ref, sink: null, stream: null);
+  }
 
   void _setSinkAndStream(WebSocketSink? sink, Stream<dynamic>? stream) {
     state = state.copyWith(sink: sink, stream: stream);
@@ -36,7 +62,7 @@ class MessageSenderNotifier extends StateNotifier<MessageSender> {
         print("Data '$data' recieved and parsed sucessfully.");
         if (parsedData.type == NetworkMessageType.setIdentifier) {
           // This is ugly and the logic should not be here, but the one listening is SynchronizedData which should have this logic even less. Should be changed.
-          ref.read(connectedDeviceIdentifierProvider.notifier).state = int.parse(parsedData.message);
+          ref.read(connectedDeviceIdentifierProvider.notifier).setValue(int.parse(parsedData.message));
           return;
         }
         onData(parsedData);
@@ -57,30 +83,3 @@ class MessageSenderNotifier extends StateNotifier<MessageSender> {
     );
   }
 }
-
-final messageSenderProvider = StateNotifierProvider<MessageSenderNotifier, MessageSender>((ref) {
-  const port = 6353;
-  final notifier = MessageSenderNotifier(ref);
-
-  print('Connecting as client');
-  final channel = WebSocketChannel.connect(
-    Uri.parse('ws://192.168.8.111:$port'),
-  );
-  channel.ready.asStream().handleError((error, stackTrace) {
-    if (error is TimeoutException || error is SocketException) {
-      print('Could not connect');
-    } else {
-      // Could not handle error, so we are rethrowing it.
-      throw error!;
-    }
-  }).listen((_) {
-    print('Connected successfully');
-    notifier._setSinkAndStream(
-      channel.sink,
-      channel.stream,
-    );
-  });
-  ref.onDispose(channel.sink.close);
-
-  return notifier;
-});

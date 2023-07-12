@@ -23,7 +23,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(synchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
+    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
     if (gameConfiguration.players.every((player) => player.id != selectedPlayerId)) {
       // Happens when someone removes the player that we have selected.
       selectedPlayerId = null;
@@ -65,7 +65,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                     ...gameConfiguration.players,
                   ];
                   newPlayerOrder.insert(indexTo + (indexFrom > indexTo ? 1 : 0), newPlayerOrder.removeAt(indexFrom));
-                  ref.read(messageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
+                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
                 },
                 builder: (BuildContext context, List<int?> candidateData, List rejectedData) {
                   return const SizedBox();
@@ -88,7 +88,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
             Expanded(
               child: MaterialButton(
                 onPressed: () {
-                  ref.read(messageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: [
+                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: [
                         ...gameConfiguration.players,
                         PlayerConfiguration(
                           id: count().where((i) => gameConfiguration.players.every((player) => player.id != i)).first as int,
@@ -104,9 +104,9 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null
                     ? null
                     : () {
-                        MessageSender messageSender = ref.read(messageSenderProvider);
+                        MessageSender messageSender = ref.read(currentMessageSenderProvider);
                         // If someone controls the player that is to be removed, we must remove that link first.
-                        for (final device in ref.read(synchronizedDataProvider).connectedDevices) {
+                        for (final device in ref.read(currentSynchronizedDataProvider).connectedDevices) {
                           if (device.controlledPlayerId == selectedPlayerId) {
                             messageSender.sendDeviceControls(device.identifier, null);
                           }
@@ -122,7 +122,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null || deviceIdentifier == null || selectedPlayerId == ref.read(connectedDeviceProvider)?.controlledPlayerId
                     ? null
                     : () {
-                        ref.read(messageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);
+                        ref.read(currentMessageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);
                       },
                 child: const Text('Styr spelare', textAlign: TextAlign.center),
               ),
@@ -132,7 +132,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null || ref.read(connectedDeviceProvider)?.controlledPlayerId == null
                     ? null
                     : () {
-                        ref.read(messageSenderProvider).sendDeviceControls(deviceIdentifier!, null);
+                        ref.read(currentMessageSenderProvider).sendDeviceControls(deviceIdentifier!, null);
                       },
                 child: const Text('Sluta styr spelare', textAlign: TextAlign.center),
               ),

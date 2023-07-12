@@ -36,7 +36,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
 
   @override
   Widget build(BuildContext context) {
-    final players = ref.watch(gameProvider.select((game) => game!.players));
+    final players = ref.watch(currentGameProvider.select((game) => game!.players));
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
     Widget descriptionText = Column(

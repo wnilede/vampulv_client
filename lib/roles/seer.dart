@@ -39,7 +39,7 @@ class SeerChoosingWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlayerMap(
       onDone: (List<Player> selected) {
-        ref.read(messageSenderProvider).sendPlayerInput('${selected.single.configuration.id}');
+        ref.read(currentMessageSenderProvider).sendPlayerInput('${selected.single.configuration.id}');
       },
       description: 'Välj vem du vill se huruvida de är vampulv',
       numberSelected: 1,

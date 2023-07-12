@@ -21,7 +21,7 @@ class _LobbyState extends ConsumerState<Lobby> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(synchronizedDataProvider.select((sd) => sd.gameConfiguration));
+    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration));
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -52,8 +52,8 @@ class _LobbyState extends ConsumerState<Lobby> {
                     onPressed: gameConfiguration.players.length * gameConfiguration.rolesPerPlayer > gameConfiguration.roles.length
                         ? null
                         : () {
-                            final SynchronizedData synchronizedData = ref.read(synchronizedDataProvider);
-                            ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                            final SynchronizedData synchronizedData = ref.read(currentSynchronizedDataProvider);
+                            ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                                   type: NetworkMessageType.setSynchronizedData,
                                   body: synchronizedData.copyWith(gameHasBegun: true),
                                 ));

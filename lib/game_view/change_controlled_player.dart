@@ -17,7 +17,7 @@ class ChangeControlledPlayer extends ConsumerWidget {
           onDone: (selected) {
             int? deviceId = ref.read(connectedDeviceIdentifierProvider);
             if (deviceId == null) return;
-            ref.read(messageSenderProvider).sendDeviceControls(deviceId, selected.singleOrNull?.configuration.id);
+            ref.read(currentMessageSenderProvider).sendDeviceControls(deviceId, selected.singleOrNull?.configuration.id);
           },
           numberSelected: 1,
           canChooseFewer: true,

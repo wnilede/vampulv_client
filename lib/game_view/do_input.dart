@@ -17,7 +17,7 @@ class DoInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider);
-    if (ref.watch(gameProvider.select((game) => game!.isFinished))) {
+    if (ref.watch(currentGameProvider.select((game) => game!.isFinished))) {
       return Scaffold(
         appBar: AppBar(title: const Text('Spelet är slut')),
         drawer: drawer,
@@ -29,7 +29,7 @@ class DoInput extends ConsumerWidget {
         ),
       );
     }
-    final isNight = ref.watch(gameProvider.select((game) => game!.isNight));
+    final isNight = ref.watch(currentGameProvider.select((game) => game!.isNight));
     return Scaffold(
       appBar: AppBar(title: controlledPlayer?.currentInputHandler?.description == null ? const Text('Lynchning') : Text(controlledPlayer!.currentInputHandler!.description)),
       drawer: drawer,
@@ -39,7 +39,7 @@ class DoInput extends ConsumerWidget {
               : controlledPlayer.lynchingDone
                   ? MaterialButton(
                       onPressed: () {
-                        ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                        ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                               type: NetworkMessageType.doneLynching,
                               body: SetDoneLynchingBody(
                                 playerId: controlledPlayer.configuration.id,
@@ -52,7 +52,7 @@ class DoInput extends ConsumerWidget {
                   : PlayerMap(
                       description: 'Välj någon att lyncha',
                       onDone: (selected) {
-                        ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                        ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                               type: NetworkMessageType.proposeLynching,
                               body: ProposeLynchingBody(
                                 proposerId: controlledPlayer.configuration.id,
@@ -61,7 +61,7 @@ class DoInput extends ConsumerWidget {
                             ));
                       },
                       onCancel: () {
-                        ref.read(messageSenderProvider).sendChange(NetworkMessage.fromObject(
+                        ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                               type: NetworkMessageType.doneLynching,
                               body: SetDoneLynchingBody(
                                 playerId: controlledPlayer.configuration.id,

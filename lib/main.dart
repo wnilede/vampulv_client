@@ -22,9 +22,9 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      theme: ref.watch(gameProvider.select((game) => game?.isNight ?? false)) ? ThemeData.dark() : ThemeData.light(),
-      home: ref.watch(messageSenderProvider.select((messageSender) => messageSender.isConnected))
-          ? ref.watch(synchronizedDataProvider).gameHasBegun
+      theme: ref.watch(currentGameProvider.select((game) => game?.isNight ?? false)) ? ThemeData.dark() : ThemeData.light(),
+      home: ref.watch(currentMessageSenderProvider.select((messageSender) => messageSender.isConnected))
+          ? ref.watch(currentSynchronizedDataProvider).gameHasBegun
               ? const GameView()
               : const Lobby()
           : const Scaffold(
