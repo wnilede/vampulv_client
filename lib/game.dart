@@ -68,7 +68,7 @@ class Game with _$Game {
 
   factory Game.fromNetworkMessages(GameConfiguration configuration, List<NetworkMessage> messages) {
     Game game = Game.fromConfiguration(configuration);
-    for (final message in messages) {
+    for (final message in messages.orderBy((message) => message.timestamp)) {
       if (!message.type.isGameChange) continue;
       if (message.type == NetworkMessageType.inputToGame) {
         game = game.applyInput(PlayerInput.fromJson(message.body));

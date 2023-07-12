@@ -22,8 +22,8 @@ class RoleCardView extends StatelessWidget {
         );
       },
       child: SizedBox(
-        width: 17,
-        height: 23,
+        width: 170,
+        height: 230,
         child: Container(
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_provider.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
+import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/user_maps/circular_layout.dart';
 import 'package:vampulv/user_maps/player_in_map.dart';
@@ -18,14 +19,29 @@ class PlayerMap extends ConsumerStatefulWidget {
   /// Determines the number of players that should be selected.
   final int numberSelected;
 
+  /// Function to be called when user has clicked the OK button. If null, the result will be sent as a user input for a game instead. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
+  final void Function(List<Player> selected)? onDone;
+
   final String? description;
   final bool canChooseFewer;
   final bool deadPlayersSelectable;
-  final List<int>? selectablePlayerIds;
-  final void Function(List<Player> selected) onDone;
+  final List<int> selectablePlayerFilter;
+  final bool filterIsWhitelist;
   final void Function()? onCancel;
 
-  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, this.deadPlayersSelectable = false, this.selectablePlayerIds, super.key});
+  const PlayerMap({
+    required this.onDone,
+    this.onCancel,
+    this.playerAppearance,
+    this.description,
+    this.betweenPlayers,
+    this.numberSelected = 0,
+    this.canChooseFewer = false,
+    this.deadPlayersSelectable = false,
+    this.selectablePlayerFilter = const [],
+    this.filterIsWhitelist = false,
+    super.key,
+  });
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
@@ -65,7 +81,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                       selected: selectedIndices.contains(i),
                       onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1) && //
                               (players[i].alive || widget.deadPlayersSelectable) &&
-                              (widget.selectablePlayerIds == null || widget.selectablePlayerIds!.any((id) => id == players[i].configuration.id))
+                              (widget.selectablePlayerFilter.any((id) => id == players[i].configuration.id) == widget.filterIsWhitelist)
                           ? () {
                               if (selectedIndices.contains(i)) {
                                 setState(() {
@@ -120,7 +136,11 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                 child: MaterialButton(
                   onPressed: hasSelectedEnough
                       ? () {
-                          widget.onDone(selectedIndices.map((i) => players[i]).toList());
+                          if (widget.onDone == null) {
+                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.join(';'));
+                          } else {
+                            widget.onDone!(selectedIndices.map((i) => players[i]).toList());
+                          }
                         }
                       : null,
                   child: const Text('OK'),

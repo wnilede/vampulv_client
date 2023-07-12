@@ -55,6 +55,15 @@ class VampulvRule extends Rule {
                 if (mostVotedForId == null) return null;
                 return HurtEvent(playerId: mostVotedForId, priority: 10, appliedMorning: true);
               }),
+          RuleReaction<DieEvent>(
+              priority: -50,
+              onApply: (event, game) {
+                final alivePlayers = game.players.where((player) => player.alive);
+                return alivePlayers.every((player) => player.roles.any((role) => role is Vampulv)) || //
+                        alivePlayers.every((player) => player.roles.all((role) => role is! Vampulv))
+                    ? GameEndsEvent()
+                    : null;
+              }),
           RuleReaction<GameEndsEvent>(
               priority: 10,
               onApply: (event, game) {

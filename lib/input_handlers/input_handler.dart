@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vampulv/confirm_message.dart';
 import 'package:vampulv/game.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
@@ -21,11 +22,11 @@ class InputHandler {
 
   static InputHandler confirmChild({required String description, required Widget child}) => InputHandler(
         description: description,
-        widget: child,
+        widget: ConfirmMessage(child: child),
         resultApplyer: (PlayerInput input, Game game, Player owner) {},
       );
   static InputHandler confirmMessage(String message) => InputHandler.confirmChild(
-        description: "Läsa meddelande '$message'",
+        description: "Läs meddelande '$message'",
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Center(
