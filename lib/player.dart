@@ -17,6 +17,8 @@ class Player with _$Player {
     @Default(true) bool alive,
     bool? lynchingVote,
     @Default(1) int votesInLynching,
+    @Default([]) List<int> previouslyProposed,
+    @Default(false) bool lynchingDone,
   }) = _Player;
 
   const Player._();

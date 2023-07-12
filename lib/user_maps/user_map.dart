@@ -20,11 +20,12 @@ class PlayerMap extends ConsumerStatefulWidget {
 
   final String? description;
   final bool canChooseFewer;
-  final bool deadPeopleSelectable;
+  final bool deadPlayersSelectable;
+  final List<int>? selectablePlayerIds;
   final void Function(List<Player> selected) onDone;
   final void Function()? onCancel;
 
-  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, this.deadPeopleSelectable = false, super.key});
+  const PlayerMap({required this.onDone, this.onCancel, this.playerAppearance, this.description, this.betweenPlayers, this.numberSelected = 0, this.canChooseFewer = false, this.deadPlayersSelectable = false, this.selectablePlayerIds, super.key});
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
@@ -58,34 +59,33 @@ class _UserMapState extends ConsumerState<PlayerMap> {
           inside: FittedBox(child: descriptionText),
           children: List.generate(
               players.length,
-              (i) => GestureDetector(
-                    onTap: players[i].alive || widget.deadPeopleSelectable
-                        ? () {
-                            if (selectedIndices.contains(i)) {
-                              setState(() {
-                                selectedIndices.remove(i);
-                              });
-                            } else if (widget.numberSelected == 1) {
-                              setState(() {
-                                selectedIndices = [
-                                  i
-                                ];
-                              });
-                            } else if (selectedIndices.length < widget.numberSelected) {
-                              setState(() {
-                                selectedIndices.add(i);
-                              });
+              (i) => widget.playerAppearance == null
+                  ? PlayerInMap(
+                      players[i],
+                      selected: selectedIndices.contains(i),
+                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1) && //
+                              (players[i].alive || widget.deadPlayersSelectable) &&
+                              (widget.selectablePlayerIds == null || widget.selectablePlayerIds!.any((id) => id == players[i].configuration.id))
+                          ? () {
+                              if (selectedIndices.contains(i)) {
+                                setState(() {
+                                  selectedIndices.remove(i);
+                                });
+                              } else if (widget.numberSelected == 1) {
+                                setState(() {
+                                  selectedIndices = [
+                                    i
+                                  ];
+                                });
+                              } else {
+                                setState(() {
+                                  selectedIndices.add(i);
+                                });
+                              }
                             }
-                          }
-                        : null,
-                    child: widget.playerAppearance == null
-                        ? PlayerInMap(
-                            players[i],
-                            selected: selectedIndices.contains(i),
-                            selectable: widget.numberSelected > 0 && (players[i].alive || widget.deadPeopleSelectable),
-                          )
-                        : widget.playerAppearance!(players[i]),
-                  )));
+                          : null,
+                    )
+                  : widget.playerAppearance!(players[i])));
       return Flex(
         direction: buttonsBelow ? Axis.vertical : Axis.horizontal,
         children: [

@@ -21,7 +21,7 @@ class ChangeControlledPlayer extends ConsumerWidget {
           },
           numberSelected: 1,
           canChooseFewer: true,
-          deadPeopleSelectable: true,
+          deadPlayersSelectable: true,
         ),
       );
 }

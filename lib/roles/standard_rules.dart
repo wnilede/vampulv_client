@@ -13,10 +13,18 @@ class StandardRule extends Rule {
             priority: 0,
             onApply: (event, game) => game.copyWith(isNight: false),
           ),
-          // Set game night field when event is sent.
+          // Set game night field when event is sent and reset lynchinging ability.
           RuleReaction<NightBeginsEvent>(
             priority: 0,
-            onApply: (event, game) => game.copyWith(isNight: true),
+            onApply: (event, game) => game.copyWith(
+              isNight: true,
+              players: game.players
+                  .map((player) => player.copyWith(
+                        lynchingDone: !player.alive,
+                        previouslyProposed: [],
+                      ))
+                  .toList(),
+            ),
           ),
           // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this.
           RuleReaction<HurtEvent>(
@@ -46,7 +54,7 @@ class StandardRule extends Rule {
                 game.copyWith(
                   players: cappedPlayers,
                 ),
-                cappedPlayers //
+                ...cappedPlayers //
                     .where((player) => player.lives == 0)
                     .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id, priority: 0, appliedMorning: true)),
               ];
@@ -77,6 +85,7 @@ class StandardRule extends Rule {
                                     return [
                                       newGame,
                                       DieEvent(playerId: event.proposedId, priority: 40, appliedMorning: false),
+                                      NightBeginsEvent(),
                                     ];
                                   }
                                   return newGame;

@@ -17,7 +17,8 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
   Widget build(BuildContext context) {
     final playersOrdered = ref
         .watch(gameProvider.select((game) => game?.players ?? [])) //
-        .orderByDescending((player) => player.unhandledInputHandlers.length);
+        .orderByDescending((player) => 2 * player.unhandledInputHandlers.length + (player.lynchingDone ? 0 : 1));
+    final bool isNight = ref.watch(gameProvider.select((game) => game!.isNight));
     return DefaultTabController(
       length: playersOrdered.length,
       child: Scaffold(
@@ -35,8 +36,8 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
                 .map((player) => ListView(
                     children: player.unhandledInputHandlers //
                         .map((inputHandler) => Text(inputHandler.description))
-                        .defaultIfEmpty(const Text(
-                          'Inget kvar att göra...',
+                        .defaultIfEmpty(Text(
+                          player.lynchingDone || isNight ? 'Inget kvar att göra...' : 'Väljer spelare att förseslå för lynchning',
                           textAlign: TextAlign.center,
                         ))
                         .toList()))

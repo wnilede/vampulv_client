@@ -4,6 +4,7 @@ import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
 import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
+import 'package:vampulv/network/message_bodies/set_done_lynching_body.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
@@ -73,6 +74,9 @@ class Game with _$Game {
         game = game.applyInput(PlayerInput.fromJson(message.body));
       } else if (message.type == NetworkMessageType.proposeLynching) {
         game = game.applyEvent(ProposeLynchingEvent.fromBody((ProposeLynchingBody.fromJson(message.body))));
+      } else if (message.type == NetworkMessageType.doneLynching) {
+        final body = SetDoneLynchingBody.fromJson(message.body);
+        game = game.copyWithPlayer(game.playerFromId(body.playerId).copyWith(lynchingDone: body.value))._runUntilInput();
       } else {
         throw UnimplementedError("Cannot yet handle network messages of type '${message.type.name}'.");
       }
@@ -223,6 +227,7 @@ class Game with _$Game {
         return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());
       }
     }
+    if (!isNight && players.every((player) => player.lynchingDone)) return _applyEventOnly(NightBeginsEvent());
     return null;
   }
 
