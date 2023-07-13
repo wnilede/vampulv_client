@@ -2,7 +2,6 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
-import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -122,7 +121,7 @@ class VampulvTargetInputHandler extends InputHandler {
 class VampulvResultInputHandler extends ConfirmChildInputHandler {
   VampulvResultInputHandler(String result)
       : super(
-          description: 'See result av vampulvattack',
+          description: 'See resultat av vampulvattack',
           identifier: 'vampulv-result',
           child: Center(child: Text(result, textAlign: TextAlign.center)),
         );
