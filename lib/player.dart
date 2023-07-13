@@ -1,3 +1,4 @@
+import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/player_configuration.dart';
@@ -24,9 +25,13 @@ class Player with _$Player {
 
   const Player._();
 
-  InputHandler? get currentInputHandler => unhandledInputHandlers.firstOrNull;
+  InputHandler? get currentInputHandler => unhandledInputHandlers.isEmpty
+      ? null
+      : unhandledInputHandlers.min(
+          (handler1, handler2) => InputHandler.typeOrder.indexOf(handler1.runtimeType) - InputHandler.typeOrder.indexOf(handler2.runtimeType),
+        );
   Player get removeCurrentInputHandler => copyWith(
-        unhandledInputHandlers: unhandledInputHandlers.skip(1).toList(),
+        unhandledInputHandlers: unhandledInputHandlers.exclude(currentInputHandler!).toList(),
         handledInputs: handledInputs + 1,
       );
 }

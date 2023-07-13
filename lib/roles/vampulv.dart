@@ -13,20 +13,7 @@ class Vampulv extends Role {
   Vampulv() : super(type: RoleType.vampulv) {
     reactions.add(RoleReaction<NightBeginsEvent>(
       priority: 100,
-      onApply: (event, game, owner) => InputHandler(
-        description: 'Välj spelare att attakera med vampulv',
-        identifier: 'choose-target-vampulv',
-        resultApplyer: (input, game, player) {
-          _setAttacked(int.tryParse(input.message));
-          return null;
-        },
-        widget: const PlayerMap(
-          description: 'Välj vem vampulverna ska attakera',
-          identifier: 'choose-target-vampulv',
-          numberSelected: 1,
-          canChooseFewer: true,
-        ),
-      ),
+      onApply: (event, game, owner) => VampulvTargetInputHandler(onResult: _setAttacked),
     ));
   }
 
@@ -90,6 +77,24 @@ class VampulvRule extends Rule {
                 );
               }),
         ]);
+}
+
+class VampulvTargetInputHandler extends InputHandler {
+  VampulvTargetInputHandler({required void Function(int?) onResult})
+      : super(
+          description: 'Välj spelare att attakera med vampulv',
+          identifier: 'choose-target-vampulv',
+          resultApplyer: (input, game, player) {
+            onResult(int.tryParse(input.message));
+            return null;
+          },
+          widget: const PlayerMap(
+            description: 'Välj vem vampulverna ska attakera',
+            identifier: 'choose-target-vampulv',
+            numberSelected: 1,
+            canChooseFewer: true,
+          ),
+        );
 }
 
 class VampulvsAttackEvent extends Event {

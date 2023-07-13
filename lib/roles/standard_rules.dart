@@ -1,9 +1,8 @@
 import 'package:darq/darq.dart';
-import 'package:vampulv/binary_choice.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/rule.dart';
 import 'package:vampulv/roles/standard_events.dart';
+import 'package:vampulv/roles/standard_input_handlers.dart';
 
 class StandardRule extends Rule {
   StandardRule()
@@ -71,36 +70,18 @@ class StandardRule extends Rule {
             onApply: (event, game) {
               Player proposed = game.playerFromId(event.proposedId);
               Player proposer = game.playerFromId(event.proposerId);
-              final identifier = 'vote-lynching-of-${proposed.configuration.id}-proposed-by-${proposer.configuration.id}';
               return game.copyWith(
-                  players: game.players
-                      .map((player) => player.copyWith(
-                          lynchingVote: null,
-                          unhandledInputHandlers: player.unhandledInputHandlers
-                              .append(InputHandler(
-                                description: 'Rösta i lynchning av ${proposed.configuration.name}',
-                                identifier: identifier,
-                                resultApplyer: (playerInput, game, player) {
-                                  // If this is the last player casting the vote, count the votes and send die event if neccessary.
-                                  final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
-                                  if (newGame.players.every((player) => player.lynchingVote != null) && newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
-                                    return [
-                                      newGame,
-                                      DieEvent(playerId: event.proposedId, priority: 40, appliedMorning: false),
-                                      NightBeginsEvent(),
-                                    ];
-                                  }
-                                  return newGame;
-                                },
-                                widget: BinaryChoice(
-                                  title: '${proposer.configuration.name} föreslår lynchning av ${proposed.configuration.name}',
-                                  identifier: identifier,
-                                  trueChoice: 'För',
-                                  falseChoice: 'Emot',
-                                ),
-                              ))
-                              .toList()))
-                      .toList());
+                players: game.players
+                    .map(
+                      (player) => player.copyWith(
+                        lynchingVote: null,
+                        unhandledInputHandlers: player.unhandledInputHandlers //
+                            .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
+                            .toList(),
+                      ),
+                    )
+                    .toList(),
+              );
             },
           ),
         ]);
