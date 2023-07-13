@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vampulv/confirm_message.dart';
 import 'package:vampulv/game.dart';
+import 'package:vampulv/game_view/nothing_to_do_widget.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/card_turner.dart';
@@ -12,10 +13,11 @@ import 'package:vampulv/roles/vampulv.dart';
 abstract class InputHandler {
   /// Determines in which order InputHandlers of different types are evaluated. Input handlers of the same type are evaluated in the order they were added to the player.
   static const typeOrder = [
-    LynchingVoteInputHandler,
-    VampulvResultInputHandler,
     CardTurnerObservedInputHandler,
+    LynchingVoteInputHandler,
     VampulvTargetInputHandler,
+    VampulvBlockingInputHandler,
+    VampulvResultInputHandler,
     SeerTargetInputHandler,
     CardTurnerObserverInputHandler,
     ConfirmChildInputHandler,
@@ -68,4 +70,14 @@ class ConfirmChildInputHandler extends InputHandler {
           ),
         ),
       );
+}
+
+class BlockingInputHandler extends InputHandler {
+  BlockingInputHandler({required String identifier})
+      : super(
+          description: 'Vampulv', // This is for the titel to not be spoiling, because the description is shown in the AppBar.
+          identifier: 'blocking-$identifier',
+          widget: const NothingToDoWidget(),
+          resultApplyer: (PlayerInput input, Game game, Player owner) {},
+        );
 }
