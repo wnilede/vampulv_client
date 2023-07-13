@@ -4,7 +4,6 @@ import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role_type.dart';
 
 abstract class Role {
-  //Game changesBeforeNight(Game game) => game;
   List<RoleReaction> reactions;
   RoleType type;
   Role({required this.type, List<RoleReaction>? reactions}) : reactions = reactions ?? [];
