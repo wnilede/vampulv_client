@@ -1,6 +1,7 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/logentry.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/role_card_view.dart';
 import 'package:vampulv/roles/role.dart';
@@ -55,7 +56,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
             role.seeingPlayerId = int.tryParse(input.message);
             if (role.seeingPlayerId == null) {
               role.seenPlayerId = null;
-              return null;
+              return 'Du valde att inte använda din Kortvändare på någon.';
             }
 
             return CardTurnerObservedInputHandler(
@@ -86,27 +87,34 @@ class CardTurnerObservedInputHandler extends InputHandler {
             role.seenPlayerId = int.tryParse(input.message);
             if (role.seenPlayerId == null) {
               role.seeingPlayerId = null;
-              return null;
+              return 'Du valde att inte använda din kortvändare på någon.';
             }
             final seenPlayer = game.playerFromId(int.parse(input.message));
             final seenRole = seenPlayer.roles[game.randomGenerator.nextInt(seenPlayer.roles.length)];
 
-            return game.copyWithPlayer(seeingPlayer.copyWith(
-                unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
-                    .append(ConfirmChildInputHandler(
-                      description: 'See roll visat av kortvändare',
-                      identifier: 'role-${seenRole.type.name}-of-${seenPlayer.configuration.id}-shown-by-card-turner-of-$ownerId',
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('En av rollerna som ${seenPlayer.configuration.name} har är', textAlign: TextAlign.center),
-                            RoleCardView(seenRole.type),
-                          ],
+            return [
+              game.copyWithPlayer(seeingPlayer.copyWith(
+                  unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
+                      .append(ConfirmChildInputHandler(
+                        description: 'See roll visad av kortvändare',
+                        identifier: 'role-${seenRole.type.name}-of-${seenPlayer.configuration.id}-shown-by-card-turner-of-$ownerId',
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.configuration.name} har är', textAlign: TextAlign.center),
+                              RoleCardView(seenRole.type),
+                            ],
+                          ),
                         ),
-                      ),
-                    ))
-                    .toList()));
+                      ))
+                      .toList())),
+              LogEntry(
+                playerVisibleTo: seeingPlayer.configuration.id,
+                value: 'Någons kortvändare visade dig att ${seenPlayer.configuration.name} har rollen ${seenRole.type.displayName}',
+              ),
+              'Din kortvändare visade ${seeingPlayer.configuration.name} en av rollerna ägd av ${seenPlayer.configuration.name}.',
+            ];
           },
         );
 }
