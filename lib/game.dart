@@ -90,6 +90,10 @@ class Game with _$Game {
 
   Game applyInput(PlayerInput input) {
     final caller = playerFromId(input.ownerId);
+    // If the input is invalid we silently ignore it.
+    if (caller.currentInputHandler == null || //
+        caller.currentInputHandler!.identifier != input.identifier ||
+        input.playerInputNumber != caller.handledInputs) return this;
     return _applyResultFromApplyer(caller.currentInputHandler!.resultApplyer(input, this, caller), input.ownerId)
         .game //
         .copyWithPlayerModification(input.ownerId, (player) => player.removeCurrentInputHandler)

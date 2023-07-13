@@ -19,8 +19,11 @@ class PlayerMap extends ConsumerStatefulWidget {
   /// Determines the number of players that should be selected.
   final int numberSelected;
 
-  /// Function to be called when user has clicked the OK button. If null, the result will be sent as a user input for a game instead. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
+  /// Function to be called when user has clicked the OK button.
   final void Function(List<Player> selected)? onDone;
+
+  /// If non-null, a PlayerInput will be sent with this identifier when player presses the OK button. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
+  final String? identifier;
 
   final String? description;
   final bool canChooseFewer;
@@ -30,7 +33,8 @@ class PlayerMap extends ConsumerStatefulWidget {
   final void Function()? onCancel;
 
   const PlayerMap({
-    required this.onDone,
+    this.onDone,
+    this.identifier,
     this.onCancel,
     this.playerAppearance,
     this.description,
@@ -41,7 +45,7 @@ class PlayerMap extends ConsumerStatefulWidget {
     this.selectablePlayerFilter = const [],
     this.filterIsWhitelist = false,
     super.key,
-  });
+  }) : assert(onDone != null || identifier != null, 'At least one of onDone or identifier must be non-null.');
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
@@ -136,10 +140,11 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                 child: MaterialButton(
                   onPressed: hasSelectedEnough
                       ? () {
-                          if (widget.onDone == null) {
-                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.join(';'));
-                          } else {
+                          if (widget.onDone != null) {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
+                          }
+                          if (widget.identifier != null) {
+                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.join(';'), widget.identifier!);
                           }
                         }
                       : null,

@@ -1,9 +1,5 @@
 import 'package:darq/darq.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -19,11 +15,17 @@ class Vampulv extends Role {
       priority: 100,
       onApply: (event, game, owner) => InputHandler(
         description: 'Välj spelare att attakera med vampulv',
+        identifier: 'choose-target-vampulv',
         resultApplyer: (input, game, player) {
           _setAttacked(int.tryParse(input.message));
           return null;
         },
-        widget: const VampulvChoosingWidget(),
+        widget: const PlayerMap(
+          description: 'Välj vem vampulverna ska attakera',
+          identifier: 'choose-target-vampulv',
+          numberSelected: 1,
+          canChooseFewer: true,
+        ),
       ),
     ));
   }
@@ -88,22 +90,6 @@ class VampulvRule extends Rule {
                 );
               }),
         ]);
-}
-
-class VampulvChoosingWidget extends ConsumerWidget {
-  const VampulvChoosingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlayerMap(
-      onDone: (List<Player> selected) {
-        ref.read(currentMessageSenderProvider).sendPlayerInput(selected.isEmpty ? 'none' : '${selected.single.configuration.id}');
-      },
-      description: 'Välj vem vampulverna ska attakera',
-      numberSelected: 1,
-      canChooseFewer: true,
-    );
-  }
 }
 
 class VampulvsAttackEvent extends Event {

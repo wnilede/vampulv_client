@@ -28,6 +28,7 @@ class CardTurner extends Role {
 
         return InputHandler(
           description: 'Välj observatör för kortvändaren',
+          identifier: 'card-turner-choose-observer',
           widget: PlayerMap(
             selectablePlayerFilter: [
               if (seeingPlayerId != null) seeingPlayerId!,
@@ -46,7 +47,8 @@ class CardTurner extends Role {
             final seeingPlayer = game.playerFromId(seeingPlayerId!);
 
             return InputHandler(
-                description: 'Välj observerare för kortvändaren',
+                description: 'Välj observerad för kortvändaren',
+                identifier: 'card-turner-choose-observed',
                 widget: PlayerMap(
                   selectablePlayerFilter: [
                     if (seeingPlayerId != null) seeingPlayerId!,
@@ -69,7 +71,8 @@ class CardTurner extends Role {
                   return game.copyWithPlayer(seeingPlayer.copyWith(
                       unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
                           .append(InputHandler.confirmChild(
-                            description: 'See kort visat av kortvändare',
+                            description: 'See roll visat av kortvändare',
+                            identifier: 'role-${seenRole.type.name}-of-${seenPlayer.configuration.id}-shown-by-card-turner-of-${player.configuration.id}',
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

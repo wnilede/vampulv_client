@@ -19,10 +19,14 @@ class Player with _$Player {
     @Default(1) int votesInLynching,
     @Default([]) List<int> previouslyProposed,
     @Default(false) bool lynchingDone,
+    @Default(0) int handledInputs,
   }) = _Player;
 
   const Player._();
 
   InputHandler? get currentInputHandler => unhandledInputHandlers.firstOrNull;
-  Player get removeCurrentInputHandler => copyWith(unhandledInputHandlers: unhandledInputHandlers.skip(1).toList());
+  Player get removeCurrentInputHandler => copyWith(
+        unhandledInputHandlers: unhandledInputHandlers.skip(1).toList(),
+        handledInputs: handledInputs + 1,
+      );
 }

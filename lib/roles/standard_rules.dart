@@ -71,6 +71,7 @@ class StandardRule extends Rule {
             onApply: (event, game) {
               Player proposed = game.playerFromId(event.proposedId);
               Player proposer = game.playerFromId(event.proposerId);
+              final identifier = 'vote-lynching-of-${proposed.configuration.id}-proposed-by-${proposer.configuration.id}';
               return game.copyWith(
                   players: game.players
                       .map((player) => player.copyWith(
@@ -78,6 +79,7 @@ class StandardRule extends Rule {
                           unhandledInputHandlers: player.unhandledInputHandlers
                               .append(InputHandler(
                                 description: 'Rösta i lynchning av ${proposed.configuration.name}',
+                                identifier: identifier,
                                 resultApplyer: (playerInput, game, player) {
                                   // If this is the last player casting the vote, count the votes and send die event if neccessary.
                                   final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
@@ -92,6 +94,7 @@ class StandardRule extends Rule {
                                 },
                                 widget: BinaryChoice(
                                   title: '${proposer.configuration.name} föreslår lynchning av ${proposed.configuration.name}',
+                                  identifier: identifier,
                                   trueChoice: 'För',
                                   falseChoice: 'Emot',
                                 ),

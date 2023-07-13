@@ -44,13 +44,15 @@ class MessageSender with _$MessageSender {
     ));
   }
 
-  void sendPlayerInput(Object value) {
+  void sendPlayerInput(Object value, String identifier) {
     final player = ref.read(controlledPlayerProvider);
     if (player == null) return;
     sendChange(NetworkMessage.fromObject(
       type: NetworkMessageType.inputToGame,
       body: PlayerInput.fromObject(
-        ownerId: ref.read(controlledPlayerProvider)!.configuration.id,
+        ownerId: player.configuration.id,
+        playerInputNumber: player.handledInputs,
+        identifier: identifier,
         body: value,
       ),
     ));

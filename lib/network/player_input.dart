@@ -10,6 +10,8 @@ class PlayerInput with _$PlayerInput {
   const factory PlayerInput({
     required String message,
     required int ownerId,
+    required int playerInputNumber,
+    required String identifier,
   }) = _PlayerInput;
   factory PlayerInput.fromJson(Map<String, Object?> json) => _$PlayerInputFromJson(json);
   const PlayerInput._();
@@ -18,10 +20,14 @@ class PlayerInput with _$PlayerInput {
 
   factory PlayerInput.fromObject({
     required int ownerId,
+    required int playerInputNumber,
+    required String identifier,
     required Object body,
   }) {
     return PlayerInput(
       ownerId: ownerId,
+      playerInputNumber: playerInputNumber,
+      identifier: identifier,
       message: body is String ? body : json.encode(body),
     );
   }
