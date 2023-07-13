@@ -10,8 +10,9 @@ class LonelyPulv extends Vampulv {
     reactions.add(
       RoleReaction<GameEndsEvent>(
           priority: 60,
+          worksAfterDeath: true,
           onApply: (event, game, player) {
-            if (player.isWinner && game.players.any((otherPlayer) => otherPlayer.alive && otherPlayer.configuration.id != player.configuration.id)) {
+            if (player.isWinner && (!player.alive || game.players.any((otherPlayer) => otherPlayer.alive && otherPlayer.configuration.id != player.configuration.id))) {
               return player.copyWith(isWinner: false);
             }
           }),
@@ -20,6 +21,7 @@ class LonelyPulv extends Vampulv {
     reactions.add(
       RoleReaction<GameBeginsEvent>(
           priority: 200,
+          worksAfterDeath: true,
           onApply: (event, game, player) {
             if (game.rules.any((rule) => rule is VampulvRule)) {
               return game.copyWith(rules: game.rules.append(VampulvRule()).toList());

@@ -12,9 +12,11 @@ abstract class Role {
 class RoleReaction<T extends Event> {
   final int priority;
   final dynamic Function(T event, Game game, Player owner) _onApply;
+  final bool worksAfterDeath;
 
   const RoleReaction({
     required this.priority,
+    this.worksAfterDeath = false,
 
     /// Must return value that the game knows how to apply.
     required dynamic Function(T, Game, Player) onApply,

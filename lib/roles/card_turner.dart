@@ -16,6 +16,7 @@ class CardTurner extends Role {
   CardTurner() : super(type: RoleType.cardTurner) {
     reactions.add(RoleReaction<DieEvent>(
       priority: -60,
+      worksAfterDeath: true,
       onApply: (event, game, player) {
         someoneDiedToday = true;
         return null;

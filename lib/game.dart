@@ -125,7 +125,7 @@ class Game with _$Game {
               ),
         )
         .flatten()
-        .where((playerReaction) => playerReaction.$2.passesFilter(event))
+        .where((playerReaction) => playerReaction.$2.passesFilter(event) && (playerReaction.$1.alive || playerReaction.$2.worksAfterDeath))
         .orderBy((playerReaction) => playerReaction.$2.priority)
         .toList();
     _ApplyResultResult resultingGame = _ApplyResultResult(this);
