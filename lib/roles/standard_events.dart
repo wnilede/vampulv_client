@@ -5,13 +5,13 @@ class HurtEvent extends Event {
   int playerId;
   int livesLost;
 
-  HurtEvent({required this.playerId, this.livesLost = 1, required super.priority, required super.appliedMorning});
+  HurtEvent({required this.playerId, this.livesLost = 1, required super.appliedMorning});
 }
 
 class DieEvent extends Event {
   int playerId;
 
-  DieEvent({required this.playerId, required super.priority, required super.appliedMorning});
+  DieEvent({required this.playerId, required super.appliedMorning});
 }
 
 class GameBeginsEvent extends Event {}

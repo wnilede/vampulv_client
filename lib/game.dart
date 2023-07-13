@@ -220,14 +220,9 @@ class Game with _$Game {
       if (unhandledEvents.isEmpty) {
         return _applyEventOnly(DayBeginsEvent());
       } else {
-        Event eventToApply = unhandledEvents.min((event1, event2) {
-          if (event1.runtimeType == event2.runtimeType) {
-            assert(event1.priority == null || event2.priority == null, "There are more than one unhandled event of type '${event1.runtimeType}', and at least one of them has priority null.");
-            assert(event1.priority != event2.priority, "There are multiple unhandled events of type '${event1.runtimeType}' with the same priority.");
-            return event2.priority! - event1.priority!;
-          }
-          return Event.typeOrder.indexWhere((subType) => event1.runtimeType == subType) - Event.typeOrder.indexWhere((subType) => event2.runtimeType == subType);
-        });
+        Event eventToApply = unhandledEvents.min(
+          (event1, event2) => Event.typeOrder.indexWhere((subType) => event1.runtimeType == subType) - Event.typeOrder.indexWhere((subType) => event2.runtimeType == subType),
+        );
         Game afterEvent = _applyEventOnly(eventToApply);
         return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());
       }

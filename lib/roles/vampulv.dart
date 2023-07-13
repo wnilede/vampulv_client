@@ -42,7 +42,7 @@ class VampulvRule extends Rule {
                     .randomSubset(1, game.randomGenerator)
                     .single;
                 if (mostVotedForId == null) return null;
-                return HurtEvent(playerId: mostVotedForId, priority: 10, appliedMorning: true);
+                return HurtEvent(playerId: mostVotedForId, appliedMorning: true);
               }),
           RuleReaction<DieEvent>(
               priority: -50,

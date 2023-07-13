@@ -15,7 +15,7 @@ class LynchingVoteInputHandler extends InputHandler {
             if (newGame.players.every((player) => player.lynchingVote != null) && newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
               return [
                 newGame,
-                DieEvent(playerId: proposed.configuration.id, priority: 40, appliedMorning: false),
+                DieEvent(playerId: proposed.configuration.id, appliedMorning: false),
                 NightBeginsEvent(),
               ];
             }
