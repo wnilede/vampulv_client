@@ -149,7 +149,7 @@ class Game with _$Game {
   /// - Event to add it to the game
   /// - LogEntry to log it to the game
   /// - String to add a log entry visible to caller if it exists or to everyone otherwise
-  /// - Player to set caller
+  /// - Player to set the player with that id
   /// - InputHandler to add an input handler to the caller
   /// - EventResult.cancel to cancel the event and stop evaluating reactions for it
   /// - iterable of valid values to set them all in order
@@ -170,9 +170,6 @@ class Game with _$Game {
       return _ApplyResultResult(copyWithPlayer(caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList())));
     }
     if (result is Player) {
-      if (callerId == null) {
-        throw UnsupportedError('Cannot apply Player without an owner.');
-      }
       return _ApplyResultResult(copyWithPlayer(result));
     }
     if (result is String) {

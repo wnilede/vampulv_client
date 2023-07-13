@@ -13,6 +13,7 @@ abstract class InputHandler {
   /// Determines in which order InputHandlers of different types are evaluated. Input handlers of the same type are evaluated in the order they were added to the player.
   static const typeOrder = [
     LynchingVoteInputHandler,
+    VampulvResultInputHandler,
     CardTurnerObservedInputHandler,
     VampulvTargetInputHandler,
     SeerTargetInputHandler,

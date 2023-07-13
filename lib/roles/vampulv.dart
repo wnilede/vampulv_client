@@ -1,5 +1,8 @@
 import 'package:darq/darq.dart';
+import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/logentry.dart';
+import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -32,7 +35,8 @@ class VampulvRule extends Rule {
           RuleReaction<VampulvsAttackEvent>(
               priority: 10,
               onApply: (event, game) {
-                final mostVotedForId = game.players //
+                final vampulvs = game.players.where((player) => player.alive && player.roles.any((role) => role is Vampulv));
+                final mostVotedForId = vampulvs //
                     .map((player) => player.roles)
                     .flatten()
                     .whereType<Vampulv>()
@@ -41,8 +45,26 @@ class VampulvRule extends Rule {
                     .max((group1, group2) => group1.key - group2.key)
                     .randomSubset(1, game.randomGenerator)
                     .single;
-                if (mostVotedForId == null) return null;
-                return HurtEvent(playerId: mostVotedForId, appliedMorning: true);
+                final resultSummary = 'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).configuration.name}!\n${vampulvs //
+                    .map(
+                      (player) => '${player.configuration.name} röstade på ${player.roles.whereType<Vampulv>() //
+                          .map((role) => role.playerIdAttacked == null //
+                              ? 'att inte attackera någon' //
+                              : game.playerFromId(role.playerIdAttacked!).configuration.name).join(' och ')}',
+                    ).join('\n')}';
+                return [
+                  ...vampulvs.map((vampulv) => [
+                        LogEntry(
+                          playerVisibleTo: vampulv.configuration.id,
+                          value: resultSummary,
+                        ),
+                        vampulv.copyWith(
+                            unhandledInputHandlers: vampulv.unhandledInputHandlers //
+                                .append(VampulvResultInputHandler(resultSummary))
+                                .toList()),
+                      ]),
+                  if (mostVotedForId != null) HurtEvent(playerId: mostVotedForId, appliedMorning: true),
+                ];
               }),
           RuleReaction<DieEvent>(
               priority: -50,
@@ -94,6 +116,15 @@ class VampulvTargetInputHandler extends InputHandler {
             numberSelected: 1,
             canChooseFewer: true,
           ),
+        );
+}
+
+class VampulvResultInputHandler extends ConfirmChildInputHandler {
+  VampulvResultInputHandler(String result)
+      : super(
+          description: 'See result av vampulvattack',
+          identifier: 'vampulv-result',
+          child: Center(child: Text(result, textAlign: TextAlign.center)),
         );
 }
 
