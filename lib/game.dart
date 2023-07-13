@@ -97,7 +97,12 @@ class Game with _$Game {
         input.playerInputNumber != caller.handledInputs) return this;
     return _applyResultFromApplyer(inputHandler.resultApplyer(input, this, caller), input.ownerId)
         .game //
-        .copyWithPlayerModification(input.ownerId, (player) => player.removeCurrentInputHandler)
+        .copyWithPlayerModification(
+            input.ownerId,
+            (player) => player.copyWith(
+                  unhandledInputHandlers: player.unhandledInputHandlers.exclude(inputHandler).toList(),
+                  handledInputs: player.handledInputs + 1,
+                ))
         ._runUntilInput();
   }
 

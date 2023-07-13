@@ -1,5 +1,6 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
+import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
 import 'package:vampulv/player.dart';
@@ -93,9 +94,9 @@ class CardTurnerObservedInputHandler extends InputHandler {
             final seenRole = seenPlayer.roles[game.randomGenerator.nextInt(seenPlayer.roles.length)];
 
             return [
-              game.copyWithPlayer(seeingPlayer.copyWith(
+              seeingPlayer.copyWith(
                   unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
-                      .append(ConfirmChildInputHandler(
+                      .append(LateConfirmChildInputHandler(
                         description: 'See roll visad av kortvändare',
                         identifier: 'role-${seenRole.type.name}-of-${seenPlayer.configuration.id}-shown-by-card-turner-of-$ownerId',
                         child: Center(
@@ -108,7 +109,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
                           ),
                         ),
                       ))
-                      .toList())),
+                      .toList()),
               LogEntry(
                 playerVisibleTo: seeingPlayer.configuration.id,
                 value: 'Någons kortvändare visade dig att ${seenPlayer.configuration.name} har rollen ${seenRole.type.displayName}',

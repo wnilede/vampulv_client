@@ -30,8 +30,8 @@ class Player with _$Player {
       : unhandledInputHandlers.min(
           (handler1, handler2) => InputHandler.typeOrder.indexOf(handler1.runtimeType) - InputHandler.typeOrder.indexOf(handler2.runtimeType),
         );
-  Player get removeCurrentInputHandler => copyWith(
-        unhandledInputHandlers: unhandledInputHandlers.exclude(currentInputHandler!).toList(),
-        handledInputs: handledInputs + 1,
-      );
+  // Player get removeCurrentInputHandler => copyWith(
+  //       unhandledInputHandlers: unhandledInputHandlers.exclude(currentInputHandler!).toList(),
+  //       handledInputs: handledInputs + 1,
+  //     );
 }

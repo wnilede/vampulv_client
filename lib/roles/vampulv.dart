@@ -1,5 +1,7 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
+import 'package:vampulv/input_handlers/blocking_input_handler.dart';
+import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
 import 'package:vampulv/roles/role.dart';
@@ -99,7 +101,11 @@ class VampulvTargetInputHandler extends InputHandler {
                     vampulv.copyWith(
                         unhandledInputHandlers: vampulv.unhandledInputHandlers //
                             .where((handler) => handler is! VampulvBlockingInputHandler)
-                            .append(VampulvResultInputHandler(resultSummary))
+                            .append(EarlyConfirmChildInputHandler(
+                              description: 'See resultat av vampulvattack',
+                              identifier: 'vampulv-result',
+                              child: Center(child: Text(resultSummary, textAlign: TextAlign.center)),
+                            ))
                             .toList()),
                     LogEntry(
                       playerVisibleTo: vampulv.configuration.id,
@@ -120,13 +126,4 @@ class VampulvTargetInputHandler extends InputHandler {
 
 class VampulvBlockingInputHandler extends BlockingInputHandler {
   VampulvBlockingInputHandler() : super(identifier: 'vampulv-result');
-}
-
-class VampulvResultInputHandler extends ConfirmChildInputHandler {
-  VampulvResultInputHandler(String result)
-      : super(
-          description: 'See resultat av vampulvattack',
-          identifier: 'vampulv-result',
-          child: Center(child: Text(result, textAlign: TextAlign.center)),
-        );
 }

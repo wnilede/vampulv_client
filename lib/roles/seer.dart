@@ -1,3 +1,4 @@
+import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -26,7 +27,7 @@ class SeerTargetInputHandler extends InputHandler {
             final seenPlayer = game.playerFromId(int.parse(input.message));
             final seenPlayerIsVampulv = seenPlayer.roles.any((role) => role.type == RoleType.vampulv || role.type == RoleType.lycan);
             return [
-              ConfirmChildInputHandler.withText('${seenPlayer.configuration.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en vampulv!'),
+              EarlyConfirmChildInputHandler.withText('${seenPlayer.configuration.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en vampulv!'),
               'Du använde din spådam för att se att ${seenPlayer.configuration.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en vampulv.',
             ];
           },

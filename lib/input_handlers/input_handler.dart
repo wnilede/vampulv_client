@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/confirm_message.dart';
 import 'package:vampulv/game.dart';
-import 'package:vampulv/game_view/nothing_to_do_widget.dart';
+import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/card_turner.dart';
@@ -13,14 +12,14 @@ import 'package:vampulv/roles/vampulv.dart';
 abstract class InputHandler {
   /// Determines in which order InputHandlers of different types are evaluated. Input handlers of the same type are evaluated in the order they were added to the player.
   static const typeOrder = [
+    EarlyConfirmChildInputHandler,
     CardTurnerObservedInputHandler,
     LynchingVoteInputHandler,
     VampulvTargetInputHandler,
     VampulvBlockingInputHandler,
-    VampulvResultInputHandler,
     SeerTargetInputHandler,
     CardTurnerObserverInputHandler,
-    ConfirmChildInputHandler,
+    LateConfirmChildInputHandler,
   ];
 
   final Widget widget;
@@ -46,38 +45,4 @@ abstract class InputHandler {
   }) {
     assert(typeOrder.contains(runtimeType), "Cannot instanciate InputHandler of type '$runtimeType' because it is not in the typeOrder field.");
   }
-}
-
-class ConfirmChildInputHandler extends InputHandler {
-  ConfirmChildInputHandler({required String description, required String identifier, required Widget child})
-      : super(
-          description: description,
-          identifier: 'confirm-child-$identifier',
-          widget: ConfirmMessage(inputIdentifier: 'confirm-child-$identifier', child: child),
-          resultApplyer: (PlayerInput input, Game game, Player owner) {},
-        );
-
-  factory ConfirmChildInputHandler.withText(String message) => ConfirmChildInputHandler(
-        description: "Läs meddelande '$message'",
-        identifier: 'text-${message.toLowerCase().replaceAll(RegExp(r'[^a-zåäö ]'), '').trim().replaceAll(RegExp(r' +'), '-')}',
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Center(
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      );
-}
-
-class BlockingInputHandler extends InputHandler {
-  BlockingInputHandler({required String identifier})
-      : super(
-          description: 'Vampulv', // This is for the titel to not be spoiling, because the description is shown in the AppBar.
-          identifier: 'blocking-$identifier',
-          widget: const NothingToDoWidget(),
-          resultApplyer: (PlayerInput input, Game game, Player owner) {},
-        );
 }
