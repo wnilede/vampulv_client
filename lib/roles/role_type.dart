@@ -1,5 +1,6 @@
 import 'package:vampulv/roles/card_turner.dart';
 import 'package:vampulv/roles/lonely_pulv.dart';
+import 'package:vampulv/roles/lycan.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/rule.dart';
 import 'package:vampulv/roles/seer.dart';
@@ -128,7 +129,8 @@ enum RoleType {
         RoleType.seer => Seer(),
         RoleType.lonelyPulv => LonelyPulv(),
         RoleType.cardTurner => CardTurner(),
-        _ => throw UnimplementedError("Have not created and connected class for role type '$this' yet."),
+        RoleType.lycan => Lycan(),
+        _ => throw UnimplementedError("Have not created and connected class for role type '$name' yet."),
       };
 
   Rule? produceRule() => switch (this) {
