@@ -2,7 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/logentry.dart';
+import 'package:vampulv/log_entry.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/role_card_view.dart';
 import 'package:vampulv/roles/role.dart';

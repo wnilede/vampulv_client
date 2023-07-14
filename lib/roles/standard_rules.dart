@@ -10,21 +10,27 @@ class StandardRule extends Rule {
           // Set game night field when event is sent.
           RuleReaction<DayBeginsEvent>(
             priority: 0,
-            onApply: (event, game) => game.copyWith(isNight: false),
+            onApply: (event, game) => [
+              game.copyWith(isNight: false),
+              'Day ${game.dayNumber + 1} began.',
+            ],
           ),
           // Set game night field when event is sent and reset lynchinging ability.
           RuleReaction<NightBeginsEvent>(
-            priority: 0,
-            onApply: (event, game) => game.copyWith(
-              isNight: true,
-              players: game.players
-                  .map((player) => player.copyWith(
-                        lynchingDone: !player.alive,
-                        previouslyProposed: [],
-                      ))
-                  .toList(),
-            ),
-          ),
+              priority: 0,
+              onApply: (event, game) => [
+                    game.copyWith(
+                      isNight: true,
+                      players: game.players
+                          .map((player) => player.copyWith(
+                                lynchingDone: !player.alive,
+                                previouslyProposed: [],
+                              ))
+                          .toList(),
+                      dayNumber: game.dayNumber + 1,
+                    ),
+                    'Night ${game.dayNumber + 2} began.',
+                  ]),
           // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this.
           RuleReaction<HurtEvent>(
             priority: 0,
@@ -62,7 +68,13 @@ class StandardRule extends Rule {
           // Set player field when die event is sent.
           RuleReaction<DieEvent>(
             priority: 0,
-            onApply: (event, game) => game.copyWithPlayer(game.playerFromId(event.playerId).copyWith(alive: false)),
+            onApply: (event, game) {
+              final player = game.playerFromId(event.playerId);
+              return [
+                game.copyWithPlayer(player.copyWith(alive: false)),
+                '${player.name} died',
+              ];
+            },
           ),
           // Add input handlers for voting when lynching is proposed.
           RuleReaction<ProposeLynchingEvent>(
@@ -77,6 +89,7 @@ class StandardRule extends Rule {
                         lynchingVote: null,
                         unhandledInputHandlers: player.unhandledInputHandlers //
                             .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
+                            .append(LynchingWaitingResultInputHandler())
                             .toList(),
                       ),
                     )

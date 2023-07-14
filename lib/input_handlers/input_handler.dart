@@ -19,6 +19,7 @@ abstract class InputHandler {
     VampulvBlockingInputHandler,
     SeerTargetInputHandler,
     CardTurnerObserverInputHandler,
+    LynchingWaitingResultInputHandler,
     LateConfirmChildInputHandler,
   ];
 

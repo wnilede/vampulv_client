@@ -2,7 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/logentry.dart';
+import 'package:vampulv/log_entry.dart';
 import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
 import 'package:vampulv/network/message_bodies/set_done_lynching_body.dart';
 import 'package:vampulv/network/network_message_type.dart';
@@ -28,6 +28,7 @@ class Game with _$Game {
     @Default([]) List<LogEntry> log,
     @Default(false) bool isNight,
     @Default(false) bool isFinished,
+    @Default(-1) int dayNumber,
   }) = _Game;
 
   const Game._();

@@ -3,6 +3,7 @@ import 'package:vampulv/game_view/change_controlled_player.dart';
 import 'package:vampulv/game_view/do_input.dart';
 import 'package:vampulv/game_view/game_view_drawer.dart';
 import 'package:vampulv/game_view/information.dart';
+import 'package:vampulv/game_view/log_page.dart';
 import 'package:vampulv/game_view/spectator_overview.dart';
 
 class GameView extends StatefulWidget {
@@ -30,6 +31,7 @@ class _GameViewState extends State<GameView> {
       GameViewSelection.input => DoInput(drawer: drawer),
       GameViewSelection.changeControlledPlayer => ChangeControlledPlayer(drawer: drawer),
       GameViewSelection.aboutGame => Information(drawer: drawer),
+      GameViewSelection.log => LogPage(drawer: drawer),
       GameViewSelection.spectatorOverview => SpectatorOverview(drawer: drawer),
     };
   }
@@ -39,5 +41,6 @@ enum GameViewSelection {
   input,
   changeControlledPlayer,
   aboutGame,
+  log,
   spectatorOverview,
 }

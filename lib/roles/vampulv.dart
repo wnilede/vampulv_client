@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/blocking_input_handler.dart';
 import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/logentry.dart';
+import 'package:vampulv/log_entry.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -54,7 +54,10 @@ class VampulvRule extends Rule {
                   return [
                     messageFor.copyWith(unhandledInputHandlers: messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
                     LogEntry(
-                      value: 'Du såg vilka som var vampulver:\n - du själv${otherVampulvsNames.map((name) => '\n - $name')}',
+                      value: 'Du såg vilka som var vampulver:${[
+                        'du själv',
+                        ...otherVampulvsNames,
+                      ].map((name) => '\n - $name').join()}',
                       playerVisibleTo: messageFor.id,
                     ),
                   ];
