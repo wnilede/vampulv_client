@@ -25,16 +25,16 @@ enum RoleType {
     description: 'Normal medborgare i byn',
     detailedDescription: 'Om alla dina kort är bybor så är du en borgmästare. Borgmästare har en extra röst när det röstas om avrättning.',
   ),
-  pacifist(
-    displayName: 'Pasifist',
-    description: 'Rösta nej till avrättningar',
-    detailedDescription: 'Vid röstning om avrättning måste du alltid rösta emot.',
-  ),
-  idiot(
-    displayName: 'Idiot',
-    description: 'Rösta alltid för att avrätta dig själv',
-    detailedDescription: 'Vid röstning om avrättning av dig själv måste du alltid rösta för.',
-  ),
+  // pacifist(
+  //   displayName: 'Pasifist',
+  //   description: 'Rösta nej till avrättningar',
+  //   detailedDescription: 'Vid röstning om avrättning måste du alltid rösta emot.',
+  // ),
+  // idiot(
+  //   displayName: 'Idiot',
+  //   description: 'Rösta ja till avrättningar',
+  //   detailedDescription: 'Vid röstning om avrättning måste du alltid rösta för.',
+  // ),
   seer(
     displayName: 'Spådam',
     description: 'Se vilka som är vampulver',
