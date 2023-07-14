@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiver/iterables.dart';
+import 'package:vampulv/lobby/edit_player.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_sender.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
@@ -88,15 +88,25 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
             Expanded(
               child: MaterialButton(
                 onPressed: () {
-                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: [
-                        ...gameConfiguration.players,
-                        PlayerConfiguration(
-                          id: count().where((i) => gameConfiguration.players.every((player) => player.id != i)).first as int,
-                          name: '${math.Random().nextInt(900) + 100}',
-                        )
-                      ]));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EditPlayer(null)),
+                  );
                 },
                 child: const Text('Lägg till spelare', textAlign: TextAlign.center),
+              ),
+            ),
+            Expanded(
+              child: MaterialButton(
+                onPressed: selectedPlayerId == null
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => EditPlayer(selectedPlayerId)),
+                        );
+                      },
+                child: const Text('Redigera spelare', textAlign: TextAlign.center),
               ),
             ),
             Expanded(
