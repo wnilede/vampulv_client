@@ -37,6 +37,29 @@ class Vampulv extends Role {
 class VampulvRule extends Rule {
   VampulvRule()
       : super(reactions: [
+          RuleReaction<GameBeginsEvent>(
+              priority: -20,
+              onApply: (event, game) {
+                final vampulvs = game.players.where((player) => player.roles.whereType<Vampulv>().isNotEmpty);
+                return vampulvs.map((messageFor) {
+                  final otherVampulvsNames = vampulvs //
+                      .where((vampulv) => vampulv.id != messageFor.id)
+                      .map((vampulv) => vampulv.name)
+                      .toList();
+                  final message = otherVampulvsNames.isEmpty
+                      ? 'Du är den enda vampulven!'
+                      : otherVampulvsNames.length == 1
+                          ? 'Den andra vampulven är ${otherVampulvsNames.single}!'
+                          : 'De andra vampulverna är ${otherVampulvsNames.skip(1).join(', ')} och ${otherVampulvsNames[0]}!';
+                  return [
+                    messageFor.copyWith(unhandledInputHandlers: messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
+                    LogEntry(
+                      value: 'Du såg vilka som var vampulver:\n - du själv${otherVampulvsNames.map((name) => '\n - $name')}',
+                      playerVisibleTo: messageFor.id,
+                    ),
+                  ];
+                });
+              }),
           RuleReaction<Event>(
               priority: -50,
               onApply: (event, game) {
