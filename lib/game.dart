@@ -166,7 +166,7 @@ class Game with _$Game {
       return _ApplyResultResult(this);
     }
     if (result == EventResult.cancel) {
-      return _ApplyResultResult(this, canceled: false);
+      return _ApplyResultResult(this, canceled: true);
     }
     if (result is InputHandler) {
       if (callerId == null) {

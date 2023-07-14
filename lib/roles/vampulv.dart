@@ -140,7 +140,7 @@ class VampulvTargetInputHandler extends InputHandler {
                       value: resultSummary,
                     ),
                   ]),
-              if (mostVotedForId != null) HurtEvent(playerId: mostVotedForId, appliedMorning: true),
+              if (mostVotedForId != null) VampulvHurtEvent(playerId: mostVotedForId),
             ];
           },
           widget: const PlayerMap(
@@ -154,4 +154,8 @@ class VampulvTargetInputHandler extends InputHandler {
 
 class VampulvBlockingInputHandler extends BlockingInputHandler {
   VampulvBlockingInputHandler() : super(identifier: 'vampulv-result');
+}
+
+class VampulvHurtEvent extends HurtEvent {
+  VampulvHurtEvent({required super.playerId}) : super(appliedMorning: true);
 }
