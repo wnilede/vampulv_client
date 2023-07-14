@@ -55,7 +55,7 @@ class StandardRule extends Rule {
                 ),
                 ...cappedPlayers //
                     .where((player) => player.lives == 0)
-                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.configuration.id, appliedMorning: false)),
+                    .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.id, appliedMorning: false)),
               ];
             },
           ),

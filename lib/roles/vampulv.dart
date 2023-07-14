@@ -89,12 +89,12 @@ class VampulvTargetInputHandler extends InputHandler {
                 .max((group1, group2) => group1.key - group2.key)
                 .randomSubset(1, game.randomGenerator)
                 .single;
-            final resultSummary = 'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).configuration.name}!\n${vampulvs //
+            final resultSummary = 'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).name}!\n${vampulvs //
                 .map(
-                  (player) => '${player.configuration.name} röstade på ${player.roles.whereType<Vampulv>() //
+                  (player) => '${player.name} röstade på ${player.roles.whereType<Vampulv>() //
                       .map((role) => role.playerIdAttacked == null //
                           ? 'att inte attackera någon' //
-                          : game.playerFromId(role.playerIdAttacked!).configuration.name).join(' och ')}',
+                          : game.playerFromId(role.playerIdAttacked!).name).join(' och ')}',
                 ).join('\n')}';
             return [
               ...vampulvs.map((vampulv) => [
@@ -108,7 +108,7 @@ class VampulvTargetInputHandler extends InputHandler {
                             ))
                             .toList()),
                     LogEntry(
-                      playerVisibleTo: vampulv.configuration.id,
+                      playerVisibleTo: vampulv.id,
                       value: resultSummary,
                     ),
                   ]),

@@ -19,7 +19,7 @@ class Information extends ConsumerWidget {
       drawer: drawer,
       body: ListView(
         children: [
-          Text(player == null ? 'Du är inte med i spelet' : 'Spelar som ${player.configuration.name}'),
+          Text(player == null ? 'Du är inte med i spelet' : 'Spelar som ${player.name}'),
           if (player != null) const Text('Dina roller'),
           if (player != null)
             SizedBox(

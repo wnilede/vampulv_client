@@ -32,7 +32,7 @@ ConnectedDevice? connectedDevice(ConnectedDeviceRef ref) {
 Player? controlledPlayer(ControlledPlayerRef ref) {
   final controlledPlayerId = ref.watch(connectedDeviceProvider.select((connectedDevice) => connectedDevice?.controlledPlayerId));
   if (controlledPlayerId == null) return null;
-  final controlledPlayer = ref.watch(currentGameProvider)?.players.singleWhere((player) => player.configuration.id == controlledPlayerId);
+  final controlledPlayer = ref.watch(currentGameProvider)?.players.singleWhere((player) => player.id == controlledPlayerId);
 
   return controlledPlayer;
 }

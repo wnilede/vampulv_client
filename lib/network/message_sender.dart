@@ -50,7 +50,7 @@ class MessageSender with _$MessageSender {
     sendChange(NetworkMessage.fromObject(
       type: NetworkMessageType.inputToGame,
       body: PlayerInput.fromObject(
-        ownerId: player.configuration.id,
+        ownerId: player.id,
         playerInputNumber: player.handledInputs,
         identifier: identifier,
         body: value,

@@ -72,7 +72,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     );
     return LayoutBuilder(builder: (context, constraints) {
       final buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
-      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.configuration.id == controlledPlayer.configuration.id) * 2 * math.pi / players.length;
+      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
       final Widget playersWidget = CircularLayout(
           largerChildren: true,
           rotationOffset: rotationCurrent,
@@ -85,7 +85,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                       selected: selectedIndices.contains(i),
                       onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1) && //
                               (players[i].alive || widget.deadPlayersSelectable) &&
-                              (widget.selectablePlayerFilter.any((id) => id == players[i].configuration.id) == widget.filterIsWhitelist)
+                              (widget.selectablePlayerFilter.any((id) => id == players[i].id) == widget.filterIsWhitelist)
                           ? () {
                               if (selectedIndices.contains(i)) {
                                 setState(() {

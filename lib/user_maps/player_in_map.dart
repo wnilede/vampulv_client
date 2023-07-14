@@ -32,7 +32,7 @@ class PlayerInMap extends StatelessWidget {
               Expanded(
                 child: FittedBox(
                   child: Text(
-                    player.configuration.name,
+                    player.name,
                     style: TextStyle(color: textColor),
                   ),
                 ),

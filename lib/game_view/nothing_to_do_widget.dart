@@ -24,7 +24,7 @@ class NothingToDoWidget extends ConsumerWidget {
                   ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.doneLynching,
                         body: SetDoneLynchingBody(
-                          playerId: controlledPlayer.configuration.id,
+                          playerId: controlledPlayer.id,
                           value: false,
                         ),
                       ));
@@ -37,8 +37,8 @@ class NothingToDoWidget extends ConsumerWidget {
                   ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.proposeLynching,
                         body: ProposeLynchingBody(
-                          proposerId: controlledPlayer.configuration.id,
-                          proposedId: selected.single.configuration.id,
+                          proposerId: controlledPlayer.id,
+                          proposedId: selected.single.id,
                         ),
                       ));
                 },
@@ -46,7 +46,7 @@ class NothingToDoWidget extends ConsumerWidget {
                   ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.doneLynching,
                         body: SetDoneLynchingBody(
-                          playerId: controlledPlayer.configuration.id,
+                          playerId: controlledPlayer.id,
                           value: true,
                         ),
                       ));

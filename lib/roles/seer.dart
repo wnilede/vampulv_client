@@ -12,7 +12,7 @@ class Seer extends Role {
           reactions: [
             RoleReaction<NightBeginsEvent>(
               priority: 30,
-              onApply: (event, game, player) => SeerTargetInputHandler(player.configuration.id),
+              onApply: (event, game, player) => SeerTargetInputHandler(player.id),
             )
           ],
         );
@@ -27,8 +27,8 @@ class SeerTargetInputHandler extends InputHandler {
             final seenPlayer = game.playerFromId(int.parse(input.message));
             final seenPlayerIsVampulv = seenPlayer.roles.any((role) => role.type == RoleType.vampulv || role.type == RoleType.lycan);
             return [
-              EarlyConfirmChildInputHandler.withText('${seenPlayer.configuration.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en vampulv!'),
-              'Du använde din spådam för att se att ${seenPlayer.configuration.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en vampulv.',
+              EarlyConfirmChildInputHandler.withText('${seenPlayer.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en vampulv!'),
+              'Du använde din spådam för att se att ${seenPlayer.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en vampulv.',
             ];
           },
           widget: PlayerMap(

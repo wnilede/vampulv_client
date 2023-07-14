@@ -140,7 +140,7 @@ class Game with _$Game {
         ruleReactions.removeAt(0);
       } else {
         final owner = playerReactionPairs[0].$1;
-        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.apply(event, resultingGame.game, owner), owner.configuration.id);
+        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.apply(event, resultingGame.game, owner), owner.id);
         playerReactionPairs.removeAt(0);
       }
     }
@@ -202,7 +202,7 @@ class Game with _$Game {
       }
       return gameSoFar;
     }
-    throw UnsupportedError("When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).configuration.name}'}, the returned type was '${result.runtimeType}'.");
+    throw UnsupportedError("When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).name}'}, the returned type was '${result.runtimeType}'.");
   }
 
   Game _runUntilInput() {
@@ -233,13 +233,13 @@ class Game with _$Game {
     return null;
   }
 
-  Player playerFromId(int id) => players.singleWhere((player) => player.configuration.id == id);
+  Player playerFromId(int id) => players.singleWhere((player) => player.id == id);
 
   Game copyWithPlayer(Player player) {
     final newPlayers = [
       ...players,
     ];
-    newPlayers[players.indexWhere((existingPlayer) => existingPlayer.configuration.id == player.configuration.id)] = player;
+    newPlayers[players.indexWhere((existingPlayer) => existingPlayer.id == player.id)] = player;
     return copyWith(players: newPlayers);
   }
 

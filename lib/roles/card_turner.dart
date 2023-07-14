@@ -32,7 +32,7 @@ class CardTurner extends Role {
 
         return CardTurnerObserverInputHandler(
           role: this,
-          ownerId: player.configuration.id,
+          ownerId: player.id,
         );
       },
     ));
@@ -81,7 +81,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
               ownerId,
             ],
             onDone: null,
-            description: 'Välj spelaren vars ena kort ska bli sett av ${seeingPlayer.configuration.name}',
+            description: 'Välj spelaren vars ena kort ska bli sett av ${seeingPlayer.name}',
             numberSelected: 1,
           ),
           resultApplyer: (input, game, string) {
@@ -98,12 +98,12 @@ class CardTurnerObservedInputHandler extends InputHandler {
                   unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
                       .append(LateConfirmChildInputHandler(
                         description: 'See roll visad av kortvändare',
-                        identifier: 'role-${seenRole.type.name}-of-${seenPlayer.configuration.id}-shown-by-card-turner-of-$ownerId',
+                        identifier: 'role-${seenRole.type.name}-of-${seenPlayer.id}-shown-by-card-turner-of-$ownerId',
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.configuration.name} har är', textAlign: TextAlign.center),
+                              Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.name} har är', textAlign: TextAlign.center),
                               RoleCardView(seenRole.type),
                             ],
                           ),
@@ -111,10 +111,10 @@ class CardTurnerObservedInputHandler extends InputHandler {
                       ))
                       .toList()),
               LogEntry(
-                playerVisibleTo: seeingPlayer.configuration.id,
-                value: 'Någons kortvändare visade dig att ${seenPlayer.configuration.name} har rollen ${seenRole.type.displayName}',
+                playerVisibleTo: seeingPlayer.id,
+                value: 'Någons kortvändare visade dig att ${seenPlayer.name} har rollen ${seenRole.type.displayName}',
               ),
-              'Din kortvändare visade ${seeingPlayer.configuration.name} en av rollerna ägd av ${seenPlayer.configuration.name}.',
+              'Din kortvändare visade ${seeingPlayer.name} en av rollerna ägd av ${seenPlayer.name}.',
             ];
           },
         );

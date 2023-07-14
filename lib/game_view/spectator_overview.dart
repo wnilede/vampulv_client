@@ -27,7 +27,7 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
           bottom: TabBar(
               isScrollable: true,
               tabs: playersOrdered //
-                  .map((player) => Text(player.configuration.name))
+                  .map((player) => Text(player.name))
                   .toList()),
         ),
         drawer: widget.drawer,
