@@ -12,14 +12,14 @@ class Seer extends Role {
           reactions: [
             RoleReaction<NightBeginsEvent>(
               priority: 30,
-              onApply: (event, game, player) => SeerTargetInputHandler(),
+              onApply: (event, game, player) => SeerTargetInputHandler(player.configuration.id),
             )
           ],
         );
 }
 
 class SeerTargetInputHandler extends InputHandler {
-  SeerTargetInputHandler()
+  SeerTargetInputHandler(int ownerId)
       : super(
           description: 'Välj spelare att använda spådamen på',
           identifier: 'choose-target-seer',
@@ -31,10 +31,13 @@ class SeerTargetInputHandler extends InputHandler {
               'Du använde din spådam för att se att ${seenPlayer.configuration.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en vampulv.',
             ];
           },
-          widget: const PlayerMap(
+          widget: PlayerMap(
             identifier: 'choose-target-seer',
             description: 'Välj vem du vill se huruvida de är vampulv',
             numberSelected: 1,
+            selectablePlayerFilter: [
+              ownerId,
+            ],
           ),
         );
 }
