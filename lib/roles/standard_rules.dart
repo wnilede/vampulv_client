@@ -84,5 +84,10 @@ class StandardRule extends Rule {
               );
             },
           ),
+          // Set game field when GameEndsEvent is sent.
+          RuleReaction<GameEndsEvent>(
+            priority: 0,
+            onApply: (event, game) => game.copyWith(isFinished: true),
+          ),
         ]);
 }

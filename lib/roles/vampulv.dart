@@ -4,6 +4,7 @@ import 'package:vampulv/input_handlers/blocking_input_handler.dart';
 import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
 import 'package:vampulv/logentry.dart';
+import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
 import 'package:vampulv/roles/rule.dart';
@@ -36,9 +37,10 @@ class Vampulv extends Role {
 class VampulvRule extends Rule {
   VampulvRule()
       : super(reactions: [
-          RuleReaction<DieEvent>(
+          RuleReaction<Event>(
               priority: -50,
               onApply: (event, game) {
+                if (event is! GameBeginsEvent && event is! DieEvent) return null;
                 final alivePlayers = game.players.where((player) => player.alive);
                 return alivePlayers.every((player) => player.roles.any((role) => role is Vampulv)) || //
                         alivePlayers.every((player) => player.roles.all((role) => role is! Vampulv))
