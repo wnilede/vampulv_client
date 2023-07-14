@@ -74,7 +74,7 @@ class VampulvRule extends Rule {
                     : null;
               }),
           RuleReaction<GameEndsEvent>(
-              priority: 10,
+              priority: 100,
               onApply: (event, game) {
                 final vampulvsWon = game.players.isNotEmpty &&
                     game.players.every(

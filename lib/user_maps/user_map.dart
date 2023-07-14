@@ -28,6 +28,7 @@ class PlayerMap extends ConsumerStatefulWidget {
   final String? description;
   final bool canChooseFewer;
   final bool deadPlayersSelectable;
+  final bool canSelectSelf;
   final List<int> selectablePlayerFilter;
   final bool filterIsWhitelist;
   final void Function()? onCancel;
@@ -42,6 +43,7 @@ class PlayerMap extends ConsumerStatefulWidget {
     this.numberSelected = 0,
     this.canChooseFewer = false,
     this.deadPlayersSelectable = false,
+    this.canSelectSelf = true,
     this.selectablePlayerFilter = const [],
     this.filterIsWhitelist = false,
     super.key,
@@ -83,8 +85,9 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                   ? PlayerInMap(
                       players[i],
                       selected: selectedIndices.contains(i),
-                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1) && //
+                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i)) && //
                               (players[i].alive || widget.deadPlayersSelectable) &&
+                              (players[i].id != controlledPlayer?.id || widget.canSelectSelf) &&
                               (widget.selectablePlayerFilter.any((id) => id == players[i].id) == widget.filterIsWhitelist)
                           ? () {
                               if (selectedIndices.contains(i)) {
