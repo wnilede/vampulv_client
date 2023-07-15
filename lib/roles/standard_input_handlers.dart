@@ -31,7 +31,7 @@ class LynchingVoteInputHandler extends InputHandler {
               LogEntry(value: '${proposer.name} föreslog lynchning av ${proposed.name}.${summaries.map((summary) => '\n - $summary').join()}', playerVisibleTo: null),
             ];
             if (newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
-              result.add(DieEvent(playerId: proposed.id, appliedMorning: false));
+              result.add(LynchingDieEvent(playerId: proposed.id));
               result.add(NightBeginsEvent());
             }
             return result;

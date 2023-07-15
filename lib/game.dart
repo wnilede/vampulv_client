@@ -108,31 +108,30 @@ class Game with _$Game {
   }
 
   Game _applyEventOnly(Event event) {
+    if (isFinished) return this;
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,
         )
         .flatten()
         .where((rule) => rule.passesFilter(event))
-        .orderBy((reaction) => reaction.priority)
+        .orderByDescending((reaction) => reaction.priority)
         .toList();
     final playerReactionPairs = players
         .map(
-          (player) => player.roles
-              .map(
-                (role) => role.reactions,
-              )
+          (player) => player.roles //
+              .map((role) => role.reactions)
               .flatten()
+              .where((reaction) => reaction.passesFilter(event) && (player.alive || reaction.worksAfterDeath))
               .map(
                 (reaction) => (
-                  player,
+                  player.id,
                   reaction,
                 ),
               ),
         )
         .flatten()
-        .where((playerReaction) => playerReaction.$2.passesFilter(event) && (playerReaction.$1.alive || playerReaction.$2.worksAfterDeath))
-        .orderBy((playerReaction) => playerReaction.$2.priority)
+        .orderByDescending((playerReaction) => playerReaction.$2.priority)
         .toList();
     _ApplyResultResult resultingGame = _ApplyResultResult(this);
     while ((ruleReactions.isNotEmpty || playerReactionPairs.isNotEmpty) && !resultingGame.canceled) {
@@ -140,8 +139,10 @@ class Game with _$Game {
         resultingGame = resultingGame.game._applyResultFromApplyer(ruleReactions[0].apply(event, resultingGame.game), null);
         ruleReactions.removeAt(0);
       } else {
-        final owner = playerReactionPairs[0].$1;
-        resultingGame = resultingGame.game._applyResultFromApplyer(playerReactionPairs[0].$2.apply(event, resultingGame.game, owner), owner.id);
+        resultingGame = resultingGame.game._applyResultFromApplyer(
+          playerReactionPairs[0].$2.apply(event, resultingGame.game, resultingGame.game.playerFromId(playerReactionPairs[0].$1)),
+          playerReactionPairs[0].$1,
+        );
         playerReactionPairs.removeAt(0);
       }
     }
@@ -210,7 +211,8 @@ class Game with _$Game {
     Game oldResult = this;
     while (true) {
       final result = oldResult._runOneStep();
-      if (result == null) {
+      // We only check for cycles of length 1. That should be enough for most cases, and it is neccessary in some. But I could imagine it happening in some weird edge case that we get in a longer cycle. To prevent this, we could keep track of and compare to all previous states, but that might not be enough, if the cycle for example increase dayNumber.
+      if (result == null || result == oldResult) {
         return oldResult;
       } else {
         oldResult = result;

@@ -19,7 +19,7 @@ class CurrentMessageSender extends _$CurrentMessageSender {
 
     print('Connecting as client');
     final channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.8.111:$port'),
+      Uri.parse('ws://192.168.8.119:$port'),
     );
     channel.ready.asStream().handleError((error, stackTrace) {
       if (error is TimeoutException || error is SocketException) {

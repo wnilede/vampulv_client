@@ -30,3 +30,7 @@ class ProposeLynchingEvent extends Event {
 
   factory ProposeLynchingEvent.fromBody(ProposeLynchingBody body) => ProposeLynchingEvent(proposedId: body.proposedId, proposerId: body.proposerId);
 }
+
+class LynchingDieEvent extends DieEvent {
+  LynchingDieEvent({required super.playerId}) : super(appliedMorning: false);
+}

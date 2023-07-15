@@ -14,18 +14,20 @@ class Hoodler extends Role {
 
   Hoodler() : super(type: RoleType.hoodler) {
     reactions.add(RoleReaction<NightBeginsEvent>(
-      priority: 27,
+      priority: -27,
+      worksAfterDeath: true,
       onApply: (event, game, player) => game.dayNumber >= nightWaking && targets == null
           ? HoodlerTargetsInputHandler(
               setTargets: (targets) {
                 this.targets = targets;
               },
-              numberOfTargets: math.min(numberOfTargets, game.players.where((player) => player.alive).count() - 1),
+              numberOfTargets: math.min(numberOfTargets, game.players.where((player) => player.alive && player.id != player.id).count()),
             )
           : null,
     ));
     reactions.add(RoleReaction<GameEndsEvent>(
-      priority: 20,
+      priority: 8,
+      worksAfterDeath: true,
       onApply: (event, game, player) => player.copyWith(
         isWinner: targets != null && targets!.every((targetId) => !game.playerFromId(targetId).alive),
       ),

@@ -76,21 +76,20 @@ class VampulvRule extends Rule {
           RuleReaction<GameEndsEvent>(
               priority: 100,
               onApply: (event, game) {
-                final vampulvsWon = game.players.isNotEmpty &&
+                final alivePlayers = game.players.where((player) => player.alive);
+                final vampulvsWon = alivePlayers.isNotEmpty &&
                     game.players.every(
                       (player) => !player.alive || player.roles.any((role) => role is Vampulv),
                     );
-                final civiliansWon = game.players.isNotEmpty && !vampulvsWon;
-                return game.copyWith(
-                  players: game.players.map(
-                    (player) {
-                      final isVampulv = player.roles.any((role) => role is Vampulv);
-                      return player.copyWith(
-                        isWinner: vampulvsWon && isVampulv || civiliansWon && !isVampulv,
-                      );
-                    },
-                  ).toList(),
-                );
+                final civiliansWon = alivePlayers.isNotEmpty && !vampulvsWon;
+                return game.players.map(
+                  (player) {
+                    final isVampulv = player.roles.any((role) => role is Vampulv);
+                    return player.copyWith(
+                      isWinner: vampulvsWon && isVampulv || civiliansWon && !isVampulv,
+                    );
+                  },
+                ).toList();
               }),
         ]);
 }
