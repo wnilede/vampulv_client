@@ -36,10 +36,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
                       children: gameConfiguration.roles.indexed
                           .map((indexedRoleType) => GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    selectedAmongAll = false;
-                                    selectedIndex = indexedRoleType.$1;
-                                  });
+                                  selectRole(false, indexedRoleType.$1);
                                 },
                                 child: RoleListItem(indexedRoleType.$2, !selectedAmongAll && indexedRoleType.$1 == selectedIndex),
                               ))
@@ -49,10 +46,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
                       children: RoleType.values.indexed
                           .map((indexedRoleType) => GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    selectedAmongAll = true;
-                                    selectedIndex = indexedRoleType.$1;
-                                  });
+                                  selectRole(true, indexedRoleType.$1);
                                 },
                                 child: RoleListItem(indexedRoleType.$2, selectedAmongAll && indexedRoleType.$1 == selectedIndex),
                               ))
@@ -60,7 +54,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
             ],
           ),
         ),
-        if (selectedIndex != null) RoleDescription(selectedAmongAll ? RoleType.values[selectedIndex!] : gameConfiguration.roles[selectedIndex!]),
+        if (selectedIndex != null) Expanded(child: RoleDescription(selectedAmongAll ? RoleType.values[selectedIndex!] : gameConfiguration.roles[selectedIndex!])),
         MaterialButton(
           onPressed: selectedIndex == null
               ? null
@@ -85,5 +79,16 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
         ),
       ],
     );
+  }
+
+  selectRole(bool selectedAmongAll, int? selectedIndex) {
+    setState(() {
+      if (this.selectedAmongAll == selectedAmongAll && this.selectedIndex == selectedIndex) {
+        this.selectedIndex = null;
+      } else {
+        this.selectedAmongAll = selectedAmongAll;
+        this.selectedIndex = selectedIndex;
+      }
+    });
   }
 }

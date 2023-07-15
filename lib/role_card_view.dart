@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:vampulv/role_description.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -15,34 +16,40 @@ class RoleCardView extends StatelessWidget {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) => Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(title: Text(role.displayName)),
               body: RoleDescription(role),
             ),
           ),
         );
       },
-      child: SizedBox(
-        width: 170,
-        height: 230,
+      child: FittedBox(
         child: Container(
-          padding: const EdgeInsets.all(2),
+          width: 170,
+          height: 230,
+          margin: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
             border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(2)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
           child: Column(
             children: [
-              const AspectRatio(
+              AspectRatio(
                 aspectRatio: 1,
-                child: Center(child: Icon(Icons.person)),
+                child: FittedBox(child: Icon(Icons.person, color: Theme.of(context).colorScheme.onSecondary)),
               ),
               Expanded(
                 child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     role.displayName,
-                    maxLines: 1,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontSize: 50,
+                    ),
                   ),
                 ),
               ),

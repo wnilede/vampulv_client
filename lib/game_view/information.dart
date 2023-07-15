@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/role_description.dart';
-import 'package:vampulv/role_list_item.dart';
+import 'package:vampulv/player_summary.dart';
 
 class Information extends ConsumerWidget {
   final Widget drawer;
@@ -20,32 +19,14 @@ class Information extends ConsumerWidget {
       body: ListView(
         children: [
           Text(player == null ? 'Du är inte med i spelet' : 'Spelar som ${player.name}'),
-          if (player != null) const Text('Dina roller'),
           if (player != null)
-            SizedBox(
-              height: 200,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: player.roles
-                    .map((role) => SizedBox(
-                        width: 200,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) => Scaffold(
-                                  appBar: AppBar(),
-                                  body: RoleDescription(role.type),
-                                ),
-                              ),
-                            );
-                          },
-                          child: RoleListItem(role.type, false),
-                        )))
-                    .toList(),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ),
+              child: PlayerSummary(player),
+            )
         ],
       ),
     );

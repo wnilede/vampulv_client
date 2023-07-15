@@ -16,7 +16,7 @@ class GameViewDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      width: 250,
+      width: 170,
       child: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

@@ -18,7 +18,7 @@ enum RoleType {
     detailedDescription: 'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attakera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
   ),
   lonelyPulv(
-    displayName: 'Självisk vampyr',
+    displayName: 'Självisk vampulv',
     description: 'Döda alla andra',
     detailedDescription: 'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet.',
   ),

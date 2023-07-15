@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_provider.dart';
@@ -62,9 +63,21 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
     Widget descriptionText = Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (widget.description != null) Text(widget.description!),
+        if (widget.description != null)
+          Expanded(
+            child: Center(
+              child: AutoSizeText(
+                widget.description!,
+                minFontSize: 8,
+                maxLines: 5,
+                wrapWords: false,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 50), //Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+          ),
         if (widget.numberSelected > 1)
           Text(
             '${selectedIndices.length}/${widget.numberSelected}',
@@ -78,7 +91,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
       final Widget playersWidget = CircularLayout(
           largerChildren: true,
           rotationOffset: rotationCurrent,
-          inside: FittedBox(child: descriptionText),
+          inside: descriptionText,
           children: List.generate(
               players.length,
               (i) => widget.playerAppearance == null

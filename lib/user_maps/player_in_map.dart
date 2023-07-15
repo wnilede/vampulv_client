@@ -1,9 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player.dart';
+import 'package:vampulv/player_summary.dart';
 
-class PlayerInMap extends StatelessWidget {
+class PlayerInMap extends ConsumerWidget {
   final Player player;
   final bool selected;
   final void Function()? onSelect;
@@ -11,9 +14,23 @@ class PlayerInMap extends StatelessWidget {
   const PlayerInMap(this.player, {this.selected = false, this.onSelect, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isSpectator = ref.watch(controlledPlayerProvider.select((player) => player == null));
     Color textColor = player.alive ? Colors.black : Colors.white;
     return GestureDetector(
+      onLongPress: isSpectator
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => Scaffold(
+                        appBar: AppBar(title: Text(player.name)),
+                        body: PlayerSummary(player),
+                      )),
+                ),
+              );
+            }
+          : null,
       onTap: onSelect,
       child: Container(
         decoration: BoxDecoration(
