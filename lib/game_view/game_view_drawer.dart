@@ -54,7 +54,7 @@ class GameViewDrawer extends ConsumerWidget {
               },
             ),
             ListTile(
-              title: const Text('Log'),
+              title: const Text('Historik'),
               selected: selected == GameViewSelection.log,
               onTap: () {
                 onSelect(GameViewSelection.log);

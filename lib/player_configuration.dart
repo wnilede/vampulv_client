@@ -11,4 +11,8 @@ class PlayerConfiguration with _$PlayerConfiguration {
   }) = _PlayerConfiguration;
 
   factory PlayerConfiguration.fromJson(Map<String, dynamic> json) => _$PlayerConfigurationFromJson(json);
+
+  const PlayerConfiguration._();
+
+  String get namePlural => name.trimRight().endsWith('s') ? name : '${name}s';
 }

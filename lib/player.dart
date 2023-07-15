@@ -32,4 +32,5 @@ class Player with _$Player {
         );
   int get id => configuration.id;
   String get name => configuration.name;
+  String get namePlural => configuration.namePlural;
 }
