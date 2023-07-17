@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/list_item.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player.dart';
 
@@ -24,13 +25,7 @@ class LogPage extends ConsumerWidget {
                 logEntry.playerVisibleTo == null || //
                 controlledPlayer == null ||
                 logEntry.playerVisibleTo == controlledPlayer.id)
-            .map((logEntry) => Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(8),
+            .map((logEntry) => ListItem(
                   child: controlledPlayer == null
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,

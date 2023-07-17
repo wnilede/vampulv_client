@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:darq/darq.dart';
+import 'package:vampulv/game.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
 import 'package:vampulv/roles/standard_events.dart';
@@ -33,6 +35,13 @@ class Hoodler extends Role {
       ),
     ));
   }
+
+  @override
+  Map<String, String> getDisplayableProperties(Game game, Player owner) => targets == null
+      ? {
+          'Hoodlade': 'Inga spelare valda än',
+        }
+      : targets!.indexed.toMap((indexTarget) => MapEntry('Hoodlad ${indexTarget.$1}', game.playerFromId(indexTarget.$2).name));
 }
 
 class HoodlerTargetsInputHandler extends InputHandler {

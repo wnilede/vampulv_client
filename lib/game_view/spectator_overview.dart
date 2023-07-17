@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/list_item.dart';
 
 class SpectatorOverview extends ConsumerStatefulWidget {
   final Widget drawer;
@@ -35,7 +36,7 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
             children: playersOrdered //
                 .map((player) => ListView(
                     children: player.unhandledInputHandlers //
-                        .map((inputHandler) => Text(inputHandler.description))
+                        .map<Widget>((inputHandler) => ListItem(child: Text(inputHandler.description)))
                         .defaultIfEmpty(Text(
                           player.lynchingDone || isNight ? 'Inget kvar att göra...' : 'Väljer spelare att förseslå för lynchning',
                           textAlign: TextAlign.center,

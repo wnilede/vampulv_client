@@ -1,3 +1,5 @@
+import 'package:vampulv/game.dart';
+import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/hoodler.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -26,4 +28,9 @@ class Tanner extends Role {
       },
     ));
   }
+
+  @override
+  Map<String, String> getDisplayableProperties(Game game, Player owner) => {
+        'Har blivit lynchad': diedByLynching ? 'Ja' : 'Nej',
+      };
 }

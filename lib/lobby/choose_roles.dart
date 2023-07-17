@@ -54,7 +54,7 @@ class _ChooseRolesState extends ConsumerState<ChooseRoles> {
             ],
           ),
         ),
-        if (selectedIndex != null) Expanded(child: RoleDescription(selectedAmongAll ? RoleType.values[selectedIndex!] : gameConfiguration.roles[selectedIndex!])),
+        if (selectedIndex != null) Expanded(child: RoleTypeDescription(selectedAmongAll ? RoleType.values[selectedIndex!] : gameConfiguration.roles[selectedIndex!])),
         MaterialButton(
           onPressed: selectedIndex == null
               ? null

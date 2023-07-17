@@ -6,6 +6,7 @@ import 'package:vampulv/roles/role_type.dart';
 abstract class Role {
   List<RoleReaction> reactions;
   RoleType type;
+  Map<String, String> getDisplayableProperties(Game game, Player owner) => {};
   Role({required this.type, List<RoleReaction>? reactions}) : reactions = reactions ?? [];
 }
 

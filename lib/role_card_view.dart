@@ -1,23 +1,26 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:vampulv/role_description.dart';
+import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
 
 class RoleCardView extends StatelessWidget {
-  final RoleType role;
+  final RoleType? roleType;
+  final Role? role;
 
-  const RoleCardView(this.role, {super.key});
+  const RoleCardView({this.roleType, this.role, super.key}) : assert((role == null) != (roleType == null), 'Exactly one of role and roleType must be null when creating RoleCardView.');
 
   @override
   Widget build(BuildContext context) {
+    final roleType = this.roleType ?? role!.type;
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) => Scaffold(
-              appBar: AppBar(title: Text(role.displayName)),
-              body: RoleDescription(role),
+              appBar: AppBar(title: const Text('Rolldetaljer')),
+              body: role == null ? RoleTypeDescription(roleType) : RoleDescription(role!),
             ),
           ),
         );
@@ -42,7 +45,7 @@ class RoleCardView extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: AutoSizeText(
-                    role.displayName,
+                    roleType.displayName,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,

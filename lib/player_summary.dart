@@ -11,20 +11,23 @@ class PlayerSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LimitedBox(
-      maxHeight: 200,
+      maxHeight: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: player.roles //
-                  .map((role) => RoleCardView(role.type))
-                  .toList(),
+            child: Center(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                children: player.roles //
+                    .map((role) => RoleCardView(roleType: role.type))
+                    .toList(),
+              ),
             ),
           ),
           Text(
-            'Namn:   ${player.name}\nLiv:   ${player.lives}/${player.maxLives}\nLever:   ${player.alive ? 'Ja' : 'Nej'}',
+            'Namn:  ${player.name}\nLiv:  ${player.lives}/${player.maxLives}\nLever:  ${player.alive ? 'Ja' : 'Nej'}',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
