@@ -55,15 +55,15 @@ class RoleDescription extends ConsumerWidget {
       padding: const EdgeInsets.all(8),
       children: [
         Text(
-          role.type.displayName,
+          role.getDisplayName(game, owner),
           style: theme.textTheme.headlineMedium,
         ),
         Text(
-          role.type.description,
+          role.getDescription(game, owner),
           style: theme.textTheme.titleMedium,
         ),
         Text(
-          role.type.detailedDescription,
+          role.getDetailedDescription(game, owner),
           style: theme.textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),

@@ -9,7 +9,7 @@ class Villager extends Role {
       : super(
           type: RoleType.villager,
           reactions: [
-            RoleReaction<GameBeginsEvent>(
+            RoleReaction<ProposeLynchingEvent>(
               priority: 40,
               onApply: (event, game, player) => player.roles.every((role) => role is Villager) ? player.copyWith(votesInLynching: 2) : null,
             ),

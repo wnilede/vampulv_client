@@ -21,7 +21,7 @@ class Information extends ConsumerWidget {
         children: [
           ListItem(
               child: player == null
-                  ? const Text('Du är inte med i spelet så du får se allt')
+                  ? const Text('Du är inte med i spelet så du får se allt.')
                   : Column(
                       children: [
                         Text(

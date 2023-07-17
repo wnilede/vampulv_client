@@ -35,8 +35,8 @@ class ChooseRoles extends ConsumerWidget {
                       .map((indexedRoleType) => LongPressDraggable<int>(
                             delay: const Duration(milliseconds: 200),
                             data: indexedRoleType.$1,
-                            feedback: RoleCardView(roleType: indexedRoleType.$2),
-                            child: RoleCardView(roleType: indexedRoleType.$2),
+                            feedback: RoleTypeCardView(indexedRoleType.$2),
+                            child: RoleTypeCardView(indexedRoleType.$2),
                           ))
                       .toList()),
             ),
@@ -57,8 +57,8 @@ class ChooseRoles extends ConsumerWidget {
                       (roleType) => LongPressDraggable<RoleType>(
                         delay: const Duration(milliseconds: 200),
                         data: roleType,
-                        feedback: RoleCardView(roleType: roleType),
-                        child: RoleCardView(roleType: roleType),
+                        feedback: RoleTypeCardView(roleType),
+                        child: RoleTypeCardView(roleType),
                       ),
                     )
                     .toList(),

@@ -10,6 +10,7 @@ import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/roles/event.dart';
+import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/rule.dart';
 import 'package:vampulv/roles/standard_events.dart';
 import 'package:vampulv/roles/standard_rules.dart';
@@ -21,14 +22,16 @@ part 'game.freezed.dart';
 @freezed
 class Game with _$Game {
   const factory Game({
+    required GameConfiguration configuration,
     required Xorshift32 randomGenerator,
     required List<Player> players,
+    required List<Role> rolesInDeck,
     @Default([]) List<Rule> rules,
     @Default([]) List<Event> unhandledEvents,
     @Default([]) List<LogEntry> log,
     @Default(false) bool isNight,
     @Default(false) bool isFinished,
-    @Default(-1) int dayNumber,
+    @Default(0) int dayNumber,
   }) = _Game;
 
   const Game._();
@@ -37,7 +40,7 @@ class Game with _$Game {
     assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer, 'There are not enough roles for all players.');
     final randomGenerator = Xorshift32(configuration.randomSeed);
     final players = <Player>[];
-    final shuffledRoles = configuration.roles.randomize(randomGenerator).toList();
+    final shuffledRoles = configuration.roles.map((roleType) => roleType.produceRole()).randomize(randomGenerator).toList();
     for (int i = 0; i < configuration.players.length; i++) {
       players.add(Player(
         configuration: configuration.players[i],
@@ -46,15 +49,16 @@ class Game with _$Game {
               configuration.rolesPerPlayer * i,
               configuration.rolesPerPlayer * (i + 1),
             )
-            .map((roleType) => roleType.produceRole())
             .toList(),
         maxLives: configuration.maxLives,
         lives: configuration.maxLives,
       ));
     }
     return Game(
+      configuration: configuration,
       randomGenerator: randomGenerator,
       players: players,
+      rolesInDeck: shuffledRoles.sublist(configuration.rolesPerPlayer * configuration.players.length),
       rules: configuration.roles //
           .distinct()
           .map((role) => role.produceRule())

@@ -13,25 +13,27 @@ class StandardRule extends Rule {
             priority: 0,
             onApply: (event, game) => [
               game.copyWith(isNight: false),
-              'Dag ${game.dayNumber + 1} startade.',
+              'Dag ${game.dayNumber} startade.',
             ],
           ),
           // Set game night field when event is sent and reset lynchinging ability.
           RuleReaction<NightBeginsEvent>(
-              priority: 0,
-              onApply: (event, game) => [
-                    game.copyWith(
-                      isNight: true,
-                      players: game.players
-                          .map((player) => player.copyWith(
-                                lynchingDone: !player.alive,
-                                previouslyProposed: [],
-                              ))
-                          .toList(),
-                      dayNumber: game.dayNumber + 1,
-                    ),
-                    'Natt ${game.dayNumber + 2} startade.',
-                  ]),
+            priority: 0,
+            onApply: (event, game) => [
+              game.copyWith(
+                isNight: true,
+                players: game.players
+                    .map((player) => player.copyWith(
+                          lynchingDone: !player.alive,
+                          previouslyProposed: [],
+                          votesInLynching: 1,
+                        ))
+                    .toList(),
+                dayNumber: game.dayNumber + 1,
+              ),
+              'Natt ${game.dayNumber + 1} startade.',
+            ],
+          ),
           // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this.
           RuleReaction<HurtEvent>(
             priority: 0,

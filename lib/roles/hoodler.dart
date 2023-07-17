@@ -11,7 +11,7 @@ import 'package:vampulv/user_maps/user_map.dart';
 
 class Hoodler extends Role {
   static const int numberOfTargets = 2;
-  static const int nightWaking = 1;
+  static const int nightWaking = 2;
   List<int>? targets;
 
   Hoodler() : super(type: RoleType.hoodler) {

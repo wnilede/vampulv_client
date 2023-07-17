@@ -104,7 +104,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.name} har är', textAlign: TextAlign.center),
-                              RoleCardView(roleType: seenRole.type),
+                              RoleTypeCardView(seenRole.type),
                             ],
                           ),
                         ),

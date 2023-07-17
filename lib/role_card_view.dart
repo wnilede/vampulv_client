@@ -1,22 +1,48 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vampulv/game_provider.dart';
 import 'package:vampulv/role_description.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
 
-class RoleCardView extends StatelessWidget {
-  final RoleType? roleType;
-  final Role? role;
+class RoleTypeCardView extends ConsumerWidget {
+  final RoleType roleType;
 
-  const RoleCardView({this.roleType, this.role, super.key})
-      : assert(
-          (role == null) != (roleType == null),
-          'Exactly one of role and roleType must be null when creating RoleCardView.',
-        );
+  const RoleTypeCardView(this.roleType, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final roleType = this.roleType ?? role!.type;
+  Widget build(BuildContext context, WidgetRef ref) => _RoleCardView(
+        title: roleType.displayName,
+        showedOnTap: RoleTypeDescription(roleType),
+      );
+}
+
+class RoleCardView extends ConsumerWidget {
+  final Role role;
+
+  const RoleCardView(this.role, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final game = ref.watch(currentGameProvider);
+    final owner = game?.players.firstWhereOrDefault((player) => player.roles.contains(role));
+    return _RoleCardView(
+      title: owner == null ? role.type.displayName : role.getDisplayName(game!, owner),
+      showedOnTap: RoleDescription(role),
+    );
+  }
+}
+
+class _RoleCardView extends ConsumerWidget {
+  final String title;
+  final Widget showedOnTap;
+
+  const _RoleCardView({required this.title, required this.showedOnTap});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -24,7 +50,7 @@ class RoleCardView extends StatelessWidget {
           MaterialPageRoute<void>(
             builder: (BuildContext context) => Scaffold(
               appBar: AppBar(title: const Text('Rolldetaljer')),
-              body: role == null ? RoleTypeDescription(roleType) : RoleDescription(role!),
+              body: showedOnTap,
             ),
           ),
         );
@@ -49,7 +75,7 @@ class RoleCardView extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: AutoSizeText(
-                    roleType.displayName,
+                    title,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
