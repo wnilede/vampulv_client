@@ -40,6 +40,7 @@ class RoleDescription extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final game = ref.watch(currentGameProvider);
     if (game == null) {
       return RoleTypeDescription(role.type);
@@ -49,16 +50,26 @@ class RoleDescription extends ConsumerWidget {
       return RoleTypeDescription(role.type);
     }
     final displayableProperties = role.getDisplayableProperties(game, owner);
-    if (displayableProperties.isEmpty) {
-      return RoleTypeDescription(role.type);
-    }
-    return Column(
+    displayableProperties['Ägare'] = owner.name;
+    return ListView(
+      padding: const EdgeInsets.all(8),
       children: [
-        RoleTypeDescription(role.type),
+        Text(
+          role.type.displayName,
+          style: theme.textTheme.headlineMedium,
+        ),
+        Text(
+          role.type.description,
+          style: theme.textTheme.titleMedium,
+        ),
+        Text(
+          role.type.detailedDescription,
+          style: theme.textTheme.bodyMedium,
+        ),
         const SizedBox(height: 8),
         ...displayableProperties.entries.map((property) => Text(
               '${property.key}: ${property.value}',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyLarge,
             )),
       ],
     );

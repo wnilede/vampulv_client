@@ -21,7 +21,7 @@ class PlayerSummary extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 children: player.roles //
-                    .map((role) => RoleCardView(roleType: role.type))
+                    .map((role) => RoleCardView(role: role))
                     .toList(),
               ),
             ),
