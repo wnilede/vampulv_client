@@ -8,7 +8,11 @@ class RoleCardView extends StatelessWidget {
   final RoleType? roleType;
   final Role? role;
 
-  const RoleCardView({this.roleType, this.role, super.key}) : assert((role == null) != (roleType == null), 'Exactly one of role and roleType must be null when creating RoleCardView.');
+  const RoleCardView({this.roleType, this.role, super.key})
+      : assert(
+          (role == null) != (roleType == null),
+          'Exactly one of role and roleType must be null when creating RoleCardView.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class RoleCardView extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
             border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           child: Column(
             children: [
@@ -49,10 +53,7 @@ class RoleCardView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontSize: 50,
-                    ),
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).colorScheme.onSecondary),
                   ),
                 ),
               ),

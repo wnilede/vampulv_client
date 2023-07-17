@@ -4,91 +4,69 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/game_configuration.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/role_description.dart';
-import 'package:vampulv/role_list_item.dart';
+import 'package:vampulv/role_card_view.dart';
 import 'package:vampulv/roles/role_type.dart';
 
-class ChooseRoles extends ConsumerStatefulWidget {
+class ChooseRoles extends ConsumerWidget {
   const ChooseRoles({super.key});
 
   @override
-  ConsumerState<ChooseRoles> createState() => _ChooseRolesState();
-}
-
-class _ChooseRolesState extends ConsumerState<ChooseRoles> {
-  bool selectedAmongAll = false;
-  int? selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     GameConfiguration gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
-    if (selectedIndex != null && (selectedAmongAll && selectedIndex! >= RoleType.values.length || !selectedAmongAll && selectedIndex! >= gameConfiguration.roles.length)) {
-      selectedIndex = null;
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(
-                  child: ListView(
-                      children: gameConfiguration.roles.indexed
-                          .map((indexedRoleType) => GestureDetector(
-                                onTap: () {
-                                  selectRole(false, indexedRoleType.$1);
-                                },
-                                child: RoleListItem(indexedRoleType.$2, !selectedAmongAll && indexedRoleType.$1 == selectedIndex),
-                              ))
-                          .toList())),
-              Expanded(
-                  child: ListView(
-                      children: RoleType.values.indexed
-                          .map((indexedRoleType) => GestureDetector(
-                                onTap: () {
-                                  selectRole(true, indexedRoleType.$1);
-                                },
-                                child: RoleListItem(indexedRoleType.$2, selectedAmongAll && indexedRoleType.$1 == selectedIndex),
-                              ))
-                          .toList())),
-            ],
+    return LayoutBuilder(builder: (context, constraints) {
+      final listsAreHorizontal = 230 * constraints.maxWidth > 170 * constraints.maxHeight;
+      return Flex(
+        direction: listsAreHorizontal ? Axis.vertical : Axis.horizontal,
+        children: [
+          // The two DragTargets have different type variables so that they cannot react to the wrong Draggables.
+          Expanded(
+            child: DragTarget<RoleType>(
+              onAccept: (dragged) {
+                ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
+                      roles: gameConfiguration.roles //
+                          .append(dragged)
+                          .orderBy((role) => role.index)
+                          .toList(),
+                    ));
+              },
+              builder: (context, candidateData, rejectedData) => ListView(
+                  scrollDirection: listsAreHorizontal ? Axis.horizontal : Axis.vertical,
+                  children: gameConfiguration.roles.indexed
+                      .map((indexedRoleType) => LongPressDraggable<int>(
+                            delay: const Duration(milliseconds: 200),
+                            data: indexedRoleType.$1,
+                            feedback: RoleCardView(roleType: indexedRoleType.$2),
+                            child: RoleCardView(roleType: indexedRoleType.$2),
+                          ))
+                      .toList()),
+            ),
           ),
-        ),
-        if (selectedIndex != null) Expanded(child: RoleTypeDescription(selectedAmongAll ? RoleType.values[selectedIndex!] : gameConfiguration.roles[selectedIndex!])),
-        MaterialButton(
-          onPressed: selectedIndex == null
-              ? null
-              : () {
-                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
-                        roles: (selectedAmongAll
-                                ? gameConfiguration.roles.append(
-                                    RoleType.values[selectedIndex!],
-                                  )
-                                : [
-                                    ...gameConfiguration.roles.take(selectedIndex!),
-                                    ...gameConfiguration.roles.skip(selectedIndex! + 1),
-                                  ])
-                            .toList(),
-                      ));
-                },
-          child: Text(selectedIndex == null
-              ? 'Lägg till / Ta bort'
-              : selectedAmongAll
-                  ? 'Lägg till'
-                  : 'Ta bort'),
-        ),
-      ],
-    );
-  }
-
-  selectRole(bool selectedAmongAll, int? selectedIndex) {
-    setState(() {
-      if (this.selectedAmongAll == selectedAmongAll && this.selectedIndex == selectedIndex) {
-        this.selectedIndex = null;
-      } else {
-        this.selectedAmongAll = selectedAmongAll;
-        this.selectedIndex = selectedIndex;
-      }
+          Expanded(
+            child: DragTarget<int>(
+              onAccept: (draggedIndex) {
+                ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(roles: [
+                      // Should use exceptAt, but it does not work for first and last index.
+                      ...gameConfiguration.roles.skipLast(gameConfiguration.roles.length - draggedIndex),
+                      ...gameConfiguration.roles.skip(draggedIndex + 1),
+                    ]));
+              },
+              builder: (context, candidateData, rejectedData) => ListView(
+                scrollDirection: listsAreHorizontal ? Axis.horizontal : Axis.vertical,
+                children: RoleType.values
+                    .map(
+                      (roleType) => LongPressDraggable<RoleType>(
+                        delay: const Duration(milliseconds: 200),
+                        data: roleType,
+                        feedback: RoleCardView(roleType: roleType),
+                        child: RoleCardView(roleType: roleType),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        ],
+      );
     });
   }
 }

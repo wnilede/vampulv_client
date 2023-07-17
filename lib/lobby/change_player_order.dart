@@ -67,7 +67,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                   newPlayerOrder.insert(indexTo + (indexFrom > indexTo ? 1 : 0), newPlayerOrder.removeAt(indexFrom));
                   ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
                 },
-                builder: (BuildContext context, List<int?> candidateData, List rejectedData) {
+                builder: (context, candidateData, rejectedData) {
                   return const SizedBox();
                 },
               ),
