@@ -14,5 +14,5 @@ class PlayerConfiguration with _$PlayerConfiguration {
 
   const PlayerConfiguration._();
 
-  String get namePlural => name.trimRight().endsWith('s') ? name : '${name}s';
+  String get namePossessive => name.trimRight().endsWith('s') ? name : '${name}s';
 }

@@ -12,7 +12,7 @@ class LonelyPulv extends Vampulv {
           priority: 60,
           worksAfterDeath: true,
           onApply: (event, game, player) {
-            if (player.isWinner && (!player.alive || game.players.any((otherPlayer) => otherPlayer.alive && otherPlayer.id != player.id))) {
+            if (player.isWinner && (!player.alive || game.alivePlayers.any((otherPlayer) => otherPlayer.id != player.id))) {
               return player.copyWith(isWinner: false);
             }
           }),

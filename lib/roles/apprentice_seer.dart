@@ -10,7 +10,7 @@ class ApprenticeSeer extends Role {
           reactions: [
             RoleReaction<NightBeginsEvent>(
               priority: 25,
-              onApply: (event, game, player) => game.players.any((player) => player.alive && player.roles.whereType<Seer>().isNotEmpty) ? null : SeerTargetInputHandler(player.id),
+              onApply: (event, game, player) => game.alivePlayers.any((player) => player.roles.whereType<Seer>().isNotEmpty) ? null : SeerTargetInputHandler(player.id),
             )
           ],
         );

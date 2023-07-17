@@ -67,21 +67,19 @@ class VampulvRule extends Rule {
               priority: -50,
               onApply: (event, game) {
                 if (event is! GameBeginsEvent && event is! DieEvent) return null;
-                final alivePlayers = game.players.where((player) => player.alive);
-                return alivePlayers.every((player) => player.roles.any((role) => role is Vampulv)) || //
-                        alivePlayers.every((player) => player.roles.all((role) => role is! Vampulv))
+                return game.alivePlayers.every((player) => player.roles.any((role) => role is Vampulv)) || //
+                        game.alivePlayers.every((player) => player.roles.all((role) => role is! Vampulv))
                     ? GameEndsEvent()
                     : null;
               }),
-          RuleReaction<GameEndsEvent>(
+          RuleReaction<EndScoringEvent>(
               priority: 100,
               onApply: (event, game) {
-                final alivePlayers = game.players.where((player) => player.alive);
-                final vampulvsWon = alivePlayers.isNotEmpty &&
-                    game.players.every(
-                      (player) => !player.alive || player.roles.any((role) => role is Vampulv),
+                final vampulvsWon = game.alivePlayers.isNotEmpty &&
+                    game.alivePlayers.every(
+                      (player) => player.roles.any((role) => role is Vampulv),
                     );
-                final civiliansWon = alivePlayers.isNotEmpty && !vampulvsWon;
+                final civiliansWon = game.alivePlayers.isNotEmpty && !vampulvsWon;
                 return game.players.map(
                   (player) {
                     final isVampulv = player.roles.any((role) => role is Vampulv);
@@ -101,7 +99,7 @@ class VampulvTargetInputHandler extends InputHandler {
           identifier: 'choose-target-vampulv',
           resultApplyer: (input, game, player) {
             setResult(int.tryParse(input.message));
-            final vampulvs = game.players.where((player) => player.alive && player.roles.any((role) => role is Vampulv)).toList();
+            final vampulvs = game.alivePlayers.where((player) => player.roles.any((role) => role is Vampulv)).toList();
             if (vampulvs.any((player) => player.alive && player.roles.whereType<Vampulv>().any((role) => !role.hasChoosen))) {
               return null;
             }

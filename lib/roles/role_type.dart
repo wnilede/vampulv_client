@@ -9,6 +9,7 @@ import 'package:vampulv/roles/prince.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/rule.dart';
 import 'package:vampulv/roles/seer.dart';
+import 'package:vampulv/roles/suicide_bomber.dart';
 import 'package:vampulv/roles/tanner.dart';
 import 'package:vampulv/roles/vampulv.dart';
 import 'package:vampulv/roles/villager.dart';
@@ -140,6 +141,7 @@ enum RoleType {
         RoleType.prince => Prince(),
         RoleType.tanner => Tanner(),
         RoleType.hoodler => Hoodler(),
+        RoleType.suicideBomber => SuicideBomber(),
         RoleType.cardTurner => CardTurner(),
         RoleType.drunk => Drunk(),
         _ => throw UnimplementedError("Have not created and connected class for role type '$name' yet."),

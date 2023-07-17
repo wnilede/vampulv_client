@@ -9,7 +9,7 @@ class Tanner extends Role {
   bool diedByLynching = false;
 
   Tanner() : super(type: RoleType.tanner) {
-    reactions.add(RoleReaction<GameEndsEvent>(
+    reactions.add(RoleReaction<EndScoringEvent>(
       priority: 7,
       worksAfterDeath: true,
       onApply: (event, game, player) => player.copyWith(

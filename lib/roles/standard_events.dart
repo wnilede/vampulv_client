@@ -18,6 +18,8 @@ class GameBeginsEvent extends Event {}
 
 class GameEndsEvent extends Event {}
 
+class EndScoringEvent extends Event {}
+
 class NightBeginsEvent extends Event {}
 
 class DayBeginsEvent extends Event {}

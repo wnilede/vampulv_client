@@ -23,11 +23,11 @@ class Hoodler extends Role {
               setTargets: (targets) {
                 this.targets = targets;
               },
-              numberOfTargets: math.min(numberOfTargets, game.players.where((player) => player.alive && player.id != player.id).count()),
+              numberOfTargets: math.min(numberOfTargets, game.alivePlayers.where((player) => player.id != player.id).count()),
             )
           : null,
     ));
-    reactions.add(RoleReaction<GameEndsEvent>(
+    reactions.add(RoleReaction<EndScoringEvent>(
       priority: 8,
       worksAfterDeath: true,
       onApply: (event, game, player) => player.copyWith(

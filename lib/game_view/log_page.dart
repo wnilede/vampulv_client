@@ -31,7 +31,7 @@ class LogPage extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              logEntry.playerVisibleTo == null ? 'Synligt för alla' : 'Från ${game.playerFromId(logEntry.playerVisibleTo!).namePlural} historik',
+                              logEntry.playerVisibleTo == null ? 'Synligt för alla' : 'Från ${game.playerFromId(logEntry.playerVisibleTo!).namePossissive} historik',
                               style: Theme.of(context).textTheme.labelLarge, //.copyWith(color: Theme.of(context).colorScheme.),
                             ),
                             Text(logEntry.value),

@@ -217,6 +217,9 @@ class Game with _$Game {
       final result = oldResult._runOneStep();
       // We only check for cycles of length 1. That should be enough for most cases, and it is neccessary in some. But I could imagine it happening in some weird edge case that we get in a longer cycle. To prevent this, we could keep track of and compare to all previous states, but that might not be enough, if the cycle for example increase dayNumber.
       if (result == null || result == oldResult) {
+        if (isFinished) {
+          return oldResult._applyEventOnly(EndScoringEvent());
+        }
         return oldResult;
       } else {
         oldResult = result;
@@ -236,7 +239,7 @@ class Game with _$Game {
         return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());
       }
     }
-    if (!isNight && players.every((player) => player.lynchingDone)) return _applyEventOnly(NightBeginsEvent());
+    if (!isNight && alivePlayers.every((player) => player.lynchingDone)) return _applyEventOnly(NightBeginsEvent());
     return null;
   }
 
@@ -253,6 +256,8 @@ class Game with _$Game {
   Game copyWithPlayerModification(int playerId, Player Function(Player) modification) {
     return copyWithPlayer(modification(playerFromId(playerId)));
   }
+
+  List<Player> get alivePlayers => players.where((player) => player.alive).toList();
 }
 
 @freezed

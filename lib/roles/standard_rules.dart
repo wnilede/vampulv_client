@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:darq/darq.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/event.dart';
@@ -34,27 +36,34 @@ class StandardRule extends Rule {
               'Natt ${game.dayNumber + 1} startade.',
             ],
           ),
-          // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this.
+          // Change players lives on hurt events. Lives can be bigger than max lives and smaller than 0 after this if it is night.
           RuleReaction<HurtEvent>(
             priority: 0,
             onApply: (event, game) {
               if (event.livesLost == 0) return null;
-              final Player previousPlayer = game.playerFromId(event.playerId);
-              return game.copyWithPlayer(previousPlayer.copyWith(lives: previousPlayer.lives - event.livesLost));
+              final Player player = game.playerFromId(event.playerId);
+              final livesAfterwards = player.lives - event.livesLost;
+              if (event.appliedMorning) {
+                return player.copyWith(lives: livesAfterwards);
+              }
+              return [
+                player.copyWith(lives: math.min(math.max(livesAfterwards, 0), player.maxLives)),
+                if (player.alive && livesAfterwards <= 0) DieEvent(playerId: player.id, appliedMorning: false),
+              ];
             },
           ),
           // Cap lives for all players and send die events if neccessary.
           RuleReaction<DayBeginsEvent>(
             priority: 40,
             onApply: (event, game) => [
-              ...game.players // Cap players with too many lives
-                  .where((player) => player.alive && player.lives > player.maxLives)
+              ...game.alivePlayers // Cap players with too many lives
+                  .where((player) => player.lives > player.maxLives)
                   .map((player) => player.copyWith(lives: player.maxLives)),
-              ...game.players // Cap players with negative amount of lives
-                  .where((player) => player.alive && player.lives < 0)
+              ...game.alivePlayers // Cap players with negative amount of lives
+                  .where((player) => player.lives < 0)
                   .map((player) => player.copyWith(lives: 0)),
-              ...game.players // Send die event for players without positive lives
-                  .where((player) => player.alive && player.lives <= 0)
+              ...game.alivePlayers // Send die event for players without positive lives
+                  .where((player) => player.lives <= 0)
                   .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.id, appliedMorning: false)),
             ],
           ),
@@ -75,8 +84,7 @@ class StandardRule extends Rule {
             onApply: (event, game) {
               Player proposed = game.playerFromId(event.proposedId);
               Player proposer = game.playerFromId(event.proposerId);
-              return game.players
-                  .where((player) => player.alive)
+              return game.alivePlayers
                   .map(
                     (player) => player.copyWith(
                       lynchingVote: null,

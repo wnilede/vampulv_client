@@ -59,8 +59,8 @@ class PlayerInMap extends ConsumerWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ...List.generate(player.lives, (index) => Icon(Icons.favorite, color: textColor)),
-                    ...List.generate(player.maxLives - player.lives, (index) => Icon(Icons.favorite_border, color: textColor)),
+                    ...List.generate(math.max(player.lives, 0), (index) => Icon(Icons.favorite, color: textColor)),
+                    ...List.generate(math.max(player.maxLives - math.max(player.lives, 0), 0), (index) => Icon(Icons.favorite_border, color: textColor)),
                   ],
                 ),
               )

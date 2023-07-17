@@ -14,14 +14,13 @@ class LynchingVoteInputHandler extends InputHandler {
           identifier: 'vote-lynching-of-${proposed.id}-proposed-by-${proposer.id}',
           resultApplyer: (playerInput, game, player) {
             final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
-            if (newGame.players.any((player) => player.lynchingVote == null)) return newGame;
+            if (newGame.alivePlayers.any((player) => player.lynchingVote == null)) return newGame;
 
             // This is the last player casting the vote, so count the votes and send die event if neccessary.
-            final summaries = newGame.players.map((player) => '${player.name} röstade ${player.lynchingVote! ? 'för' : 'emot'}.');
+            final summaries = newGame.alivePlayers.map((player) => '${player.name} röstade ${player.lynchingVote! ? 'för' : 'emot'}.');
             final result = [
               newGame,
-              ...newGame.players //
-                  .where((player) => player.alive)
+              ...newGame.alivePlayers //
                   .map((player) => player.copyWith(
                         unhandledInputHandlers: player.unhandledInputHandlers //
                             .where((inputHandler) => inputHandler is! LynchingWaitingResultInputHandler)
@@ -30,7 +29,7 @@ class LynchingVoteInputHandler extends InputHandler {
                       )),
               LogEntry(value: '${proposer.name} föreslog lynchning av ${proposed.name}.${summaries.map((summary) => '\n - $summary').join()}', playerVisibleTo: null),
             ];
-            if (newGame.players.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
+            if (newGame.alivePlayers.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
               result.add(LynchingDieEvent(playerId: proposed.id));
               result.add(NightBeginsEvent());
             }

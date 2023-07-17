@@ -20,7 +20,7 @@ class Prince extends Role {
         }
         usedUp = true;
         return [
-          ...game.players
+          ...game.alivePlayers
               .map((otherPlayer) => otherPlayer.copyWith(
                   unhandledInputHandlers: otherPlayer.unhandledInputHandlers
                       .append(
