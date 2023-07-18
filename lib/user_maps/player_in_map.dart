@@ -17,30 +17,29 @@ class PlayerInMap extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isSpectator = ref.watch(controlledPlayerProvider.select((player) => player == null));
     Color textColor = player.alive ? Colors.black : Colors.white;
-    return GestureDetector(
-      onLongPress: isSpectator
-          ? () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => Scaffold(
-                        appBar: AppBar(title: Text(player.name)),
-                        body: PlayerSummary(player),
-                      )),
-                ),
-              );
-            }
-          : null,
-      onTap: onSelect,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: onSelect == null
-              ? const Color.fromARGB(255, 245, 198, 128)
-              : selected
-                  ? Colors.orange[700]
-                  : Colors.orange[400],
-        ),
+    return Material(
+      shape: const CircleBorder(),
+      color: onSelect == null
+          ? const Color.fromARGB(255, 245, 198, 128)
+          : selected
+              ? Colors.orange[700]
+              : Colors.orange[400],
+      child: InkWell(
+        onLongPress: isSpectator
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => Scaffold(
+                          appBar: AppBar(title: Text(player.name)),
+                          body: PlayerSummary(player),
+                        )),
+                  ),
+                );
+              }
+            : null,
+        onTap: onSelect,
+        borderRadius: BorderRadius.circular(100),
         child: FractionallySizedBox(
           widthFactor: math.sqrt1_2,
           heightFactor: math.sqrt1_2,

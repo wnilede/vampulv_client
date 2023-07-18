@@ -43,47 +43,54 @@ class _RoleCardView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => Scaffold(
-              appBar: AppBar(title: const Text('Rolldetaljer')),
-              body: showedOnTap,
-            ),
+    return FittedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Material(
+          color: Colors.brown,
+          type: MaterialType.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(width: 3, color: Colors.grey),
           ),
-        );
-      },
-      child: FittedBox(
-        child: Container(
-          width: 170,
-          height: 230,
-          margin: const EdgeInsets.all(4),
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            border: Border.all(),
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Column(
-            children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: FittedBox(child: Icon(Icons.person, color: Theme.of(context).colorScheme.onSecondary)),
-              ),
-              Expanded(
-                child: Center(
-                  child: AutoSizeText(
-                    title,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => Scaffold(
+                    appBar: AppBar(title: const Text('Rolldetaljer')),
+                    body: showedOnTap,
                   ),
                 ),
+              );
+            },
+            child: SizedBox(
+              width: 170,
+              height: 230,
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Column(
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: FittedBox(child: Icon(Icons.person, color: Theme.of(context).colorScheme.onSecondary)),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: AutoSizeText(
+                          title,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),
