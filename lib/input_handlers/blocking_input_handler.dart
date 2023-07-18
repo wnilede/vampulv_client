@@ -9,7 +9,7 @@ class BlockingInputHandler extends InputHandler {
       : super(
           description: 'Vampulv', // This is for the titel to not be spoiling, because the description is shown in the AppBar.
           identifier: 'blocking-$identifier',
-          widget: const NothingToDoWidget(),
+          widget: const NothingToDoWidget(canLyncha: false),
           resultApplyer: (PlayerInput input, Game game, Player owner) {},
         );
 }

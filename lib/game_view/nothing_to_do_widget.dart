@@ -10,13 +10,15 @@ import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/user_maps/user_map.dart';
 
 class NothingToDoWidget extends ConsumerWidget {
-  const NothingToDoWidget({super.key});
+  final canLyncha;
+
+  const NothingToDoWidget({this.canLyncha = true, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider)!;
     final isNight = ref.watch(currentGameProvider.select((game) => game!.isNight));
-    return (isNight || !controlledPlayer.alive
+    return (isNight || !controlledPlayer.alive || !canLyncha
         ? const Center(child: Text('Väntar på andra spelare...', textAlign: TextAlign.center))
         : controlledPlayer.lynchingDone
             ? MaterialButton(

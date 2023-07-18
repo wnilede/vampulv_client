@@ -6,6 +6,7 @@ import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/card_turner.dart';
 import 'package:vampulv/roles/cupid.dart';
 import 'package:vampulv/roles/hoodler.dart';
+import 'package:vampulv/roles/hunter.dart';
 import 'package:vampulv/roles/priest.dart';
 import 'package:vampulv/roles/seer.dart';
 import 'package:vampulv/roles/standard_input_handlers.dart';
@@ -17,6 +18,8 @@ abstract class InputHandler {
   static const typeOrder = [
     EarlyConfirmChildInputHandler,
     CardTurnerObservedInputHandler,
+    HunterTargetInputHandler,
+    HunterBlockingInputHanlder,
     LynchingVoteInputHandler,
     CupidTargetsInputHandler,
     HoodlerTargetsInputHandler,
