@@ -48,13 +48,13 @@ class StandardRule extends Rule {
               }
               return [
                 player.copyWith(lives: math.min(math.max(livesAfterwards, 0), player.maxLives)),
-                if (player.alive && livesAfterwards <= 0) DieEvent(playerId: player.id, appliedMorning: false),
+                if (player.alive && player.lives > 0 && livesAfterwards <= 0) DieEvent(playerId: player.id, appliedMorning: false),
               ];
             },
           ),
           // Cap lives for all players and send die events if neccessary.
           RuleReaction<DayBeginsEvent>(
-            priority: 40,
+            priority: 0,
             onApply: (event, game) => [
               ...game.alivePlayers // Cap players with too many lives
                   .where((player) => player.lives > player.maxLives)

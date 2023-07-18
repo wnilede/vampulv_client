@@ -112,7 +112,6 @@ class Game with _$Game {
   }
 
   Game _applyEventOnly(Event event) {
-    if (isFinished) return this;
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,

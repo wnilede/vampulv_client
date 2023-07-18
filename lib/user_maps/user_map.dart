@@ -34,7 +34,7 @@ class PlayerMap extends ConsumerStatefulWidget {
   final bool filterIsWhitelist;
   final void Function()? onCancel;
 
-  const PlayerMap({
+  PlayerMap({
     this.onDone,
     this.identifier,
     this.onCancel,
@@ -47,8 +47,9 @@ class PlayerMap extends ConsumerStatefulWidget {
     this.canSelectSelf = true,
     this.selectablePlayerFilter = const [],
     this.filterIsWhitelist = false,
-    super.key,
-  }) : assert(onDone != null || identifier != null, 'At least one of onDone or identifier must be non-null.');
+    Key? key,
+  })  : assert(onDone != null || identifier != null, 'At least one of onDone or identifier must be non-null.'),
+        super(key: key ?? (identifier == null ? null : Key(identifier)));
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();

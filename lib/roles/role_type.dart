@@ -1,5 +1,6 @@
 import 'package:vampulv/roles/apprentice_seer.dart';
 import 'package:vampulv/roles/card_turner.dart';
+import 'package:vampulv/roles/cupid.dart';
 import 'package:vampulv/roles/drunk.dart';
 import 'package:vampulv/roles/gang_member.dart';
 import 'package:vampulv/roles/hoodler.dart';
@@ -143,6 +144,7 @@ enum RoleType {
         RoleType.gangMember => GangMember(),
         RoleType.tanner => Tanner(),
         RoleType.hoodler => Hoodler(),
+        RoleType.cupid => Cupid(),
         RoleType.suicideBomber => SuicideBomber(),
         RoleType.cardTurner => CardTurner(),
         RoleType.drunk => Drunk(),

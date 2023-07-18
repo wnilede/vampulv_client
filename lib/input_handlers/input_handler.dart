@@ -4,6 +4,7 @@ import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/card_turner.dart';
+import 'package:vampulv/roles/cupid.dart';
 import 'package:vampulv/roles/hoodler.dart';
 import 'package:vampulv/roles/priest.dart';
 import 'package:vampulv/roles/seer.dart';
@@ -17,6 +18,7 @@ abstract class InputHandler {
     EarlyConfirmChildInputHandler,
     CardTurnerObservedInputHandler,
     LynchingVoteInputHandler,
+    CupidTargetsInputHandler,
     HoodlerTargetsInputHandler,
     VampulvTargetInputHandler,
     VampulvBlockingInputHandler,

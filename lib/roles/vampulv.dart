@@ -140,7 +140,7 @@ class VampulvTargetInputHandler extends InputHandler {
               if (mostVotedForId != null) VampulvHurtEvent(playerId: mostVotedForId),
             ];
           },
-          widget: const PlayerMap(
+          widget: PlayerMap(
             description: 'Välj vem vampulverna ska attakera',
             identifier: 'choose-target-vampulv',
             numberSelected: 1,
