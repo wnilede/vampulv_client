@@ -33,11 +33,13 @@ class Drunk extends Villager {
     );
   }
 
-  // These are set so that if you look at this card as the owner, it looks like a villager. When the owner is nonexistent, for example when choosing cards when configuring the game, or when we don't have access to instance specific information, for example when seeing the card with a card turner, it is shown as a drunk instead.
+  // These are set so that if you look at this card as the owner, it looks like a villager. When the owner is nonexistent, for example when choosing cards when configuring the game, or when we don't have access to instance specific information, for example when seeing the card with a card turner, it is shown as a drunk instead. The image becomes slightly weird, because it is not randomized together with the other villagers. If there are only 7 villages and 1 drunk, and you see that you have two villages with the same image, you can figure out that one of them must be a drunk.
   @override
   String getDisplayName(Game game, Player owner) => RoleType.villager.displayName;
   @override
   String getDescription(Game game, Player owner) => RoleType.villager.description;
   @override
   String getDetailedDescription(Game game, Player owner) => RoleType.villager.detailedDescription;
+  @override
+  String getImageName(Game game, Player owner) => '${RoleType.villager.name}$image';
 }

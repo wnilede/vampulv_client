@@ -6,6 +6,7 @@ import 'package:vampulv/game_view/game_view.dart';
 import 'package:vampulv/lobby/lobby.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
+import 'package:vampulv/not_connected.dart';
 
 void main() {
   FlutterError.demangleStackTrace = (StackTrace stack) {
@@ -27,9 +28,7 @@ class MainApp extends ConsumerWidget {
           ? ref.watch(currentSynchronizedDataProvider).gameHasBegun
               ? const GameView()
               : const Lobby()
-          : const Scaffold(
-              body: Center(child: Text('Not connected')),
-            ),
+          : const NotConnected(),
     );
   }
 }

@@ -15,6 +15,7 @@ class RoleTypeCardView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => _RoleCardView(
         title: roleType.displayName,
+        imageName: '${roleType.name}0',
         showedOnTap: RoleTypeDescription(roleType),
       );
 }
@@ -30,6 +31,7 @@ class RoleCardView extends ConsumerWidget {
     final owner = game?.players.firstWhereOrDefault((player) => player.roles.contains(role));
     return _RoleCardView(
       title: owner == null ? role.type.displayName : role.getDisplayName(game!, owner),
+      imageName: owner == null ? '${role.type.name}${role.image}' : role.getImageName(game!, owner),
       showedOnTap: RoleDescription(role),
     );
   }
@@ -38,8 +40,9 @@ class RoleCardView extends ConsumerWidget {
 class _RoleCardView extends ConsumerWidget {
   final String title;
   final Widget showedOnTap;
+  final String imageName;
 
-  const _RoleCardView({required this.title, required this.showedOnTap});
+  const _RoleCardView({required this.title, required this.imageName, required this.showedOnTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +77,7 @@ class _RoleCardView extends ConsumerWidget {
                   children: [
                     AspectRatio(
                       aspectRatio: 1,
-                      child: FittedBox(child: Icon(Icons.person, color: Theme.of(context).colorScheme.onSecondary)),
+                      child: FittedBox(child: Image(image: AssetImage('assets/roles/$imageName.png'))),
                     ),
                     Expanded(
                       child: Center(
