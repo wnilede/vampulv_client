@@ -31,18 +31,21 @@ class _EditPlayerState extends ConsumerState<EditPlayer> {
         autovalidateMode: AutovalidateMode.always,
         child: ListView(
           children: [
-            TextFormField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Namn'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Spelaren måste ha ett namn';
-                }
-                if (configuration.players.any((player) => player.name == value && player.id != widget.playerId)) {
-                  return 'Namnet är upptaget av en annan spelare';
-                }
-                return null;
-              },
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Namn'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Spelaren måste ha ett namn';
+                  }
+                  if (configuration.players.any((player) => player.name == value && player.id != widget.playerId)) {
+                    return 'Namnet är upptaget av en annan spelare';
+                  }
+                  return null;
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
