@@ -10,7 +10,7 @@ import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/user_maps/user_map.dart';
 
 class NothingToDoWidget extends ConsumerWidget {
-  final canLyncha;
+  final bool canLyncha;
 
   const NothingToDoWidget({this.canLyncha = true, super.key});
 
@@ -54,6 +54,7 @@ class NothingToDoWidget extends ConsumerWidget {
                       ));
                 },
                 numberSelected: 1,
+                selectablePlayerFilter: controlledPlayer.previouslyProposed,
               ));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/lobby/choose_roles.dart';
+import 'package:vampulv/lobby/configuration_summary.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
@@ -23,7 +24,7 @@ class _LobbyState extends ConsumerState<Lobby> {
   Widget build(BuildContext context) {
     final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration));
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Inställningar nytt spel'),
@@ -31,6 +32,7 @@ class _LobbyState extends ConsumerState<Lobby> {
             tabs: <Widget>[
               Tab(icon: Icon(Icons.groups)),
               Tab(icon: Icon(Icons.view_list)),
+              Tab(icon: Icon(Icons.warning)),
             ],
           ),
         ),
@@ -42,6 +44,7 @@ class _LobbyState extends ConsumerState<Lobby> {
                 children: [
                   ChangePlayerOrderMap(),
                   ChooseRoles(),
+                  ConfigurationSummary(),
                 ],
               ),
             ),

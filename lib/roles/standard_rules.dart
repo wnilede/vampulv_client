@@ -84,17 +84,20 @@ class StandardRule extends Rule {
             onApply: (event, game) {
               Player proposed = game.playerFromId(event.proposedId);
               Player proposer = game.playerFromId(event.proposerId);
-              return game.alivePlayers
-                  .map(
-                    (player) => player.copyWith(
-                      lynchingVote: null,
-                      unhandledInputHandlers: player.unhandledInputHandlers //
-                          .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
-                          .append(LynchingWaitingResultInputHandler())
-                          .toList(),
-                    ),
-                  )
-                  .toList();
+              return game.alivePlayers.map(
+                (player) {
+                  if (player.id == proposer.id) {
+                    player = player.copyWith(previouslyProposed: player.previouslyProposed.append(proposed.id).toList());
+                  }
+                  return player.copyWith(
+                    lynchingVote: null,
+                    unhandledInputHandlers: player.unhandledInputHandlers //
+                        .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
+                        .append(LynchingWaitingResultInputHandler())
+                        .toList(),
+                  );
+                },
+              ).toList();
             },
           ),
           // Set game field when GameEndsEvent is sent.
