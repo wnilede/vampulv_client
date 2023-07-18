@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/list_item.dart';
+import 'package:vampulv/lobby/configuration_summary.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/player_summary.dart';
 
@@ -20,18 +21,27 @@ class Information extends ConsumerWidget {
       body: ListView(
         children: [
           ListItem(
-              child: player == null
-                  ? const Text('Du är inte med i spelet så du får se allt.')
-                  : Column(
-                      children: [
-                        Text(
-                          'Om dig själv',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 8),
-                        PlayerSummary(player),
-                      ],
-                    )),
+            child: Column(
+              children: [
+                Text(
+                  'Om dig själv',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 8),
+                player == null ? const Text('Du är inte med i spelet så du får se allt.') : PlayerSummary(player),
+              ],
+            ),
+          ),
+          ListItem(
+              child: Column(
+            children: [
+              Text(
+                'Om spelet',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const ConfigurationSummary(),
+            ],
+          )),
         ],
       ),
     );

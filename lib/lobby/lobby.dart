@@ -32,7 +32,7 @@ class _LobbyState extends ConsumerState<Lobby> {
             tabs: <Widget>[
               Tab(icon: Icon(Icons.groups)),
               Tab(icon: Icon(Icons.view_list)),
-              Tab(icon: Icon(Icons.warning)),
+              Tab(icon: Icon(Icons.settings)),
             ],
           ),
         ),

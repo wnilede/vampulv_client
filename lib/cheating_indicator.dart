@@ -14,7 +14,7 @@ class CheatingIndicator extends StatelessWidget {
                   appBar: AppBar(title: const Text('Fuskinformation')),
                   body: const SingleChildScrollView(
                     padding: EdgeInsets.all(4),
-                    child: Text('Vissa saker i denna app är det inte meningen att man ska göra om man spelar som en vanlig spelare då det ger information om eller ändrar på saker på ett sätt som är mot reglerna. Dessa saker är indikerade med en liten fusksymbol. Möjligheten att utföra dessa saker finns för att det ska gå att fixa saker om det blir fel, och bygger på tillit. Alla spelare måste helt enkelt lita på varandra att inte medvetet fuska då det förstör det roliga med spelet.'),
+                    child: Text('Vissa saker är det inte meningen att man ska göra som en vanlig spelare då det ger information om eller ändrar på saker på ett sätt som är mot reglerna. Dessa saker är indikerade med en fusksymbol. Möjligheten att utföra dessa saker finns för att det ska gå att fixa saker om det blir fel, och bygger på tillit. Alla spelare måste helt enkelt lita på varandra att inte medvetet fuska då det förstör det roliga med spelet.'),
                   ),
                 )),
           ),
