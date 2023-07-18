@@ -23,6 +23,7 @@ enum RoleType {
     displayName: 'Vampulv',
     description: 'Döda alla som inte är vampulver',
     detailedDescription: 'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attakera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
+    imageVariations: 3,
   ),
   lonelyPulv(
     displayName: 'Självisk vampulv',
@@ -33,6 +34,7 @@ enum RoleType {
     displayName: 'Bybo',
     description: 'Normal medborgare i byn',
     detailedDescription: 'Om alla dina kort är bybor så är du en borgmästare. Borgmästare har en extra röst när det röstas om avrättning.',
+    imageVariations: 10,
   ),
   // pacifist(
   //   displayName: 'Pasifist',
@@ -73,6 +75,7 @@ enum RoleType {
     displayName: 'Gängmedlem',
     description: 'Se andra gängmedlemmar',
     detailedDescription: 'Du vet vilka andra som är gängmedlemmar.',
+    imageVariations: 2,
   ),
   tanner(
     displayName: 'Tanner',
@@ -118,6 +121,7 @@ enum RoleType {
     displayName: 'Fyllo',
     description: 'Få nya roller tredje natten',
     detailedDescription: 'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en bybo.',
+    imageVariations: 10, // Not really, but it uses the villagers images.
   );
 
   static Role hej() {
@@ -128,11 +132,14 @@ enum RoleType {
     required this.displayName,
     required this.description,
     required this.detailedDescription,
+    this.imageVariations = 1,
   });
 
   final String displayName;
   final String description;
   final String detailedDescription;
+
+  final int imageVariations;
 
   Role produceRole() => switch (this) {
         RoleType.vampulv => Vampulv(),

@@ -41,6 +41,19 @@ class Game with _$Game {
     final randomGenerator = Xorshift32(configuration.randomSeed);
     final players = <Player>[];
     final shuffledRoles = configuration.roles.map((roleType) => roleType.produceRole()).randomize(randomGenerator).toList();
+
+    // Every image for a specific role is used the same number of times, except for some which are used once more than the rest. Which these images are is randomized.
+    for (final roleOfType in shuffledRoles.groupBy((role) => role.type)) {
+      List<int> usedOnceLess = [];
+      for (final role in roleOfType) {
+        if (usedOnceLess.isEmpty) {
+          usedOnceLess = List.generate(roleOfType.key.imageVariations, (i) => i);
+        }
+        role.image = usedOnceLess[randomGenerator.nextInt(usedOnceLess.length)];
+        usedOnceLess.remove(role.image);
+      }
+    }
+
     for (int i = 0; i < configuration.players.length; i++) {
       players.add(Player(
         configuration: configuration.players[i],
