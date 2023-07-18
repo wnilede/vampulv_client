@@ -56,6 +56,7 @@ class PlayerMap extends ConsumerStatefulWidget {
 }
 
 class _UserMapState extends ConsumerState<PlayerMap> {
+  // Should perhaps save selected player ids instead.
   List<int> selectedIndices = [];
 
   @override
@@ -75,7 +76,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                 maxLines: 5,
                 wrapWords: false,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 50), //Theme.of(context).textTheme.titleMedium,
+                style: const TextStyle(fontSize: 50),
               ),
             ),
           ),
@@ -161,7 +162,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }
                           if (widget.identifier != null) {
-                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.join(';'), widget.identifier!);
+                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'), widget.identifier!);
                           }
                         }
                       : null,
