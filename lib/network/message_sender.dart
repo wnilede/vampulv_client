@@ -9,6 +9,7 @@ import 'package:vampulv/network/message_bodies/change_device_controls_body.dart'
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/player_input.dart';
+import 'package:vampulv/network/synchronized_data.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'message_sender.freezed.dart';
@@ -65,6 +66,13 @@ class MessageSender with _$MessageSender {
         deviceToChangeId: deviceToChangeId,
         playerToControlId: playerToControlId,
       ),
+    ));
+  }
+
+  void sendSynchronizedData(SynchronizedData synchronizedData) {
+    sendChange(NetworkMessage.fromObject(
+      type: NetworkMessageType.setSynchronizedData,
+      body: synchronizedData,
     ));
   }
 }

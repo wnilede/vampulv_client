@@ -76,6 +76,14 @@ class GameViewDrawer extends ConsumerWidget {
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              title: const Text('Ändra spel'),
+              selected: selected == GameViewSelection.changeGame,
+              onTap: () {
+                onSelect(GameViewSelection.changeGame);
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),

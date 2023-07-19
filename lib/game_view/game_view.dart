@@ -5,6 +5,7 @@ import 'package:vampulv/game_view/game_view_drawer.dart';
 import 'package:vampulv/game_view/information.dart';
 import 'package:vampulv/game_view/log_page.dart';
 import 'package:vampulv/game_view/spectator_overview.dart';
+import 'package:vampulv/global_settings/global_settings.dart';
 
 class GameView extends StatefulWidget {
   const GameView({super.key});
@@ -33,6 +34,7 @@ class _GameViewState extends State<GameView> {
       GameViewSelection.aboutGame => Information(drawer: drawer),
       GameViewSelection.log => LogPage(drawer: drawer),
       GameViewSelection.spectatorOverview => SpectatorOverview(drawer: drawer),
+      GameViewSelection.changeGame => GlobalSettings(drawer: drawer),
     };
   }
 }
@@ -43,4 +45,5 @@ enum GameViewSelection {
   aboutGame,
   log,
   spectatorOverview,
+  changeGame,
 }

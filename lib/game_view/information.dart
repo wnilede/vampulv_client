@@ -15,7 +15,7 @@ class Information extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(controlledPlayerProvider);
-    final roles = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration.roles));
+    final roles = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration.roles));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Information'),

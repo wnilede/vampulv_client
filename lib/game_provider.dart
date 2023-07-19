@@ -11,12 +11,12 @@ part 'game_provider.g.dart';
 class CurrentGame extends _$CurrentGame {
   @override
   Game? build() {
-    if (!ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameHasBegun))) {
+    if (!ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.hasBegun))) {
       return null;
     }
     return Game.fromNetworkMessages(
-      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration)),
-      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameEvents)),
+      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration)),
+      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.events)),
     );
   }
 

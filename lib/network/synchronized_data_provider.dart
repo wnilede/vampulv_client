@@ -9,6 +9,7 @@ import 'package:vampulv/network/message_bodies/change_device_controls_body.dart'
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
+import 'package:vampulv/network/saved_game.dart';
 import 'package:vampulv/network/synchronized_data.dart';
 
 part 'synchronized_data_provider.g.dart';
@@ -20,7 +21,7 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
     final messageSender = ref.watch(currentMessageSenderProvider);
     messageSender.sendString('Change room:default');
     ref.watch(currentMessageSenderProvider.notifier).subscribe(applyChange);
-    return SynchronizedData(gameConfiguration: GameConfiguration(randomSeed: Random().nextInt(1 << 32 - 1)));
+    return SynchronizedData(game: SavedGame(configuration: GameConfiguration(randomSeed: Random().nextInt(1 << 32 - 1))));
   }
 
   void applyChange(NetworkMessage event) {
@@ -29,15 +30,15 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
     }
     if (event.type.isGameChange) {
       // Should we sort them by timestamp here?
-      state = state.copyWith(gameEvents: [
-        ...state.gameEvents,
+      state = state.copyWith.game(events: [
+        ...state.game.events,
         event,
       ]);
       return;
     }
     switch (event.type) {
       case NetworkMessageType.setGameConfiguration:
-        state = state.copyWith(gameConfiguration: GameConfiguration.fromJson(event.body));
+        state = state.copyWith.game(configuration: GameConfiguration.fromJson(event.body));
         break;
       case NetworkMessageType.setDevices:
         List<int> identifiers = event.message.split(';').map((identifier) => int.parse(identifier)).toList();
@@ -50,10 +51,7 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
         ]);
         // If new devices have been added, we send all of the synchronized data, but to prevent multiple devices from sending, only the one with the lowest identifier that was not just added sends.
         if (newDevices.isNotEmpty && oldDevices.isNotEmpty && ref.read(connectedDeviceIdentifierProvider) == oldDevices.map((device) => device.identifier).min()) {
-          ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
-                type: NetworkMessageType.setSynchronizedData,
-                body: state,
-              ));
+          ref.read(currentMessageSenderProvider).sendSynchronizedData(state);
         }
         break;
       case NetworkMessageType.changeDeviceControls:
@@ -79,4 +77,4 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
 
 @riverpod
 GameConfiguration gameConfiguration(GameConfigurationRef ref) => //
-    ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration));
+    ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration));

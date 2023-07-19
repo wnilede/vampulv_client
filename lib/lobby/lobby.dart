@@ -3,15 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/lobby/choose_roles.dart';
 import 'package:vampulv/lobby/configuration_summary.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
-import 'package:vampulv/network/synchronized_data.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/player_configuration.dart';
 import 'package:vampulv/lobby/change_player_order.dart';
 
 class Lobby extends ConsumerStatefulWidget {
-  const Lobby({super.key});
+  final Widget drawer;
+
+  const Lobby({required this.drawer, super.key});
 
   @override
   ConsumerState<Lobby> createState() => _LobbyState();
@@ -22,7 +21,7 @@ class _LobbyState extends ConsumerState<Lobby> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration));
+    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration));
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -36,6 +35,7 @@ class _LobbyState extends ConsumerState<Lobby> {
             ],
           ),
         ),
+        drawer: widget.drawer,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -55,11 +55,9 @@ class _LobbyState extends ConsumerState<Lobby> {
                     onPressed: gameConfiguration.players.length * gameConfiguration.rolesPerPlayer > gameConfiguration.roles.length || gameConfiguration.players.length < 3
                         ? null
                         : () {
-                            final SynchronizedData synchronizedData = ref.read(currentSynchronizedDataProvider);
-                            ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
-                                  type: NetworkMessageType.setSynchronizedData,
-                                  body: synchronizedData.copyWith(gameHasBegun: true),
-                                ));
+                            ref.read(currentMessageSenderProvider).sendSynchronizedData(
+                                  ref.read(currentSynchronizedDataProvider).copyWith.game(hasBegun: true),
+                                );
                           },
                     child: const Text('Starta'),
                   ),
@@ -71,4 +69,9 @@ class _LobbyState extends ConsumerState<Lobby> {
       ),
     );
   }
+}
+
+enum LobbySelection {
+  configureGame,
+  changeGame,
 }

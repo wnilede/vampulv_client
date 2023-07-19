@@ -23,7 +23,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.gameConfiguration));
+    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
     if (gameConfiguration.players.every((player) => player.id != selectedPlayerId)) {
       // Happens when someone removes the player that we have selected.
       selectedPlayerId = null;
