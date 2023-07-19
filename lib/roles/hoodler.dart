@@ -23,7 +23,7 @@ class Hoodler extends Role {
               setTargets: (targets) {
                 this.targets = targets;
               },
-              numberOfTargets: math.min(numberOfTargets, game.alivePlayers.where((player) => player.id != player.id).count()),
+              numberOfTargets: math.min(numberOfTargets, game.alivePlayers.where((other) => other.id != player.id).count()),
             )
           : null,
     ));
