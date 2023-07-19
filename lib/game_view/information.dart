@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/list_item.dart';
 import 'package:vampulv/lobby/configuration_summary.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
+import 'package:vampulv/network/synchronized_data_provider.dart';
 import 'package:vampulv/player_summary.dart';
+import 'package:vampulv/role_card_view.dart';
 
 class Information extends ConsumerWidget {
   final Widget drawer;
@@ -13,6 +15,7 @@ class Information extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(controlledPlayerProvider);
+    final roles = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.gameConfiguration.roles));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Information'),
@@ -33,15 +36,30 @@ class Information extends ConsumerWidget {
             ),
           ),
           ListItem(
-              child: Column(
-            children: [
-              Text(
-                'Om spelet',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const ConfigurationSummary(),
-            ],
-          )),
+            child: Column(
+              children: [
+                Text(
+                  'Om spelet',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const ConfigurationSummary(),
+                Text(
+                  'Roller som är med',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      children: roles.map((role) => RoleTypeCardView(role)).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
