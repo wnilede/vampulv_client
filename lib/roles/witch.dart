@@ -50,7 +50,7 @@ class WitchPoisonInputHandler extends InputHandler {
             usePoison();
             return [
               HurtEvent(playerId: choosen, appliedMorning: true),
-              'Du använde din häxa för att förgifta ${game.playerFromId(choosen)}.',
+              'Du använde din häxa för att förgifta ${game.playerFromId(choosen).name}.',
             ];
           },
           widget: PlayerMap(
@@ -77,7 +77,7 @@ class WitchHealingInputHandler extends InputHandler {
             useHealing();
             return [
               HurtEvent(playerId: choosen, livesLost: -1, appliedMorning: true),
-              'Du använde din häxa för att hela ${game.playerFromId(choosen)}.',
+              'Du använde din häxa för att hela ${game.playerFromId(choosen).name}.',
             ];
           },
           widget: PlayerMap(

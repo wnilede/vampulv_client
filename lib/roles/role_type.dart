@@ -22,13 +22,13 @@ enum RoleType {
   vampulv(
     displayName: 'Vampulv',
     description: 'Döda alla som inte är vampulver',
-    detailedDescription: 'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attakera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
+    detailedDescription: 'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
     imageVariations: 3,
   ),
   lonelyPulv(
     displayName: 'Självisk vampulv',
     description: 'Döda alla andra',
-    detailedDescription: 'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet.',
+    detailedDescription: 'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
   ),
   villager(
     displayName: 'Bybo',
@@ -49,17 +49,17 @@ enum RoleType {
   seer(
     displayName: 'Spådam',
     description: 'Se vilka som är vampulver',
-    detailedDescription: 'Varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv.',
+    detailedDescription: 'Varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
   ),
   apprenticeSeer(
     displayName: 'Spådams lärling',
     description: 'Spådamssubstitut',
-    detailedDescription: 'Om det inte existerar någon spådam så får du samma kraft som en spådam.',
+    detailedDescription: 'Om det inte existerar någon spådam så får du samma kraft som en spådam, det vill säga varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
   ),
   lycan(
     displayName: 'Lycan',
-    description: 'See ut som vampulv',
-    detailedDescription: 'När spådamen använder sin kraft på dig så ser du ut som om du är en vampulv.',
+    description: 'Se ut som vampulv',
+    detailedDescription: 'När spådamen använder sin kraft på dig så ser du ut som om att du är en vampulv.',
   ),
   priest(
     displayName: 'Präst',
@@ -99,7 +99,7 @@ enum RoleType {
   ),
   hunter(
     displayName: 'Jägare',
-    description: 'Sjut när du dör',
+    description: 'Skjut när du dör',
     detailedDescription: 'Välj en annan spelare som förlorar ett liv när du dör.',
   ),
   suicideBomber(
