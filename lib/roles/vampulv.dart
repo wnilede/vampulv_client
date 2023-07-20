@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vampulv/input_handlers/blocking_input_handler.dart';
 import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/list_strings_nicely.dart';
 import 'package:vampulv/log_entry.dart';
 import 'package:vampulv/roles/event.dart';
 import 'package:vampulv/roles/role.dart';
@@ -50,7 +51,7 @@ class VampulvRule extends Rule {
                       ? 'Du är den enda vampulven!'
                       : otherVampulvsNames.length == 1
                           ? 'Den andra vampulven är ${otherVampulvsNames.single}!'
-                          : 'De andra vampulverna är ${otherVampulvsNames.skip(1).join(', ')} och ${otherVampulvsNames[0]}!';
+                          : 'De andra vampulverna är ${otherVampulvsNames.listNicely}!';
                   return [
                     messageFor.copyWith(unhandledInputHandlers: messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
                     LogEntry(

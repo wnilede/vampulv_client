@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:darq/darq.dart';
 import 'package:vampulv/game.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
+import 'package:vampulv/list_strings_nicely.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/roles/role.dart';
 import 'package:vampulv/roles/role_type.dart';
@@ -50,12 +51,16 @@ class HoodlerTargetsInputHandler extends InputHandler {
           description: 'Välj spelare för hoodlern',
           identifier: 'hoodler-choose-target',
           resultApplyer: (input, game, player) {
-            setTargets(input.message == 'none'
-                ? []
+            final targets = input.message == 'none'
+                ? <int>[]
                 : input.message //
                     .split(';')
                     .map((stringId) => int.parse(stringId))
-                    .toList());
+                    .toList();
+            setTargets(targets);
+            return targets.isEmpty //
+                ? 'Det fanns ingen kvar för din hoodler att välja, så du uppfyller vinstvillkoret automatiskt.'
+                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listNicely} för din hoodler.';
           },
           widget: PlayerMap(
             identifier: 'hoodler-choose-target',
