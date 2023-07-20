@@ -93,7 +93,8 @@ class _SaveLoadState extends ConsumerState<SaveLoad> {
                             ref.read(currentMessageSenderProvider).sendSynchronizedData(
                                   synchronizedData.copyWith(
                                     game: savedGames.games[nameText]!,
-                                    connectedDevices: synchronizedData.connectedDevices.map((device) => device.copyWith(controlledPlayerId: null)).toList(),
+                                    connectedDevices:
+                                        synchronizedData.connectedDevices.map((device) => device.copyWith(controlledPlayerId: null)).toList(),
                                   ),
                                 );
                           }

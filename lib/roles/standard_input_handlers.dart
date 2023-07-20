@@ -20,14 +20,14 @@ class LynchingVoteInputHandler extends InputHandler {
             final summaries = newGame.alivePlayers.map((player) => '${player.name} röstade ${player.lynchingVote! ? 'för' : 'emot'}.');
             final result = [
               newGame,
-              ...newGame.alivePlayers //
-                  .map((player) => player.copyWith(
-                        unhandledInputHandlers: player.unhandledInputHandlers //
-                            .where((inputHandler) => inputHandler is! LynchingWaitingResultInputHandler)
-                            .append(EarlyConfirmChildInputHandler.withText(summaries.join('\n')))
-                            .toList(),
-                      )),
-              LogEntry(value: '${proposer.name} föreslog lynchning av ${proposed.name}.${summaries.map((summary) => '\n - $summary').join()}', playerVisibleTo: null),
+              ...newGame.alivePlayers.map((player) => player.copyWith(
+                  unhandledInputHandlers: player.unhandledInputHandlers
+                      .where((inputHandler) => inputHandler is! LynchingWaitingResultInputHandler)
+                      .append(EarlyConfirmChildInputHandler.withText(summaries.join('\n')))
+                      .toList())),
+              LogEntry(
+                  value: '${proposer.name} föreslog lynchning av ${proposed.name}.${summaries.map((summary) => '\n - $summary').join()}',
+                  playerVisibleTo: null),
             ];
             if (newGame.alivePlayers.sum((player) => player.lynchingVote! ? player.votesInLynching : -player.votesInLynching) > 0) {
               result.add(LynchingDieEvent(playerId: proposed.id));

@@ -12,7 +12,8 @@ class ChooseRoles extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GameConfiguration gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
+    GameConfiguration gameConfiguration =
+        ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
     return LayoutBuilder(builder: (context, constraints) {
       final listsAreHorizontal = 230 * constraints.maxWidth > 170 * constraints.maxHeight;
       return Flex(

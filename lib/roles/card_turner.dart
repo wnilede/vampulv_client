@@ -31,12 +31,18 @@ class CardTurner extends Role {
         }
         someoneDiedToday = false;
 
-        final restrictions = game.alivePlayers.where((other) => other.id != owner.id && other.id != seenPlayerId && other.id != seeingPlayerId).length >= 2
+        final restrictions = game.alivePlayers
+                    .where((other) => other.id != owner.id && other.id != seenPlayerId && other.id != seeingPlayerId)
+                    .length >=
+                2
             ? CardTurnerRestrictions.notSamePlayers // There are at least two other players alive not chosen before.
-            : game.alivePlayers.any((other) => other.id != owner.id && other.id != seenPlayerId && other.id != seeingPlayerId) && game.alivePlayers.any((other) => other.id != owner.id && (other.id == seenPlayerId || other.id == seeingPlayerId))
+            : game.alivePlayers.any((other) => other.id != owner.id && other.id != seenPlayerId && other.id != seeingPlayerId) &&
+                    game.alivePlayers.any((other) => other.id != owner.id && (other.id == seenPlayerId || other.id == seeingPlayerId))
                 ? game.alivePlayers.where((other) => other.id != owner.id).length >= 3
-                    ? CardTurnerRestrictions.onePlayerCanBeSameNotForced // There are exactly 3 other players alive, and exactly 2 of them were chosen before.
-                    : CardTurnerRestrictions.onePlayerCanBeSameForced // There are exactly 2 other players alive, and exactly one of them was chosen before.
+                    ? CardTurnerRestrictions
+                        .onePlayerCanBeSameNotForced // There are exactly 3 other players alive, and exactly 2 of them were chosen before.
+                    : CardTurnerRestrictions
+                        .onePlayerCanBeSameForced // There are exactly 2 other players alive, and exactly one of them was chosen before.
                 : game.alivePlayers.where((other) => other.id != owner.id).length >= 2
                     ? CardTurnerRestrictions.bothPlayersCanBeSame // There are exactly 2 other players alive, and both were chosen before.
                     : game.alivePlayers.length >= 2
@@ -91,7 +97,8 @@ class CardTurnerObserverInputHandler extends InputHandler {
                 ],
               CardTurnerRestrictions.cannotUsePower => throw ArgumentError.value(restrictions),
             },
-            filterIsWhitelist: restrictions == CardTurnerRestrictions.onePlayerCanBeSameForced && role.seeingPlayerId == null || restrictions == CardTurnerRestrictions.canSelectSelf && role.seeingPlayerId == null && role.seenPlayerId != null,
+            filterIsWhitelist: restrictions == CardTurnerRestrictions.onePlayerCanBeSameForced && role.seeingPlayerId == null ||
+                restrictions == CardTurnerRestrictions.canSelectSelf && role.seeingPlayerId == null && role.seenPlayerId != null,
           ),
           resultApplyer: (input, game, string) {
             final choosedId = int.tryParse(input.message);
@@ -168,7 +175,8 @@ class CardTurnerObservedInputHandler extends InputHandler {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.name} har är', textAlign: TextAlign.center),
+                                Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.name} har är',
+                                    textAlign: TextAlign.center),
                                 RoleTypeCardView(seenRole.type),
                               ],
                             ),

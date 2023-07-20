@@ -29,7 +29,7 @@ class PriestTargetInputHandler extends InputHandler {
           resultApplyer: (input, game, string) {
             final target = int.tryParse(input.message);
             setTarget(target);
-            return target == null //
+            return target == null
                 ? 'Du valde att inte använda din präst.'
                 : 'Du använde din präst för att skydda ${game.playerFromId(target).name}.';
           },

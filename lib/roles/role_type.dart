@@ -22,13 +22,15 @@ enum RoleType {
   vampulv(
     displayName: 'Vampulv',
     description: 'Döda alla som inte är vampulver',
-    detailedDescription: 'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
+    detailedDescription:
+        'Spelat avslutas och du vinner om det endast är vampulver kvar. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
     imageVariations: 3,
   ),
   lonelyPulv(
     displayName: 'Självisk vampulv',
     description: 'Döda alla andra',
-    detailedDescription: 'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
+    detailedDescription:
+        'Du är en vampulv förutom att du endast vinner om du är den enda spelaren kvar i slutet. Du vet vem de andra vampulverna är, och du vaknar under natten tillsammans med alla andra vampulver för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
   ),
   villager(
     displayName: 'Bybo',
@@ -49,12 +51,14 @@ enum RoleType {
   seer(
     displayName: 'Spådam',
     description: 'Se vilka som är vampulver',
-    detailedDescription: 'Varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
+    detailedDescription:
+        'Varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
   ),
   apprenticeSeer(
     displayName: 'Spådams lärling',
     description: 'Spådamssubstitut',
-    detailedDescription: 'Om det inte existerar någon spådam så får du samma kraft som en spådam, det vill säga varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
+    detailedDescription:
+        'Om det inte existerar någon spådam så får du samma kraft som en spådam, det vill säga varje natt väljer du en person och du får sedan reda på huruvida någon av denna persons roller är vampulv eller lycan.',
   ),
   lycan(
     displayName: 'Lycan',
@@ -64,7 +68,8 @@ enum RoleType {
   priest(
     displayName: 'Präst',
     description: 'Skydda en person per natt',
-    detailedDescription: 'Varje natt väljer du om du vill aktivera din kraft och i så fall väljer du en person som du inte valde förra natten. Denna person kan inte bli skadad av vampulvernas kraft under den natten.',
+    detailedDescription:
+        'Varje natt väljer du om du vill aktivera din kraft och i så fall väljer du en person som du inte valde förra natten. Denna person kan inte bli skadad av vampulvernas kraft under den natten.',
   ),
   prince(
     displayName: 'Prins',
@@ -85,7 +90,8 @@ enum RoleType {
   hoodler(
     displayName: 'Hoodler',
     description: 'Döda två specifika personer',
-    detailedDescription: 'Under andra natten väljer du två personer. När spelet är slut så vinner du om båda dessa personer är döda och förlorar om någon av dem lever.',
+    detailedDescription:
+        'Under andra natten väljer du två personer. När spelet är slut så vinner du om båda dessa personer är döda och förlorar om någon av dem lever.',
   ),
   cupid(
     displayName: 'Cupid',
@@ -95,7 +101,8 @@ enum RoleType {
   witch(
     displayName: 'Häxa',
     description: 'Hela och förgifta',
-    detailedDescription: 'Varje natt får du välja om du vill hela någon, och i så fall vem. Om denna person inte har fullt med liv så får den ett liv till. På samma sätt får du välja huruvida du vill förgifta någon, och i så fall vem. Denna person förlorar i så fall ett liv. Du kan dock bara välja att hela en gång och förgifta en gång under hela spelet.',
+    detailedDescription:
+        'Varje natt får du välja om du vill hela någon, och i så fall vem. Om denna person inte har fullt med liv så får den ett liv till. På samma sätt får du välja huruvida du vill förgifta någon, och i så fall vem. Denna person förlorar i så fall ett liv. Du kan dock bara välja att hela en gång och förgifta en gång under hela spelet.',
   ),
   hunter(
     displayName: 'Jägare',
@@ -110,7 +117,8 @@ enum RoleType {
   cardTurner(
     displayName: 'Kortvändare',
     description: 'Visa andra andras kort',
-    detailedDescription: 'Varje natt där någon har dött det senaste dygnet väljer du två personer. Den ena ser sedan ett slumpmässigt av den andres roller.',
+    detailedDescription:
+        'Varje natt där någon har dött det senaste dygnet väljer du två personer. Den ena ser sedan ett slumpmässigt av den andres roller.',
   ),
   // erasurer(
   //   displayName: '10001010',
@@ -120,7 +128,8 @@ enum RoleType {
   drunk(
     displayName: 'Fyllo',
     description: 'Få nya roller tredje natten',
-    detailedDescription: 'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en bybo.',
+    detailedDescription:
+        'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en bybo.',
     imageVariations: 10, // Not really, but it uses the villagers images.
   );
 

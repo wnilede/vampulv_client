@@ -12,7 +12,8 @@ abstract class Event {
   bool appliedMorning;
 
   Event({this.appliedMorning = false}) {
-    assert(!appliedMorning || typeOrder.contains(runtimeType), "Cannot instanciate Event because it have appliedMorning set to false, and it's subtype '$runtimeType' is not in the typeOrder field.");
+    assert(!appliedMorning || typeOrder.contains(runtimeType),
+        "Cannot instanciate Event because it have appliedMorning set to false, and it's subtype '$runtimeType' is not in the typeOrder field.");
   }
 }
 

@@ -13,7 +13,8 @@ class CircularLayout extends StatelessWidget {
   /// If true, the inside will be sized as though a circle is inside it rather than it inside a circle. Use this when you can guarantee that the inside fit inside the largest circle fitting inside it's constraints.
   final bool largerInside;
 
-  const CircularLayout({this.rotationOffset = 0, this.largerChildren = false, this.largerInside = false, this.inside, required this.children, super.key})
+  const CircularLayout(
+      {this.rotationOffset = 0, this.largerChildren = false, this.largerInside = false, this.inside, required this.children, super.key})
       : assert(children.length > 0, 'Circular layouts require at least one child.'),
         assert(inside == null || children.length >= 3, 'There can be no insides in circular layouts with fewer than 3 children.');
 
@@ -59,8 +60,10 @@ class CircularLayout extends StatelessWidget {
               .asMap()
               .entries
               .map<Widget>((final indexPlayerPair) => Positioned(
-                    top: (constraints.maxHeight - childSize) / 2 + radius * math.cos(rotationOffset + 2 * math.pi * indexPlayerPair.key / children.length),
-                    left: (constraints.maxWidth - childSize) / 2 - radius * math.sin(rotationOffset + 2 * math.pi * indexPlayerPair.key / children.length),
+                    top: (constraints.maxHeight - childSize) / 2 +
+                        radius * math.cos(rotationOffset + 2 * math.pi * indexPlayerPair.key / children.length),
+                    left: (constraints.maxWidth - childSize) / 2 -
+                        radius * math.sin(rotationOffset + 2 * math.pi * indexPlayerPair.key / children.length),
                     child: SizedBox(
                       width: childSize,
                       height: childSize,

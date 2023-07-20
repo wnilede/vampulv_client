@@ -44,21 +44,24 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
         List<int> identifiers = event.message.split(';').map((identifier) => int.parse(identifier)).toList();
         // Keep the devices with identifiers in the list, and create new devices for the identifiers without a device.
         final oldDevices = state.connectedDevices.where((device) => identifiers.contains(device.identifier)).toList();
-        final newDevices = identifiers.where((identifier) => state.connectedDevices.every((device) => device.identifier != identifier)).map((identifier) => ConnectedDevice(identifier: identifier)).toList();
+        final newDevices = identifiers
+            .where((identifier) => state.connectedDevices.every((device) => device.identifier != identifier))
+            .map((identifier) => ConnectedDevice(identifier: identifier))
+            .toList();
         state = state.copyWith(connectedDevices: [
           ...oldDevices,
           ...newDevices,
         ]);
         // If new devices have been added, we send all of the synchronized data, but to prevent multiple devices from sending, only the one with the lowest identifier that was not just added sends.
-        if (newDevices.isNotEmpty && oldDevices.isNotEmpty && ref.read(connectedDeviceIdentifierProvider) == oldDevices.map((device) => device.identifier).min()) {
+        if (newDevices.isNotEmpty &&
+            oldDevices.isNotEmpty &&
+            ref.read(connectedDeviceIdentifierProvider) == oldDevices.map((device) => device.identifier).min()) {
           ref.read(currentMessageSenderProvider).sendSynchronizedData(state);
         }
         break;
       case NetworkMessageType.changeDeviceControls:
         final body = ChangeDeviceControlsBody.fromJson(event.body);
-        final List<ConnectedDevice> newConnectedDevices = [
-          ...state.connectedDevices
-        ];
+        final List<ConnectedDevice> newConnectedDevices = [...state.connectedDevices];
         for (int i = 0; i < newConnectedDevices.length; i++) {
           if (newConnectedDevices[i].identifier == body.deviceToChangeId) {
             newConnectedDevices[i] = newConnectedDevices[i].copyWith(controlledPlayerId: body.playerToControlId);
@@ -76,5 +79,5 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
 }
 
 @riverpod
-GameConfiguration gameConfiguration(GameConfigurationRef ref) => //
+GameConfiguration gameConfiguration(GameConfigurationRef ref) =>
     ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration));

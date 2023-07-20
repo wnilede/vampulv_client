@@ -51,7 +51,9 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                       child: LongPressDraggable(
                         feedback: Text(indexPlayerPair.$2.name, style: Theme.of(context).textTheme.titleLarge),
                         data: indexPlayerPair.$1,
-                        child: FittedBox(child: Text(indexPlayerPair.$2.name, style: TextStyle(color: indexPlayerPair.$2.id == selectedPlayerId ? Colors.blue : Colors.black))),
+                        child: FittedBox(
+                            child: Text(indexPlayerPair.$2.name,
+                                style: TextStyle(color: indexPlayerPair.$2.id == selectedPlayerId ? Colors.blue : Colors.black))),
                       ),
                     ))
                 .toList();
@@ -60,7 +62,9 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
               (indexTo) => DragTarget(
                 onAccept: (int indexFrom) {
                   // Some of these would break the following algorithm. Unneccessary to send message if nothing changes anyway.
-                  if (indexFrom == indexTo || indexFrom == indexTo + 1 || indexFrom == 0 && indexTo == gameConfiguration.players.length - 1) return;
+                  if (indexFrom == indexTo || indexFrom == indexTo + 1 || indexFrom == 0 && indexTo == gameConfiguration.players.length - 1) {
+                    return;
+                  }
                   final List<PlayerConfiguration> newPlayerOrder = [
                     ...gameConfiguration.players,
                   ];
@@ -72,8 +76,12 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 },
               ),
             );
-            final controlledPlayerId = ref.watch(connectedDeviceProvider)?.controlledPlayerId ?? gameConfiguration.players.map((player) => player.id).min();
-            final rotationCurrent = -gameConfiguration.players.indexWhere((player) => player.id == controlledPlayerId) * 2 * math.pi / gameConfiguration.players.length;
+            final controlledPlayerId =
+                ref.watch(connectedDeviceProvider)?.controlledPlayerId ?? gameConfiguration.players.map((player) => player.id).min();
+            final rotationCurrent = -gameConfiguration.players.indexWhere((player) => player.id == controlledPlayerId) *
+                2 *
+                math.pi /
+                gameConfiguration.players.length;
             return Expanded(
               child: Stack(
                 children: [
@@ -122,14 +130,17 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                           }
                         }
                         // Send the actual change.
-                        messageSender.sendGameConfiguration(gameConfiguration.copyWith(players: gameConfiguration.players.where((player) => player.id != selectedPlayerId).toList()));
+                        messageSender.sendGameConfiguration(gameConfiguration.copyWith(
+                            players: gameConfiguration.players.where((player) => player.id != selectedPlayerId).toList()));
                       },
                 child: const Text('Ta bort spelare', textAlign: TextAlign.center),
               ),
             ),
             Expanded(
               child: MaterialButton(
-                onPressed: selectedPlayerId == null || deviceIdentifier == null || selectedPlayerId == ref.read(connectedDeviceProvider)?.controlledPlayerId
+                onPressed: selectedPlayerId == null ||
+                        deviceIdentifier == null ||
+                        selectedPlayerId == ref.read(connectedDeviceProvider)?.controlledPlayerId
                     ? null
                     : () {
                         ref.read(currentMessageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);

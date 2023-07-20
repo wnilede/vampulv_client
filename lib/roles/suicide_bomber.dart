@@ -20,13 +20,16 @@ class SuicideBomber extends Role {
                     .map((otherPlayer) => otherPlayer.copyWith(
                         unhandledInputHandlers: otherPlayer.unhandledInputHandlers
                             .append(
-                              EarlyConfirmChildInputHandler.withText('Eftersom ${owner.name} hade en självmordsbombare och dog, så skadas grannarna ${playerRight.name} och ${playerLeft.name} varsit liv!'),
+                              EarlyConfirmChildInputHandler.withText(
+                                  'Eftersom ${owner.name} hade en självmordsbombare och dog, så skadas grannarna ${playerRight.name} och ${playerLeft.name} varsit liv!'),
                             )
                             .toList()))
                     .toList(),
                 HurtEvent(playerId: playerRight.id, appliedMorning: false),
                 HurtEvent(playerId: playerLeft.id, appliedMorning: false),
-                LogEntry(value: '${owner.namePossissive} självmordsbombare aktiverade och skadade ${playerRight.name} och ${playerLeft.name}.', playerVisibleTo: null),
+                LogEntry(
+                    value: '${owner.namePossissive} självmordsbombare aktiverade och skadade ${playerRight.name} och ${playerLeft.name}.',
+                    playerVisibleTo: null),
               ];
             },
           )

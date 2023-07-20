@@ -52,7 +52,8 @@ class _LobbyState extends ConsumerState<Lobby> {
               children: [
                 Expanded(
                   child: MaterialButton(
-                    onPressed: gameConfiguration.players.length * gameConfiguration.rolesPerPlayer > gameConfiguration.roles.length || gameConfiguration.players.length < 3
+                    onPressed: gameConfiguration.players.length * gameConfiguration.rolesPerPlayer > gameConfiguration.roles.length ||
+                            gameConfiguration.players.length < 3
                         ? null
                         : () {
                             ref.read(currentMessageSenderProvider).sendSynchronizedData(

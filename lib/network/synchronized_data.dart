@@ -9,7 +9,9 @@ part 'synchronized_data.g.dart';
 @freezed
 class SynchronizedData with _$SynchronizedData {
   const factory SynchronizedData({
-    @Default([]) List<ConnectedDevice> connectedDevices, // A list of connected devices identifiers are sent by the server whenever anyone connects or disconnect, which is how devices are added and removed. Entire devices are sent from clients to change existing devices.
+    @Default([])
+    List<ConnectedDevice>
+        connectedDevices, // A list of connected devices identifiers are sent by the server whenever anyone connects or disconnect, which is how devices are added and removed. Entire devices are sent from clients to change existing devices.
     required SavedGame game, // Information needed to recreate the current game from scratch.
   }) = _SynchronizedData;
 

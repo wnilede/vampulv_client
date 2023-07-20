@@ -91,7 +91,7 @@ class StandardRule extends Rule {
                   }
                   return player.copyWith(
                     lynchingVote: null,
-                    unhandledInputHandlers: player.unhandledInputHandlers //
+                    unhandledInputHandlers: player.unhandledInputHandlers
                         .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
                         .append(LynchingWaitingResultInputHandler())
                         .toList(),

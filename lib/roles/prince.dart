@@ -24,7 +24,8 @@ class Prince extends Role {
               .map((otherPlayer) => otherPlayer.copyWith(
                   unhandledInputHandlers: otherPlayer.unhandledInputHandlers
                       .append(
-                        EarlyConfirmChildInputHandler.withText('${player.name} skulle ha blivit lynchad, men hade en prins och klarade sig därför!'),
+                        EarlyConfirmChildInputHandler.withText(
+                            '${player.name} skulle ha blivit lynchad, men hade en prins och klarade sig därför!'),
                       )
                       .toList()))
               .toList(),

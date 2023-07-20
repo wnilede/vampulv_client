@@ -37,7 +37,8 @@ class Game with _$Game {
   const Game._();
 
   factory Game.fromConfiguration(GameConfiguration configuration) {
-    assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer, 'There are not enough roles for all players.');
+    assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer,
+        'There are not enough roles for all players.');
     final randomGenerator = Xorshift32(configuration.randomSeed);
     final players = <Player>[];
     final shuffledRoles = configuration.roles.map((roleType) => roleType.produceRole()).randomize(randomGenerator).toList();
@@ -114,7 +115,7 @@ class Game with _$Game {
         inputHandler.identifier != input.identifier ||
         input.playerInputNumber != caller.handledInputs) return this;
     return _applyResultFromApplyer(inputHandler.resultApplyer(input, this, caller), input.ownerId)
-        .game //
+        .game
         .copyWithPlayerModification(
             input.ownerId,
             (player) => player.copyWith(
@@ -220,7 +221,8 @@ class Game with _$Game {
       }
       return gameSoFar;
     }
-    throw UnsupportedError("When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).name}'}, the returned type was '${result.runtimeType}'.");
+    throw UnsupportedError(
+        "When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).name}'}, the returned type was '${result.runtimeType}'.");
   }
 
   Game _runUntilInput() {
@@ -245,13 +247,17 @@ class Game with _$Game {
         return _applyEventOnly(DayBeginsEvent());
       } else {
         Event eventToApply = unhandledEvents.min(
-          (event1, event2) => Event.typeOrder.indexWhere((subType) => event1.runtimeType == subType) - Event.typeOrder.indexWhere((subType) => event2.runtimeType == subType),
+          (event1, event2) =>
+              Event.typeOrder.indexWhere((subType) => event1.runtimeType == subType) -
+              Event.typeOrder.indexWhere((subType) => event2.runtimeType == subType),
         );
         Game afterEvent = _applyEventOnly(eventToApply);
         return afterEvent.copyWith(unhandledEvents: afterEvent.unhandledEvents.exclude(eventToApply).toList());
       }
     }
-    if (!isNight && alivePlayers.every((player) => player.lynchingDone)) return _applyEventOnly(NightBeginsEvent());
+    if (!isNight && alivePlayers.every((player) => player.lynchingDone)) {
+      return _applyEventOnly(NightBeginsEvent());
+    }
     return null;
   }
 

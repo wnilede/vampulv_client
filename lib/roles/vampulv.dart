@@ -53,7 +53,9 @@ class VampulvRule extends Rule {
                           ? 'Den andra vampulven är ${otherVampulvsNames.single}!'
                           : 'De andra vampulverna är ${otherVampulvsNames.listNicely}!';
                   return [
-                    messageFor.copyWith(unhandledInputHandlers: messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
+                    messageFor.copyWith(
+                        unhandledInputHandlers:
+                            messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
                     LogEntry(
                       value: 'Du såg vilka som var vampulver:${[
                         'du själv',
@@ -106,7 +108,7 @@ class VampulvTargetInputHandler extends InputHandler {
             }
 
             // This was the last vampulv to choose target, so we calculate who is attacked, add HurtEvent if needed, add InputHandlers for the vampulvs to see the result and remove the BlockingInputHandlers.
-            final mostVotedForId = vampulvs //
+            final mostVotedForId = vampulvs
                 .map((player) => player.roles)
                 .flatten()
                 .whereType<Vampulv>()
@@ -115,17 +117,18 @@ class VampulvTargetInputHandler extends InputHandler {
                 .max((group1, group2) => group1.key - group2.key)
                 .randomSubset(1, game.randomGenerator)
                 .single;
-            final resultSummary = 'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).name}!\n${vampulvs //
-                .map(
-                  (player) => '${player.name} röstade på ${player.roles.whereType<Vampulv>() //
-                      .map((role) => role.playerIdAttacked == null //
-                          ? 'att inte attackera någon' //
-                          : game.playerFromId(role.playerIdAttacked!).name).join(' och ')}',
-                ).join('\n')}';
+            final resultSummary =
+                'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).name}!\n${vampulvs //
+                    .map(
+                      (player) => '${player.name} röstade på ${player.roles.whereType<Vampulv>() //
+                          .map((role) => role.playerIdAttacked == null //
+                              ? 'att inte attackera någon' //
+                              : game.playerFromId(role.playerIdAttacked!).name).join(' och ')}',
+                    ).join('\n')}';
             return [
               ...vampulvs.map((vampulv) => [
                     vampulv.copyWith(
-                        unhandledInputHandlers: vampulv.unhandledInputHandlers //
+                        unhandledInputHandlers: vampulv.unhandledInputHandlers
                             .where((handler) => handler is! VampulvBlockingInputHandler)
                             .append(EarlyConfirmChildInputHandler(
                               description: 'Se resultat av vampulvattack',

@@ -16,11 +16,9 @@ class Hunter extends Role {
             worksAfterDeath: true,
             onApply: (event, game, player) => event.playerId == player.id && game.alivePlayers.isNotEmpty
                 ? [
-                    game.players //
-                        .map((other) => other.copyWith(
-                            unhandledInputHandlers: other.unhandledInputHandlers //
-                                .append(HunterBlockingInputHanlder())
-                                .toList()))
+                    game.players
+                        .map((other) =>
+                            other.copyWith(unhandledInputHandlers: other.unhandledInputHandlers.append(HunterBlockingInputHanlder()).toList()))
                         .toList(),
                     HunterTargetInputHandler(),
                   ]
@@ -41,9 +39,10 @@ class HunterTargetInputHandler extends InputHandler {
                   .map((other) =>
                       // Remove the blocking input handler created earlier so that they can continue with their other input handlers.
                       other.copyWith(
-                        unhandledInputHandlers: other.unhandledInputHandlers //
+                        unhandledInputHandlers: other.unhandledInputHandlers
                             .exclude(other.unhandledInputHandlers.firstWhere((handler) => handler is HunterBlockingInputHanlder))
-                            .append(EarlyConfirmChildInputHandler.withText('${player.name} dör, men var en jägare, och skjuter ${shoot.name}, som därför förlorar ett liv!'))
+                            .append(EarlyConfirmChildInputHandler.withText(
+                                '${player.name} dör, men var en jägare, och skjuter ${shoot.name}, som därför förlorar ett liv!'))
                             .toList(),
                       ))
                   .toList(),

@@ -41,7 +41,8 @@ class Cupid extends Role {
                   HurtEvent(playerId: target, appliedMorning: false),
                   LogEntry(
                     playerVisibleTo: null,
-                    value: 'På grund av att ${game.playerFromId(event.playerId).name} dör så förlorar ${game.playerFromId(target).name} ett liv av hjärtesorg.',
+                    value:
+                        'På grund av att ${game.playerFromId(event.playerId).name} dör så förlorar ${game.playerFromId(target).name} ett liv av hjärtesorg.',
                   ),
                 ])
             .toList();

@@ -84,7 +84,8 @@ class _EditPlayerState extends ConsumerState<EditPlayer> {
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.playerId == null ? '' : ref.read(gameConfigurationProvider).players.firstWhere((player) => player.id == widget.playerId).name;
+    nameController.text =
+        widget.playerId == null ? '' : ref.read(gameConfigurationProvider).players.firstWhere((player) => player.id == widget.playerId).name;
   }
 
   @override

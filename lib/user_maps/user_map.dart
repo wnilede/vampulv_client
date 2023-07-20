@@ -89,7 +89,8 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     );
     return LayoutBuilder(builder: (context, constraints) {
       final buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
-      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
+      final rotationCurrent =
+          controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
       final Widget playersWidget = CircularLayout(
           largerChildren: true,
           rotationOffset: rotationCurrent,
@@ -100,7 +101,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                   ? PlayerInMap(
                       players[i],
                       selected: selectedIndices.contains(i),
-                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i)) && //
+                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i)) &&
                               (players[i].alive || widget.deadPlayersSelectable) &&
                               (players[i].id != controlledPlayer?.id || widget.canSelectSelf) &&
                               (widget.selectablePlayerFilter.any((id) => id == players[i].id) == widget.filterIsWhitelist)
@@ -111,9 +112,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                                 });
                               } else if (widget.numberSelected == 1) {
                                 setState(() {
-                                  selectedIndices = [
-                                    i
-                                  ];
+                                  selectedIndices = [i];
                                 });
                               } else {
                                 setState(() {
@@ -162,7 +161,9 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }
                           if (widget.identifier != null) {
-                            ref.read(currentMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'), widget.identifier!);
+                            ref.read(currentMessageSenderProvider).sendPlayerInput(
+                                selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'),
+                                widget.identifier!);
                           }
                         }
                       : null,
