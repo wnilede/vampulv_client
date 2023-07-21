@@ -62,7 +62,6 @@ class CupidTargetsInputHandler extends InputHandler {
   CupidTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
           description: 'Välj spelare att cupida',
-          identifier: 'cupid-choose-target',
           resultApplyer: (input, game, player) {
             setTargets(input.message == 'none'
                 ? []
@@ -72,9 +71,9 @@ class CupidTargetsInputHandler extends InputHandler {
                     .toList());
           },
           widget: PlayerMap(
-            identifier: 'cupid-choose-target',
             numberSelected: numberOfTargets,
             description: 'Välj spelare att använda cupid på',
+            onDone: null,
           ),
         );
 }

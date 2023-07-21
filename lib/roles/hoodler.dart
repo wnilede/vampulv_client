@@ -49,7 +49,6 @@ class HoodlerTargetsInputHandler extends InputHandler {
   HoodlerTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
           description: 'Välj spelare för hoodlern',
-          identifier: 'hoodler-choose-target',
           resultApplyer: (input, game, player) {
             final targets = input.message == 'none'
                 ? <int>[]
@@ -63,10 +62,10 @@ class HoodlerTargetsInputHandler extends InputHandler {
                 : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listNicely} för din hoodler.';
           },
           widget: PlayerMap(
-            identifier: 'hoodler-choose-target',
             numberSelected: numberOfTargets,
             description: 'Välj spelare att använda hoodlern på',
             canSelectSelf: false,
+            onDone: null,
           ),
         );
 }

@@ -40,19 +40,11 @@ abstract class InputHandler {
   /// Appears for spectators viewing unhandled input handlers.
   final String description;
 
-  /// Typically a constant for a particular type of input.
-  ///
-  /// Used together with the owning player to identify which InputHandler are responsible for handling the PlayerInput sent. As such, it must be the same for all clients. To minimize invalidation of PlayerInput when another message is sent with earlier timestamp, it should preferably be the same even if an unrelated message is added before. Other than that it should be as unique as possible, so the game can detect when the input should actually be invalidated.
-  ///
-  /// To prevent crashes, the resultApplyer of one input handler should not throw if feed the PlayerInput of another input handler with the same owner and identifier.
-  final String identifier;
-
   /// Must return something that the game knows what to do with. See Game for more information.
   final dynamic Function(PlayerInput input, Game game, Player owner) resultApplyer;
 
   InputHandler({
     required this.description,
-    required this.identifier,
     required this.resultApplyer,
     required this.widget,
   }) {

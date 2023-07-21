@@ -45,7 +45,7 @@ class MessageSender with _$MessageSender {
     ));
   }
 
-  void sendPlayerInput(Object value, String identifier) {
+  void sendPlayerInput(Object value) {
     final player = ref.read(controlledPlayerProvider);
     if (player == null) return;
     sendChange(NetworkMessage.fromObject(
@@ -53,7 +53,6 @@ class MessageSender with _$MessageSender {
       body: PlayerInput.fromObject(
         ownerId: player.id,
         playerInputNumber: player.handledInputs,
-        identifier: identifier,
         body: value,
       ),
     ));

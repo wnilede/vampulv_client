@@ -41,7 +41,6 @@ class WitchPoisonInputHandler extends InputHandler {
   WitchPoisonInputHandler({required this.usePoison})
       : super(
           description: 'Välj spelare att förgifta med häxa',
-          identifier: 'witch-poisoning',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);
             if (choosen == null) {
@@ -54,10 +53,10 @@ class WitchPoisonInputHandler extends InputHandler {
             ];
           },
           widget: PlayerMap(
-            identifier: 'witch-poisoning',
             description: 'Välj vem du vill förgifta med din häxa',
             numberSelected: 1,
             canChooseFewer: true,
+            onDone: null,
           ),
         );
 }
@@ -68,7 +67,6 @@ class WitchHealingInputHandler extends InputHandler {
   WitchHealingInputHandler({required this.useHealing})
       : super(
           description: 'Välj spelare att hela med häxa',
-          identifier: 'witch-healing',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);
             if (choosen == null) {
@@ -81,10 +79,10 @@ class WitchHealingInputHandler extends InputHandler {
             ];
           },
           widget: PlayerMap(
-            identifier: 'witch-healing',
             description: 'Välj vem du vill hela med din häxa',
             numberSelected: 1,
             canChooseFewer: true,
+            onDone: null,
           ),
         );
 }

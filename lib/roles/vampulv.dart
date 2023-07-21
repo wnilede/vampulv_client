@@ -99,7 +99,6 @@ class VampulvTargetInputHandler extends InputHandler {
   VampulvTargetInputHandler({required void Function(int?) setResult})
       : super(
           description: 'Välj spelare att attackera med vampulv',
-          identifier: 'choose-target-vampulv',
           resultApplyer: (input, game, player) {
             setResult(int.tryParse(input.message));
             final vampulvs = game.alivePlayers.where((player) => player.roles.any((role) => role is Vampulv)).toList();
@@ -132,7 +131,6 @@ class VampulvTargetInputHandler extends InputHandler {
                             .where((handler) => handler is! VampulvBlockingInputHandler)
                             .append(EarlyConfirmChildInputHandler(
                               description: 'Se resultat av vampulvattack',
-                              identifier: 'vampulv-result',
                               child: Center(child: Text(resultSummary, textAlign: TextAlign.center)),
                             ))
                             .toList()),
@@ -146,15 +144,15 @@ class VampulvTargetInputHandler extends InputHandler {
           },
           widget: PlayerMap(
             description: 'Välj vem vampulverna ska attackera',
-            identifier: 'choose-target-vampulv',
             numberSelected: 1,
             canChooseFewer: true,
+            onDone: null,
           ),
         );
 }
 
 class VampulvBlockingInputHandler extends BlockingInputHandler {
-  VampulvBlockingInputHandler() : super(identifier: 'vampulv-result');
+  VampulvBlockingInputHandler() : super();
 }
 
 class VampulvHurtEvent extends HurtEvent {

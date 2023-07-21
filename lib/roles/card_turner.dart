@@ -70,9 +70,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
     required CardTurnerRestrictions restrictions,
   }) : super(
           description: 'Välj observatör för kortvändaren',
-          identifier: 'card-turner-choose-observer',
           widget: PlayerMap(
-            identifier: 'card-turner-choose-observer',
             description: 'Välj spelaren som ska se ett av någon annans kort',
             numberSelected: 1,
             canSelectSelf: restrictions == CardTurnerRestrictions.canSelectSelf,
@@ -99,6 +97,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
             },
             filterIsWhitelist: restrictions == CardTurnerRestrictions.onePlayerCanBeSameForced && role.seeingPlayerId == null ||
                 restrictions == CardTurnerRestrictions.canSelectSelf && role.seeingPlayerId == null && role.seenPlayerId != null,
+            onDone: null,
           ),
           resultApplyer: (input, game, string) {
             final choosedId = int.tryParse(input.message);
@@ -127,9 +126,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
     required CardTurnerRestrictions restrictions,
   }) : super(
           description: 'Välj observerad för kortvändaren',
-          identifier: 'card-turner-choose-observed',
           widget: PlayerMap(
-            identifier: 'card-turner-choose-observed',
             description: 'Välj spelaren vars ena kort ska bli sett av $seeingPlayerName',
             numberSelected: 1,
             canSelectSelf: restrictions == CardTurnerRestrictions.canSelectSelf,
@@ -150,6 +147,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
                 CardTurnerRestrictions.cannotUsePower => throw ArgumentError.value(restrictions),
               },
             ],
+            onDone: null,
           ),
           resultApplyer: (input, game, string) {
             role.seenPlayerId = int.tryParse(input.message);
@@ -170,7 +168,6 @@ class CardTurnerObservedInputHandler extends InputHandler {
                     unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
                         .append(LateConfirmChildInputHandler(
                           description: 'See roll visad av kortvändare',
-                          identifier: 'role-${seenRole.type.name}-of-${seenPlayer.id}-shown-by-card-turner',
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

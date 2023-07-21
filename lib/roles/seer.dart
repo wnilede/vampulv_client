@@ -24,7 +24,6 @@ class SeerTargetInputHandler extends InputHandler {
   SeerTargetInputHandler(int ownerId)
       : super(
           description: 'Välj spelare att använda spådamen på',
-          identifier: 'choose-target-seer',
           resultApplyer: (input, game, string) {
             final seenPlayer = game.playerFromId(int.parse(input.message));
             final seenPlayerIsVampulv = seenPlayer.roles.any((role) => role is Vampulv || role is Lycan);
@@ -34,12 +33,12 @@ class SeerTargetInputHandler extends InputHandler {
             ];
           },
           widget: PlayerMap(
-            identifier: 'choose-target-seer',
             description: 'Välj vem du vill se huruvida de är vampulv',
             numberSelected: 1,
             selectablePlayerFilter: [
               ownerId,
             ],
+            onDone: null,
           ),
         );
 }

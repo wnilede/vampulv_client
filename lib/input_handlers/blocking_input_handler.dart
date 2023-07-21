@@ -5,10 +5,9 @@ import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/player.dart';
 
 class BlockingInputHandler extends InputHandler {
-  BlockingInputHandler({required String identifier})
+  BlockingInputHandler()
       : super(
           description: 'Vampulv', // This is for the titel to not be spoiling, because the description is shown in the AppBar.
-          identifier: 'blocking-$identifier',
           widget: const NothingToDoWidget(canLyncha: false),
           resultApplyer: (PlayerInput input, Game game, Player owner) {},
         );

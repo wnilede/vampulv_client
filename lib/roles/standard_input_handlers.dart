@@ -11,7 +11,6 @@ class LynchingVoteInputHandler extends InputHandler {
   LynchingVoteInputHandler({required Player proposer, required Player proposed})
       : super(
           description: 'Rösta i lynchning av ${proposed.name}',
-          identifier: 'vote-lynching-of-${proposed.id}-proposed-by-${proposer.id}',
           resultApplyer: (playerInput, game, player) {
             final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
             if (newGame.alivePlayers.any((player) => player.lynchingVote == null)) return newGame;
@@ -37,7 +36,6 @@ class LynchingVoteInputHandler extends InputHandler {
           },
           widget: BinaryChoice(
             title: '${proposer.name} föreslår lynchning av ${proposed.name}',
-            identifier: 'vote-lynching-of-${proposed.id}-proposed-by-${proposer.id}',
             trueChoice: 'För',
             falseChoice: 'Emot',
           ),
@@ -48,7 +46,6 @@ class LynchingWaitingResultInputHandler extends InputHandler {
   LynchingWaitingResultInputHandler()
       : super(
           description: 'Vänta på andra',
-          identifier: 'waiting-for-others-to-vote-in-lynching',
           resultApplyer: (input, game, player) {},
           widget: const Center(child: Text('Väntar på att andra ska rösta i lynchningen...')),
         );

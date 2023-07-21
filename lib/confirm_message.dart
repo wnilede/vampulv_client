@@ -4,9 +4,8 @@ import 'package:vampulv/network/message_sender_provider.dart';
 
 class ConfirmMessage extends ConsumerWidget {
   final Widget child;
-  final String inputIdentifier;
 
-  const ConfirmMessage({required this.inputIdentifier, required this.child, super.key});
+  const ConfirmMessage({required this.child, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,7 +15,7 @@ class ConfirmMessage extends ConsumerWidget {
         Expanded(child: child),
         MaterialButton(
           onPressed: () {
-            ref.read(cMessageSenderProvider).sendPlayerInput('', inputIdentifier);
+            ref.read(cMessageSenderProvider).sendPlayerInput('');
           },
           child: const Text('OK'),
         )

@@ -31,7 +31,6 @@ class HunterTargetInputHandler extends InputHandler {
   HunterTargetInputHandler()
       : super(
           description: 'Välj spelare att skjuta med jägaren',
-          identifier: 'hunter-choose-target',
           resultApplyer: (input, game, player) {
             final shoot = game.playerFromId(int.parse(input.message));
             return [
@@ -51,13 +50,13 @@ class HunterTargetInputHandler extends InputHandler {
             ];
           },
           widget: PlayerMap(
-            identifier: 'hunter-choose-target',
             numberSelected: 1,
             description: 'Välj spelare att använda jägaren på',
+            onDone: null,
           ),
         );
 }
 
 class HunterBlockingInputHanlder extends BlockingInputHandler {
-  HunterBlockingInputHanlder() : super(identifier: 'hunter-choose-target');
+  HunterBlockingInputHanlder() : super();
 }

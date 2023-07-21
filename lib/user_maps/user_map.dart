@@ -20,11 +20,8 @@ class PlayerMap extends ConsumerStatefulWidget {
   /// Determines the number of players that should be selected.
   final int numberSelected;
 
-  /// Function to be called when user has clicked the OK button.
+  /// Function to be called when user has clicked the OK button. If null, a PlayerInput will be sent instead. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
   final void Function(List<Player> selected)? onDone;
-
-  /// If non-null, a PlayerInput will be sent with this identifier when player presses the OK button. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
-  final String? identifier;
 
   final String? description;
   final bool canChooseFewer;
@@ -35,8 +32,6 @@ class PlayerMap extends ConsumerStatefulWidget {
   final void Function()? onCancel;
 
   PlayerMap({
-    this.onDone,
-    this.identifier,
     this.onCancel,
     this.playerAppearance,
     this.description,
@@ -47,12 +42,17 @@ class PlayerMap extends ConsumerStatefulWidget {
     this.canSelectSelf = true,
     this.selectablePlayerFilter = const [],
     this.filterIsWhitelist = false,
+    required this.onDone,
     Key? key,
-  })  : assert(onDone != null || identifier != null, 'At least one of onDone or identifier must be non-null.'),
-        super(key: key ?? (identifier == null ? null : Key(identifier)));
+  }) : super(key: key ?? (description == null ? null : Key(description)));
 
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
+
+  bool playerIsSelectable(Player player, int? controlledPlayerId) =>
+      (player.alive || deadPlayersSelectable) &&
+      (player.id != controlledPlayerId || canSelectSelf) &&
+      (selectablePlayerFilter.any((id) => id == player.id) == filterIsWhitelist);
 }
 
 class _UserMapState extends ConsumerState<PlayerMap> {
@@ -64,6 +64,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     final players = ref.watch(cGameProvider.select((game) => game!.players));
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
+    selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id)).toList();
     Widget descriptionText = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -100,27 +101,28 @@ class _UserMapState extends ConsumerState<PlayerMap> {
               (i) => widget.playerAppearance == null
                   ? PlayerInMap(
                       players[i],
-                      selected: selectedIndices.contains(i),
-                      onSelect: (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i)) &&
-                              (players[i].alive || widget.deadPlayersSelectable) &&
-                              (players[i].id != controlledPlayer?.id || widget.canSelectSelf) &&
-                              (widget.selectablePlayerFilter.any((id) => id == players[i].id) == widget.filterIsWhitelist)
-                          ? () {
-                              if (selectedIndices.contains(i)) {
-                                setState(() {
-                                  selectedIndices.remove(i);
-                                });
-                              } else if (widget.numberSelected == 1) {
-                                setState(() {
-                                  selectedIndices = [i];
-                                });
-                              } else {
-                                setState(() {
-                                  selectedIndices.add(i);
-                                });
-                              }
-                            }
-                          : null,
+                      selectedLevel: selectedIndices.contains(i)
+                          ? SelectedLevel.selected
+                          : widget.playerIsSelectable(players[i], controlledPlayer?.id)
+                              ? (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i))
+                                  ? SelectedLevel.selectable
+                                  : SelectedLevel.selectableButMax
+                              : SelectedLevel.forbidden,
+                      onSelect: () {
+                        if (selectedIndices.contains(i)) {
+                          setState(() {
+                            selectedIndices.remove(i);
+                          });
+                        } else if (widget.numberSelected == 1) {
+                          setState(() {
+                            selectedIndices = [i];
+                          });
+                        } else {
+                          setState(() {
+                            selectedIndices.add(i);
+                          });
+                        }
+                      },
                     )
                   : widget.playerAppearance!(players[i])));
       return Flex(
@@ -157,13 +159,11 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                 child: MaterialButton(
                   onPressed: hasSelectedEnough
                       ? () {
-                          if (widget.onDone != null) {
-                            widget.onDone!(selectedIndices.map((i) => players[i]).toList());
-                          }
-                          if (widget.identifier != null) {
+                          if (widget.onDone == null) {
                             ref.read(cMessageSenderProvider).sendPlayerInput(
-                                selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'),
-                                widget.identifier!);
+                                selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'));
+                          } else {
+                            widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }
                         }
                       : null,

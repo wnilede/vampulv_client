@@ -115,7 +115,6 @@ class Game with _$Game {
     final inputHandler = caller.currentInputHandler;
     // If the input is invalid we silently ignore it.
     if (inputHandler == null || //
-        inputHandler.identifier != input.identifier ||
         input.playerInputNumber != caller.handledInputs) return this;
     return _applyResultFromApplyer(inputHandler.resultApplyer(input, this, caller), input.ownerId)
         .game

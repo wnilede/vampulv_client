@@ -8,10 +8,10 @@ import 'package:vampulv/player_summary.dart';
 
 class PlayerInMap extends ConsumerWidget {
   final Player player;
-  final bool selected;
+  final SelectedLevel selectedLevel;
   final void Function()? onSelect;
 
-  const PlayerInMap(this.player, {this.selected = false, this.onSelect, super.key});
+  const PlayerInMap(this.player, {required this.selectedLevel, required this.onSelect, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,11 +19,12 @@ class PlayerInMap extends ConsumerWidget {
     Color textColor = player.alive ? Colors.black : Colors.white;
     return Material(
       shape: const CircleBorder(),
-      color: onSelect == null
-          ? const Color.fromARGB(255, 245, 198, 128)
-          : selected
-              ? Colors.orange[700]
-              : Colors.orange[400],
+      color: switch (selectedLevel) {
+        SelectedLevel.selected => Colors.orange[700],
+        SelectedLevel.selectable => Colors.orange[400],
+        SelectedLevel.selectableButMax => const Color.fromARGB(255, 206, 161, 94),
+        SelectedLevel.forbidden => const Color.fromARGB(255, 245, 198, 128),
+      },
       child: InkWell(
         onLongPress: isSpectator
             ? () {
@@ -38,7 +39,7 @@ class PlayerInMap extends ConsumerWidget {
                 );
               }
             : null,
-        onTap: onSelect,
+        onTap: selectedLevel == SelectedLevel.selectable ? onSelect : null,
         borderRadius: BorderRadius.circular(100),
         child: FractionallySizedBox(
           widthFactor: math.sqrt1_2,
@@ -70,4 +71,11 @@ class PlayerInMap extends ConsumerWidget {
       ),
     );
   }
+}
+
+enum SelectedLevel {
+  selected,
+  selectable,
+  selectableButMax,
+  forbidden,
 }
