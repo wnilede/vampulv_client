@@ -1,8 +1,8 @@
 import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/game_logic/player_configuration.dart';
-import 'package:vampulv/game_logic/role.dart';
+import '../input_handlers/input_handler.dart';
+import 'player_configuration.dart';
+import 'role.dart';
 
 part 'player.freezed.dart';
 

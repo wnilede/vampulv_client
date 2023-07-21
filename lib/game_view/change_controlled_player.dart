@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/components/player_map.dart';
+
+import '../components/player_map.dart';
+import '../network/connected_device_provider.dart';
+import '../network/message_sender_provider.dart';
 
 class ChangeControlledPlayer extends ConsumerWidget {
   final Widget drawer;

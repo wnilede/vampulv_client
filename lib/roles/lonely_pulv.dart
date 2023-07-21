@@ -1,8 +1,8 @@
 import 'package:darq/darq.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/role_type.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
-import 'package:vampulv/roles/vampulv.dart';
+import '../game_logic/role.dart';
+import '../game_logic/role_type.dart';
+import '../game_logic/standard_events.dart';
+import 'vampulv.dart';
 
 class LonelyPulv extends Vampulv {
   LonelyPulv() {

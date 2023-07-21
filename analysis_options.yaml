@@ -9,3 +9,5 @@ linter:
   rules:
     avoid_print: false
     prefer_single_quotes: true
+    prefer_relative_imports: true
+    directives_ordering: true

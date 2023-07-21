@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/components/cheating_indicator.dart';
-import 'package:vampulv/game_view/game_view.dart';
-import 'package:vampulv/network/connected_device_provider.dart';
+
+import '../components/cheating_indicator.dart';
+import '../network/connected_device_provider.dart';
+import 'game_view.dart';
 
 class GameViewDrawer extends ConsumerWidget {
   final GameViewSelection selected;

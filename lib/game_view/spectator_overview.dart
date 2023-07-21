@@ -1,8 +1,9 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_logic/game_provider.dart';
-import 'package:vampulv/components/list_item.dart';
+
+import '../components/list_item.dart';
+import '../game_logic/game_provider.dart';
 
 class SpectatorOverview extends ConsumerStatefulWidget {
   final Widget drawer;

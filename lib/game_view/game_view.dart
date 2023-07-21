@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/game_view/change_controlled_player.dart';
-import 'package:vampulv/game_view/do_input.dart';
-import 'package:vampulv/game_view/game_view_drawer.dart';
-import 'package:vampulv/game_view/information.dart';
-import 'package:vampulv/game_view/log_page.dart';
-import 'package:vampulv/game_view/spectator_overview.dart';
-import 'package:vampulv/global_settings/global_settings.dart';
+
+import '../global_settings/global_settings.dart';
+import 'change_controlled_player.dart';
+import 'do_input.dart';
+import 'game_view_drawer.dart';
+import 'information.dart';
+import 'log_page.dart';
+import 'spectator_overview.dart';
 
 class GameView extends StatefulWidget {
   const GameView({super.key});

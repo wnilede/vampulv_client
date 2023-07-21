@@ -2,10 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_logic/game_provider.dart';
-import 'package:vampulv/components/role_description.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/role_type.dart';
+
+import '../game_logic/game_provider.dart';
+import '../game_logic/role.dart';
+import '../game_logic/role_type.dart';
+import 'role_description.dart';
 
 class RoleTypeCardView extends ConsumerWidget {
   final RoleType roleType;

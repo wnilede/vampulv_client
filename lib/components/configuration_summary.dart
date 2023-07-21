@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/lobby/game_settings.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
+import '../lobby/game_settings.dart';
+import '../network/synchronized_data_provider.dart';
 
 class ConfigurationSummary extends ConsumerWidget {
   const ConfigurationSummary({super.key});

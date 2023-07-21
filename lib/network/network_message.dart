@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/network/network_message_type.dart';
+import 'network_message_type.dart';
 
 part 'network_message.freezed.dart';
 part 'network_message.g.dart';

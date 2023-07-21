@@ -1,10 +1,10 @@
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/role_type.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
-import 'package:vampulv/components/player_map.dart';
+import '../components/player_map.dart';
+import '../game_logic/game.dart';
+import '../game_logic/player.dart';
+import '../game_logic/role.dart';
+import '../game_logic/role_type.dart';
+import '../game_logic/standard_events.dart';
+import '../input_handlers/input_handler.dart';
 
 class Witch extends Role {
   bool poisonUsed = false;

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/network/connected_device.dart';
-import 'package:vampulv/game_logic/saved_game.dart';
+
+import '../game_logic/saved_game.dart';
+import 'connected_device.dart';
 
 part 'synchronized_data.freezed.dart';
 part 'synchronized_data.g.dart';

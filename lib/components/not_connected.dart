@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
+import '../network/message_sender_provider.dart';
 
 class NotConnected extends ConsumerWidget {
   const NotConnected({super.key});

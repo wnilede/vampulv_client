@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/global_settings/global_settings.dart';
-import 'package:vampulv/lobby/lobby.dart';
-import 'package:vampulv/lobby/lobby_drawer.dart';
+import '../global_settings/global_settings.dart';
+import 'lobby.dart';
+import 'lobby_drawer.dart';
 
 class CreateGameView extends StatefulWidget {
   const CreateGameView({super.key});

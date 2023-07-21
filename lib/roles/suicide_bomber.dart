@@ -1,9 +1,10 @@
 import 'package:darq/darq.dart';
-import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
-import 'package:vampulv/game_logic/log_entry.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/role_type.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
+
+import '../game_logic/log_entry.dart';
+import '../game_logic/role.dart';
+import '../game_logic/role_type.dart';
+import '../game_logic/standard_events.dart';
+import '../input_handlers/confirm_child_input_handlers.dart';
 
 class SuicideBomber extends Role {
   SuicideBomber()

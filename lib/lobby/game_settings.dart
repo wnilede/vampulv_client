@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
+import '../network/message_sender_provider.dart';
+import '../network/synchronized_data_provider.dart';
 
 class GameSettings extends ConsumerStatefulWidget {
   const GameSettings({super.key});

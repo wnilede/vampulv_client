@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiver/iterables.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/game_logic/player_configuration.dart';
+
+import '../game_logic/player_configuration.dart';
+import '../network/message_sender_provider.dart';
+import '../network/synchronized_data_provider.dart';
 
 class EditPlayer extends ConsumerStatefulWidget {
   final int? playerId;

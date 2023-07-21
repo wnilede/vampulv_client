@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/global_settings/save_load.dart';
+import 'save_load.dart';
 
 class GlobalSettings extends StatelessWidget {
   final Widget drawer;

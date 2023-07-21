@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/components/confirm_message.dart';
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/game_logic/player_input.dart';
-import 'package:vampulv/game_logic/player.dart';
+
+import '../components/confirm_message.dart';
+import '../game_logic/game.dart';
+import '../game_logic/player.dart';
+import '../game_logic/player_input.dart';
+import 'input_handler.dart';
 
 class EarlyConfirmChildInputHandler extends _ConfirmChildInputHandler {
   EarlyConfirmChildInputHandler({required super.description, super.onConfirm, required super.child});

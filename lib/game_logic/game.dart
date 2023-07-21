@@ -1,21 +1,22 @@
 import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/game_logic/game_configuration.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/game_logic/log_entry.dart';
-import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
-import 'package:vampulv/network/message_bodies/set_done_lynching_body.dart';
-import 'package:vampulv/network/network_message_type.dart';
-import 'package:vampulv/game_logic/player_input.dart';
-import 'package:vampulv/game_logic/saved_game.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/game_logic/event.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/rule.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
-import 'package:vampulv/game_logic/standard_rules.dart';
 import 'package:xrandom/xrandom.dart';
+
+import '../input_handlers/input_handler.dart';
+import '../network/message_bodies/propose_lynching_body.dart';
+import '../network/message_bodies/set_done_lynching_body.dart';
+import '../network/network_message.dart';
+import '../network/network_message_type.dart';
+import 'event.dart';
+import 'game_configuration.dart';
+import 'log_entry.dart';
+import 'player.dart';
+import 'player_input.dart';
+import 'role.dart';
+import 'rule.dart';
+import 'saved_game.dart';
+import 'standard_events.dart';
+import 'standard_rules.dart';
 
 part 'game.freezed.dart';
 

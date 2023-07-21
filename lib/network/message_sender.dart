@@ -3,14 +3,15 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/game_logic/game_configuration.dart';
-import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
-import 'package:vampulv/game_logic/player_input.dart';
-import 'package:vampulv/network/synchronized_data.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../game_logic/game_configuration.dart';
+import '../game_logic/player_input.dart';
+import 'connected_device_provider.dart';
+import 'message_bodies/change_device_controls_body.dart';
+import 'network_message.dart';
+import 'network_message_type.dart';
+import 'synchronized_data.dart';
 
 part 'message_sender.freezed.dart';
 

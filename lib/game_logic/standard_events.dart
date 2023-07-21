@@ -1,5 +1,5 @@
-import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
-import 'package:vampulv/game_logic/event.dart';
+import '../network/message_bodies/propose_lynching_body.dart';
+import 'event.dart';
 
 class HurtEvent extends Event {
   int playerId;

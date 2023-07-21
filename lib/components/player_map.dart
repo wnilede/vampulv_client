@@ -3,12 +3,13 @@ import 'dart:math' as math;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_logic/game_provider.dart';
-import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/components/circular_layout.dart';
-import 'package:vampulv/components/player_in_map.dart';
+
+import '../game_logic/game_provider.dart';
+import '../game_logic/player.dart';
+import '../network/connected_device_provider.dart';
+import '../network/message_sender_provider.dart';
+import 'circular_layout.dart';
+import 'player_in_map.dart';
 
 class PlayerMap extends ConsumerStatefulWidget {
   /// Decides how the players should appear. If non-null, every player is inputed into this function, and the resulting widget is placed at the position designated for that player. Cannot be set together with other properties deciding how the players look.

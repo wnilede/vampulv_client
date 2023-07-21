@@ -1,5 +1,5 @@
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/game_logic/event.dart';
+import 'event.dart';
+import 'game.dart';
 
 abstract class Rule {
   List<RuleReaction> reactions;

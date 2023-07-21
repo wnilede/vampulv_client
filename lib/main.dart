@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
-import 'package:vampulv/game_logic/game_provider.dart';
-import 'package:vampulv/game_view/game_view.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/components/not_connected.dart';
 
+import 'components/not_connected.dart';
+import 'game_logic/game_provider.dart';
+import 'game_view/game_view.dart';
 import 'lobby/create_game_view.dart';
+import 'network/message_sender_provider.dart';
+import 'network/synchronized_data_provider.dart';
 
 void main() {
   FlutterError.demangleStackTrace = (StackTrace stack) {

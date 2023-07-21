@@ -1,22 +1,22 @@
-import 'package:vampulv/roles/apprentice_seer.dart';
-import 'package:vampulv/roles/card_turner.dart';
-import 'package:vampulv/roles/cupid.dart';
-import 'package:vampulv/roles/drunk.dart';
-import 'package:vampulv/roles/gang_member.dart';
-import 'package:vampulv/roles/hoodler.dart';
-import 'package:vampulv/roles/hunter.dart';
-import 'package:vampulv/roles/lonely_pulv.dart';
-import 'package:vampulv/roles/lycan.dart';
-import 'package:vampulv/roles/priest.dart';
-import 'package:vampulv/roles/prince.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/rule.dart';
-import 'package:vampulv/roles/seer.dart';
-import 'package:vampulv/roles/suicide_bomber.dart';
-import 'package:vampulv/roles/tanner.dart';
-import 'package:vampulv/roles/vampulv.dart';
-import 'package:vampulv/roles/villager.dart';
-import 'package:vampulv/roles/witch.dart';
+import '../roles/apprentice_seer.dart';
+import '../roles/card_turner.dart';
+import '../roles/cupid.dart';
+import '../roles/drunk.dart';
+import '../roles/gang_member.dart';
+import '../roles/hoodler.dart';
+import '../roles/hunter.dart';
+import '../roles/lonely_pulv.dart';
+import '../roles/lycan.dart';
+import '../roles/priest.dart';
+import '../roles/prince.dart';
+import '../roles/seer.dart';
+import '../roles/suicide_bomber.dart';
+import '../roles/tanner.dart';
+import '../roles/vampulv.dart';
+import '../roles/villager.dart';
+import '../roles/witch.dart';
+import 'role.dart';
+import 'rule.dart';
 
 enum RoleType {
   vampulv(

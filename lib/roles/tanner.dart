@@ -1,9 +1,9 @@
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/roles/hoodler.dart';
-import 'package:vampulv/game_logic/role.dart';
-import 'package:vampulv/game_logic/role_type.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
+import '../game_logic/game.dart';
+import '../game_logic/player.dart';
+import '../game_logic/role.dart';
+import '../game_logic/role_type.dart';
+import '../game_logic/standard_events.dart';
+import 'hoodler.dart';
 
 class Tanner extends Role {
   bool diedByLynching = false;

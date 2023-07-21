@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/network/message_sender.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/network_message_type.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'connected_device_provider.dart';
+import 'message_sender.dart';
+import 'network_message.dart';
+import 'network_message_type.dart';
 
 part 'message_sender_provider.g.dart';
 

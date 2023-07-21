@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/lobby/create_game_view.dart';
+import 'create_game_view.dart';
 
 class LobbyDrawer extends ConsumerWidget {
   final CreateGameViewSelection selected;

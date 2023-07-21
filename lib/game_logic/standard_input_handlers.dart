@@ -1,11 +1,11 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
-import 'package:vampulv/components/binary_choice.dart';
-import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
-import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/game_logic/log_entry.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/game_logic/standard_events.dart';
+import '../components/binary_choice.dart';
+import '../input_handlers/confirm_child_input_handlers.dart';
+import '../input_handlers/input_handler.dart';
+import 'log_entry.dart';
+import 'player.dart';
+import 'standard_events.dart';
 
 class LynchingVoteInputHandler extends InputHandler {
   LynchingVoteInputHandler({required Player proposer, required Player proposed})

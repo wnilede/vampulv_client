@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
-import 'package:vampulv/game_logic/player_input.dart';
-import 'package:vampulv/game_logic/player.dart';
-import 'package:vampulv/roles/card_turner.dart';
-import 'package:vampulv/roles/cupid.dart';
-import 'package:vampulv/roles/hoodler.dart';
-import 'package:vampulv/roles/hunter.dart';
-import 'package:vampulv/roles/priest.dart';
-import 'package:vampulv/roles/seer.dart';
-import 'package:vampulv/game_logic/standard_input_handlers.dart';
-import 'package:vampulv/roles/vampulv.dart';
-import 'package:vampulv/roles/witch.dart';
+
+import '../game_logic/game.dart';
+import '../game_logic/player.dart';
+import '../game_logic/player_input.dart';
+import '../game_logic/standard_input_handlers.dart';
+import '../roles/card_turner.dart';
+import '../roles/cupid.dart';
+import '../roles/hoodler.dart';
+import '../roles/hunter.dart';
+import '../roles/priest.dart';
+import '../roles/seer.dart';
+import '../roles/vampulv.dart';
+import '../roles/witch.dart';
+import 'confirm_child_input_handlers.dart';
 
 /// Handle user input in two steps. Firstly, this class is responsible for showing the widget that a user can interact with, and that widget is responsible for sending a network message message when the input is choosen. This is only done for the player whose input is desired. Secondly, this class handles the resulting network message and apply it to the world. This is done on all devices.
 abstract class InputHandler {

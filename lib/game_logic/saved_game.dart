@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/game_logic/game_configuration.dart';
-import 'package:vampulv/network/network_message.dart';
+
+import '../network/network_message.dart';
+import 'game_configuration.dart';
 
 part 'saved_game.freezed.dart';
 part 'saved_game.g.dart';

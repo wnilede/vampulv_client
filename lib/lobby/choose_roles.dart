@@ -1,11 +1,12 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_logic/game_configuration.dart';
-import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/components/role_card_view.dart';
-import 'package:vampulv/game_logic/role_type.dart';
+
+import '../components/role_card_view.dart';
+import '../game_logic/game_configuration.dart';
+import '../game_logic/role_type.dart';
+import '../network/message_sender_provider.dart';
+import '../network/synchronized_data_provider.dart';
 
 class ChooseRoles extends ConsumerWidget {
   const ChooseRoles({super.key});

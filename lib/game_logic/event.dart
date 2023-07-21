@@ -1,5 +1,5 @@
-import 'package:vampulv/game_logic/standard_events.dart';
-import 'package:vampulv/roles/vampulv.dart';
+import '../roles/vampulv.dart';
+import 'standard_events.dart';
 
 abstract class Event {
   /// Determines in which order events of different types are evaluated. Types of the same type are evaluated in the order they added. Types not present should not be put in the unhandledEvent. Subtypes with instances that always have appliedMorning set to false should not be in this list.

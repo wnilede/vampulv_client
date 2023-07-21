@@ -1,7 +1,8 @@
 import 'package:darq/darq.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vampulv/game_logic/game.dart';
-import 'package:vampulv/network/synchronized_data_provider.dart';
+
+import '../network/synchronized_data_provider.dart';
+import 'game.dart';
 
 part 'game_provider.g.dart';
 
