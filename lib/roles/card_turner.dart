@@ -70,6 +70,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
     required int ownerId,
     required CardTurnerRestrictions restrictions,
   }) : super(
+          title: 'Kortvändare',
           description: 'Välj observatör för kortvändaren',
           widget: PlayerMap(
             description: 'Välj spelaren som ska se ett av någon annans kort',
@@ -126,6 +127,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
     required String seeingPlayerName,
     required CardTurnerRestrictions restrictions,
   }) : super(
+          title: 'Kortvändare',
           description: 'Välj observerad för kortvändaren',
           widget: PlayerMap(
             description: 'Välj spelaren vars ena kort ska bli sett av $seeingPlayerName',

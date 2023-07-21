@@ -49,6 +49,7 @@ class Hoodler extends Role {
 class HoodlerTargetsInputHandler extends InputHandler {
   HoodlerTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
+          title: 'Hoodler',
           description: 'Välj spelare för hoodlern',
           resultApplyer: (input, game, player) {
             final targets = input.message == 'none'

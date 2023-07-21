@@ -99,6 +99,7 @@ class VampulvRule extends Rule {
 class VampulvTargetInputHandler extends InputHandler {
   VampulvTargetInputHandler({required void Function(int?) setResult})
       : super(
+          title: 'Vampulv',
           description: 'Välj spelare att attackera med vampulv',
           resultApplyer: (input, game, player) {
             setResult(int.tryParse(input.message));
@@ -153,7 +154,7 @@ class VampulvTargetInputHandler extends InputHandler {
 }
 
 class VampulvBlockingInputHandler extends BlockingInputHandler {
-  VampulvBlockingInputHandler() : super();
+  VampulvBlockingInputHandler() : super(description: 'Vänta på att vampulverna ska rösta färdigt');
 }
 
 class VampulvHurtEvent extends HurtEvent {

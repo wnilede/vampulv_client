@@ -5,9 +5,9 @@ import '../game_view/nothing_to_do_widget.dart';
 import 'input_handler.dart';
 
 class BlockingInputHandler extends InputHandler {
-  BlockingInputHandler()
+  BlockingInputHandler({required super.description})
       : super(
-          description: 'Vampulv', // This is for the titel to not be spoiling, because the description is shown in the AppBar.
+          title: null,
           widget: const NothingToDoWidget(canLyncha: false),
           resultApplyer: (PlayerInput input, Game game, Player owner) {},
         );

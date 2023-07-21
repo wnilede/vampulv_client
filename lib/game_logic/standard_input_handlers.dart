@@ -10,6 +10,7 @@ import 'standard_events.dart';
 class LynchingVoteInputHandler extends InputHandler {
   LynchingVoteInputHandler({required Player proposer, required Player proposed})
       : super(
+          title: 'Lynching',
           description: 'Rösta i lynchning av ${proposed.name}',
           resultApplyer: (playerInput, game, player) {
             final newGame = game.copyWithPlayer(player.copyWith(lynchingVote: bool.parse(playerInput.message)));
@@ -45,6 +46,7 @@ class LynchingVoteInputHandler extends InputHandler {
 class LynchingWaitingResultInputHandler extends InputHandler {
   LynchingWaitingResultInputHandler()
       : super(
+          title: 'Lynching',
           description: 'Vänta på andra',
           resultApplyer: (input, game, player) {},
           widget: const Center(child: Text('Väntar på att andra ska rösta i lynchningen...')),

@@ -23,6 +23,7 @@ class Seer extends Role {
 class SeerTargetInputHandler extends InputHandler {
   SeerTargetInputHandler(int ownerId)
       : super(
+          title: 'Spådam',
           description: 'Välj spelare att använda spådamen på',
           resultApplyer: (input, game, string) {
             final seenPlayer = game.playerFromId(int.parse(input.message));

@@ -22,6 +22,7 @@ class _ConfirmChildInputHandler extends InputHandler {
     dynamic Function(PlayerInput, Game, Player)? onConfirm,
     required Widget child,
   }) : super(
+          title: 'Meddelande',
           description: description,
           widget: ConfirmMessage(child: child),
           resultApplyer: onConfirm ?? (input, game, owner) {},

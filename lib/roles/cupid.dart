@@ -62,6 +62,7 @@ class Cupid extends Role {
 class CupidTargetsInputHandler extends InputHandler {
   CupidTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
+          title: 'Cupid',
           description: 'Välj spelare att cupida',
           resultApplyer: (input, game, player) {
             setTargets(input.message == 'none'

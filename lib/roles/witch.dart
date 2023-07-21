@@ -40,6 +40,7 @@ class WitchPoisonInputHandler extends InputHandler {
 
   WitchPoisonInputHandler({required this.usePoison})
       : super(
+          title: 'Häxa',
           description: 'Välj spelare att förgifta med häxa',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);
@@ -66,6 +67,7 @@ class WitchHealingInputHandler extends InputHandler {
 
   WitchHealingInputHandler({required this.useHealing})
       : super(
+          title: 'Häxa',
           description: 'Välj spelare att hela med häxa',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);

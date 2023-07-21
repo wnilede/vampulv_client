@@ -38,6 +38,9 @@ abstract class InputHandler {
 
   final Widget widget;
 
+  /// Appears in the appbar when showing the widget.
+  final String? title;
+
   /// Appears for spectators viewing unhandled input handlers.
   final String description;
 
@@ -45,6 +48,7 @@ abstract class InputHandler {
   final dynamic Function(PlayerInput input, Game game, Player owner) resultApplyer;
 
   InputHandler({
+    required this.title,
     required this.description,
     required this.resultApplyer,
     required this.widget,

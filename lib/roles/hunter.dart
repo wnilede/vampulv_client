@@ -31,6 +31,7 @@ class Hunter extends Role {
 class HunterTargetInputHandler extends InputHandler {
   HunterTargetInputHandler()
       : super(
+          title: 'Jägare',
           description: 'Välj spelare att skjuta med jägaren',
           resultApplyer: (input, game, player) {
             final shoot = game.playerFromId(int.parse(input.message));
@@ -59,5 +60,5 @@ class HunterTargetInputHandler extends InputHandler {
 }
 
 class HunterBlockingInputHanlder extends BlockingInputHandler {
-  HunterBlockingInputHanlder() : super();
+  HunterBlockingInputHanlder() : super(description: 'Vänta på att jägare ska skjuta någon');
 }

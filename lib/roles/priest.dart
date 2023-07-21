@@ -24,6 +24,7 @@ class Priest extends Role {
 class PriestTargetInputHandler extends InputHandler {
   PriestTargetInputHandler(Function(int? target) setTarget, int? lastProtected)
       : super(
+          title: 'Präst',
           description: 'Välj spelare att använda prästen på',
           resultApplyer: (input, game, string) {
             final target = int.tryParse(input.message);

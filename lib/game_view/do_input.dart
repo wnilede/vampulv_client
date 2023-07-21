@@ -27,7 +27,7 @@ class DoInput extends ConsumerWidget {
     }
     final inputHandler = controlledPlayer.currentInputHandler;
     return Scaffold(
-      appBar: AppBar(title: inputHandler?.description == null ? const Text('Vampulv') : Text(inputHandler!.description)),
+      appBar: AppBar(title: inputHandler?.title == null ? const Text('Vampulv') : Text(inputHandler!.title!)),
       drawer: drawer,
       body: inputHandler?.widget ?? const NothingToDoWidget(),
     );
