@@ -17,13 +17,13 @@ class NothingToDoWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider)!;
-    final isNight = ref.watch(currentGameProvider.select((game) => game!.isNight));
+    final isNight = ref.watch(cGameProvider.select((game) => game!.isNight));
     return (isNight || !controlledPlayer.alive || !canLyncha
         ? const Center(child: Text('Väntar på andra spelare...', textAlign: TextAlign.center))
         : controlledPlayer.lynchingDone
             ? MaterialButton(
                 onPressed: () {
-                  ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
+                  ref.read(cMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.doneLynching,
                         body: SetDoneLynchingBody(
                           playerId: controlledPlayer.id,
@@ -36,7 +36,7 @@ class NothingToDoWidget extends ConsumerWidget {
             : PlayerMap(
                 description: 'Välj någon att lyncha',
                 onDone: (selected) {
-                  ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
+                  ref.read(cMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.proposeLynching,
                         body: ProposeLynchingBody(
                           proposerId: controlledPlayer.id,
@@ -45,7 +45,7 @@ class NothingToDoWidget extends ConsumerWidget {
                       ));
                 },
                 onCancel: () {
-                  ref.read(currentMessageSenderProvider).sendChange(NetworkMessage.fromObject(
+                  ref.read(cMessageSenderProvider).sendChange(NetworkMessage.fromObject(
                         type: NetworkMessageType.doneLynching,
                         body: SetDoneLynchingBody(
                           playerId: controlledPlayer.id,

@@ -41,7 +41,7 @@ class RoleDescription extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final game = ref.watch(currentGameProvider);
+    final game = ref.watch(cGameProvider);
     if (game == null) {
       return RoleTypeDescription(role.type);
     }

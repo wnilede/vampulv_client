@@ -27,7 +27,7 @@ class RoleCardView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final game = ref.watch(currentGameProvider);
+    final game = ref.watch(cGameProvider);
     final owner = game?.players.firstWhereOrDefault((player) => player.roles.contains(role));
     return _RoleCardView(
       title: owner == null ? role.type.displayName : role.getDisplayName(game!, owner),

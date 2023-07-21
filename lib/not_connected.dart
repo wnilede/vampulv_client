@@ -15,7 +15,7 @@ class NotConnected extends ConsumerWidget {
             const Text('Inte ansluten'),
             ElevatedButton(
               onPressed: () {
-                ref.invalidate(currentMessageSenderProvider);
+                ref.invalidate(cMessageSenderProvider);
               },
               child: const Text('Försök igen'),
             )

@@ -15,12 +15,12 @@ import 'package:vampulv/network/synchronized_data.dart';
 part 'synchronized_data_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class CurrentSynchronizedData extends _$CurrentSynchronizedData {
+class CSynchronizedData extends _$CSynchronizedData {
   @override
   SynchronizedData build() {
-    final messageSender = ref.watch(currentMessageSenderProvider);
+    final messageSender = ref.watch(cMessageSenderProvider);
     messageSender.sendString('Change room:default');
-    ref.watch(currentMessageSenderProvider.notifier).subscribe(applyChange);
+    ref.watch(cMessageSenderProvider.notifier).subscribe(applyChange);
     return SynchronizedData(game: SavedGame(configuration: GameConfiguration(randomSeed: Random().nextInt(1 << 32 - 1))));
   }
 
@@ -56,7 +56,7 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
         if (newDevices.isNotEmpty &&
             oldDevices.isNotEmpty &&
             ref.read(connectedDeviceIdentifierProvider) == oldDevices.map((device) => device.identifier).min()) {
-          ref.read(currentMessageSenderProvider).sendSynchronizedData(state);
+          ref.read(cMessageSenderProvider).sendSynchronizedData(state);
         }
         break;
       case NetworkMessageType.changeDeviceControls:
@@ -79,5 +79,4 @@ class CurrentSynchronizedData extends _$CurrentSynchronizedData {
 }
 
 @riverpod
-GameConfiguration gameConfiguration(GameConfigurationRef ref) =>
-    ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration));
+GameConfiguration gameConfiguration(GameConfigurationRef ref) => ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.configuration));

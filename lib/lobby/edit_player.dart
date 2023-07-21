@@ -53,7 +53,7 @@ class _EditPlayerState extends ConsumerState<EditPlayer> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     if (widget.playerId == null) {
-                      ref.read(currentMessageSenderProvider).sendGameConfiguration(configuration.copyWith(players: [
+                      ref.read(cMessageSenderProvider).sendGameConfiguration(configuration.copyWith(players: [
                             ...configuration.players,
                             PlayerConfiguration(
                               id: count().where((i) => configuration.players.every((player) => player.id != i)).first as int,
@@ -61,7 +61,7 @@ class _EditPlayerState extends ConsumerState<EditPlayer> {
                             )
                           ]));
                     } else {
-                      ref.read(currentMessageSenderProvider).sendGameConfiguration(configuration.copyWith(
+                      ref.read(cMessageSenderProvider).sendGameConfiguration(configuration.copyWith(
                             players: configuration.players
                                 .map((player) => player.id == widget.playerId //
                                     ? player.copyWith(name: nameController.text)

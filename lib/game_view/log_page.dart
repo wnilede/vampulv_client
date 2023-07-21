@@ -15,7 +15,7 @@ class LogPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = player ?? ref.watch(controlledPlayerProvider);
-    final game = ref.watch(currentGameProvider);
+    final game = ref.watch(cGameProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Historik')),
       drawer: drawer,

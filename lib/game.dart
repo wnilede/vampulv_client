@@ -7,6 +7,7 @@ import 'package:vampulv/network/message_bodies/propose_lynching_body.dart';
 import 'package:vampulv/network/message_bodies/set_done_lynching_body.dart';
 import 'package:vampulv/network/network_message_type.dart';
 import 'package:vampulv/network/player_input.dart';
+import 'package:vampulv/network/saved_game.dart';
 import 'package:vampulv/player.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/roles/event.dart';
@@ -85,22 +86,24 @@ class Game with _$Game {
         .applyEvent(NightBeginsEvent());
   }
 
-  factory Game.fromNetworkMessages(GameConfiguration configuration, List<NetworkMessage> messages) {
-    Game game = Game.fromConfiguration(configuration);
+  factory Game.fromSavedGame(SavedGame savedGame) => Game.fromConfiguration(savedGame.configuration).applyNetworkMessages(savedGame.events);
+
+  Game applyNetworkMessages(List<NetworkMessage> messages) {
+    Game newGame = this;
     for (final message in messages.orderBy((message) => message.timestamp)) {
       if (!message.type.isGameChange) continue;
       if (message.type == NetworkMessageType.inputToGame) {
-        game = game.applyInput(PlayerInput.fromJson(message.body));
+        newGame = newGame.applyInput(PlayerInput.fromJson(message.body));
       } else if (message.type == NetworkMessageType.proposeLynching) {
-        game = game.applyEvent(ProposeLynchingEvent.fromBody((ProposeLynchingBody.fromJson(message.body))));
+        newGame = newGame.applyEvent(ProposeLynchingEvent.fromBody((ProposeLynchingBody.fromJson(message.body))));
       } else if (message.type == NetworkMessageType.doneLynching) {
         final body = SetDoneLynchingBody.fromJson(message.body);
-        game = game.copyWithPlayer(game.playerFromId(body.playerId).copyWith(lynchingDone: body.value))._runUntilInput();
+        newGame = newGame.copyWithPlayer(newGame.playerFromId(body.playerId).copyWith(lynchingDone: body.value))._runUntilInput();
       } else {
         throw UnimplementedError("Cannot yet handle network messages of type '${message.type.name}'.");
       }
     }
-    return game;
+    return newGame;
   }
 
   Game applyEvent(Event event) {

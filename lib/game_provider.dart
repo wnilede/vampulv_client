@@ -1,36 +1,32 @@
+import 'package:darq/darq.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vampulv/game.dart';
-import 'package:vampulv/game_configuration.dart';
-import 'package:vampulv/network/network_message.dart';
-import 'package:vampulv/network/player_input.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 
 part 'game_provider.g.dart';
 
 @riverpod
-class CurrentGame extends _$CurrentGame {
+class CGame extends _$CGame {
   @override
   Game? build() {
-    if (!ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.hasBegun))) {
+    ref.listen(cSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game), (previous, next) {
+      if (state != null && previous != null && next.hasBegun && next.configuration == previous.configuration) {
+        final pastFromNext = next.events.take(previous.events.length);
+        final futureFromNext = next.events.skip(previous.events.length).toList();
+        if (pastFromNext.sequenceEquals(previous.events) &&
+            pastFromNext.every((pastEvent) => futureFromNext.every((futureEvent) => pastEvent.timestamp! <= futureEvent.timestamp!))) {
+          state = state!.applyNetworkMessages(futureFromNext);
+          return;
+        }
+      }
+      ref.invalidateSelf();
+    });
+
+    // The riverpod documentation said not to use ref.read inside build, but in this case it should be alright, right?
+    final game = ref.read(cSynchronizedDataProvider).game;
+    if (!game.hasBegun) {
       return null;
     }
-    return Game.fromNetworkMessages(
-      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration)),
-      ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.events)),
-    );
-  }
-
-  void applyInput(PlayerInput input) {
-    state = state?.applyInput(input);
-  }
-
-  void recreateGame(GameConfiguration gameConfiguration, List<NetworkMessage> gameEvents) {
-    state = Game.fromNetworkMessages(gameConfiguration, gameEvents);
-  }
-
-  int hej() => 4;
-
-  void game(Game? game) {
-    state = game;
+    return Game.fromSavedGame(game);
   }
 }

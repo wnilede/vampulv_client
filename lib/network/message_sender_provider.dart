@@ -12,7 +12,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 part 'message_sender_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class CurrentMessageSender extends _$CurrentMessageSender {
+class CMessageSender extends _$CMessageSender {
   @override
   MessageSender build() {
     const port = 6353;

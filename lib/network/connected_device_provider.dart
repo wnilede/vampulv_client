@@ -22,7 +22,7 @@ class ConnectedDeviceIdentifier extends _$ConnectedDeviceIdentifier {
 @riverpod
 ConnectedDevice? connectedDevice(ConnectedDeviceRef ref) {
   final identifier = ref.watch(connectedDeviceIdentifierProvider);
-  final devices = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.connectedDevices));
+  final devices = ref.watch(cSynchronizedDataProvider.select((synchronizedData) => synchronizedData.connectedDevices));
 
   return devices.firstWhereOrDefault((device) => device.identifier == identifier);
 }
@@ -32,7 +32,7 @@ ConnectedDevice? connectedDevice(ConnectedDeviceRef ref) {
 Player? controlledPlayer(ControlledPlayerRef ref) {
   final controlledPlayerId = ref.watch(connectedDeviceProvider.select((connectedDevice) => connectedDevice?.controlledPlayerId));
   if (controlledPlayerId == null) return null;
-  final controlledPlayer = ref.watch(currentGameProvider)?.players.singleWhere((player) => player.id == controlledPlayerId);
+  final controlledPlayer = ref.watch(cGameProvider)?.players.singleWhere((player) => player.id == controlledPlayerId);
 
   return controlledPlayer;
 }

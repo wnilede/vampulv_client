@@ -84,7 +84,7 @@ class _GameSettingsState extends ConsumerState<GameSettings> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(currentMessageSenderProvider).sendGameConfiguration(configuration.copyWith(
+                    ref.read(cMessageSenderProvider).sendGameConfiguration(configuration.copyWith(
                           maxLives: int.parse(livesController.text),
                           rolesPerPlayer: int.parse(rolesController.text),
                         ));

@@ -26,7 +26,7 @@
         {
             "label": "watch build_runner automatically run on startup",
             "type": "shell",
-            "command": "flutter pub run build_runner watch",
+            "command": "dart run build_runner watch",
             "presentation": {
                 "reveal": "never",
                 "panel": "dedicated"

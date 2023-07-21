@@ -17,9 +17,9 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
   @override
   Widget build(BuildContext context) {
     final playersOrdered = ref
-        .watch(currentGameProvider.select((game) => game?.players ?? []))
+        .watch(cGameProvider.select((game) => game?.players ?? []))
         .orderByDescending((player) => 2 * player.unhandledInputHandlers.length + (player.lynchingDone ? 0 : 1));
-    final bool isNight = ref.watch(currentGameProvider.select((game) => game!.isNight));
+    final bool isNight = ref.watch(cGameProvider.select((game) => game!.isNight));
     return DefaultTabController(
       length: playersOrdered.length,
       child: Scaffold(

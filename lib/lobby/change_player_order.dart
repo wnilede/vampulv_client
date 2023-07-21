@@ -23,7 +23,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
+    final gameConfiguration = ref.watch(cSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
     if (gameConfiguration.players.every((player) => player.id != selectedPlayerId)) {
       // Happens when someone removes the player that we have selected.
       selectedPlayerId = null;
@@ -69,7 +69,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                     ...gameConfiguration.players,
                   ];
                   newPlayerOrder.insert(indexTo + (indexFrom > indexTo ? 1 : 0), newPlayerOrder.removeAt(indexFrom));
-                  ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
+                  ref.read(cMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(players: newPlayerOrder));
                 },
                 builder: (context, candidateData, rejectedData) {
                   return const SizedBox();
@@ -122,9 +122,9 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null
                     ? null
                     : () {
-                        MessageSender messageSender = ref.read(currentMessageSenderProvider);
+                        MessageSender messageSender = ref.read(cMessageSenderProvider);
                         // If someone controls the player that is to be removed, we must remove that link first.
-                        for (final device in ref.read(currentSynchronizedDataProvider).connectedDevices) {
+                        for (final device in ref.read(cSynchronizedDataProvider).connectedDevices) {
                           if (device.controlledPlayerId == selectedPlayerId) {
                             messageSender.sendDeviceControls(device.identifier, null);
                           }
@@ -143,7 +143,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                         selectedPlayerId == ref.read(connectedDeviceProvider)?.controlledPlayerId
                     ? null
                     : () {
-                        ref.read(currentMessageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);
+                        ref.read(cMessageSenderProvider).sendDeviceControls(deviceIdentifier, selectedPlayerId);
                       },
                 child: const Text('Styr spelare', textAlign: TextAlign.center),
               ),
@@ -153,7 +153,7 @@ class _ChangePlayerOrderMapState extends ConsumerState<ChangePlayerOrderMap> {
                 onPressed: selectedPlayerId == null || ref.read(connectedDeviceProvider)?.controlledPlayerId == null
                     ? null
                     : () {
-                        ref.read(currentMessageSenderProvider).sendDeviceControls(deviceIdentifier!, null);
+                        ref.read(cMessageSenderProvider).sendDeviceControls(deviceIdentifier!, null);
                       },
                 child: const Text('Sluta styr spelare', textAlign: TextAlign.center),
               ),

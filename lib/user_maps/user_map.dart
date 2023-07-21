@@ -61,7 +61,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
 
   @override
   Widget build(BuildContext context) {
-    final players = ref.watch(currentGameProvider.select((game) => game!.players));
+    final players = ref.watch(cGameProvider.select((game) => game!.players));
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
     Widget descriptionText = Column(
@@ -161,7 +161,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }
                           if (widget.identifier != null) {
-                            ref.read(currentMessageSenderProvider).sendPlayerInput(
+                            ref.read(cMessageSenderProvider).sendPlayerInput(
                                 selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'),
                                 widget.identifier!);
                           }

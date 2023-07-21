@@ -21,7 +21,7 @@ class _LobbyState extends ConsumerState<Lobby> {
 
   @override
   Widget build(BuildContext context) {
-    final gameConfiguration = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.configuration));
+    final gameConfiguration = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.configuration));
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -56,8 +56,8 @@ class _LobbyState extends ConsumerState<Lobby> {
                             gameConfiguration.players.length < 3
                         ? null
                         : () {
-                            ref.read(currentMessageSenderProvider).sendSynchronizedData(
-                                  ref.read(currentSynchronizedDataProvider).copyWith.game(hasBegun: true),
+                            ref.read(cMessageSenderProvider).sendSynchronizedData(
+                                  ref.read(cSynchronizedDataProvider).copyWith.game(hasBegun: true),
                                 );
                           },
                     child: const Text('Starta'),

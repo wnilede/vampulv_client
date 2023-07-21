@@ -9,7 +9,7 @@ class ConfigurationSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final configuration = ref.watch(gameConfigurationProvider);
-    final gameHasBegun = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.hasBegun));
+    final gameHasBegun = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.hasBegun));
     return ListView(
       shrinkWrap: true,
       children: [

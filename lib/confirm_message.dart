@@ -16,7 +16,7 @@ class ConfirmMessage extends ConsumerWidget {
         Expanded(child: child),
         MaterialButton(
           onPressed: () {
-            ref.read(currentMessageSenderProvider).sendPlayerInput('', inputIdentifier);
+            ref.read(cMessageSenderProvider).sendPlayerInput('', inputIdentifier);
           },
           child: const Text('OK'),
         )

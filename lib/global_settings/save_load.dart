@@ -27,7 +27,7 @@ class _SaveLoadState extends ConsumerState<SaveLoad> {
         title: const Text('Spara och öppna spel'),
       ),
       body: () {
-        final gameHasBegun = ref.watch(currentSynchronizedDataProvider.select((sd) => sd.game.hasBegun));
+        final gameHasBegun = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.hasBegun));
         final prefs = ref.watch(currentSharedPreferencesProvider);
 
         if (prefs.isLoading) {
@@ -75,7 +75,7 @@ class _SaveLoadState extends ConsumerState<SaveLoad> {
                                 savedGames.copyWith(
                                   games: {
                                     ...savedGames.games,
-                                    nameText: ref.read(currentSynchronizedDataProvider).game,
+                                    nameText: ref.read(cSynchronizedDataProvider).game,
                                   },
                                 ),
                               ),
@@ -89,8 +89,8 @@ class _SaveLoadState extends ConsumerState<SaveLoad> {
                   child: MaterialButton(
                     onPressed: savedGames.games.containsKey(nameText)
                         ? () {
-                            final synchronizedData = ref.read(currentSynchronizedDataProvider);
-                            ref.read(currentMessageSenderProvider).sendSynchronizedData(
+                            final synchronizedData = ref.read(cSynchronizedDataProvider);
+                            ref.read(cMessageSenderProvider).sendSynchronizedData(
                                   synchronizedData.copyWith(
                                     game: savedGames.games[nameText]!,
                                     connectedDevices:

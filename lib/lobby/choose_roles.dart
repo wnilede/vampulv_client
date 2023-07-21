@@ -13,7 +13,7 @@ class ChooseRoles extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GameConfiguration gameConfiguration =
-        ref.watch(currentSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
+        ref.watch(cSynchronizedDataProvider.select((synchronizedData) => synchronizedData.game.configuration));
     return LayoutBuilder(builder: (context, constraints) {
       final listsAreHorizontal = 230 * constraints.maxWidth > 170 * constraints.maxHeight;
       return Flex(
@@ -23,7 +23,7 @@ class ChooseRoles extends ConsumerWidget {
           Expanded(
             child: DragTarget<RoleType>(
               onAccept: (dragged) {
-                ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
+                ref.read(cMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(
                       roles: gameConfiguration.roles //
                           .append(dragged)
                           .orderBy((role) => role.index)
@@ -45,7 +45,7 @@ class ChooseRoles extends ConsumerWidget {
           Expanded(
             child: DragTarget<int>(
               onAccept: (draggedIndex) {
-                ref.read(currentMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(roles: [
+                ref.read(cMessageSenderProvider).sendGameConfiguration(gameConfiguration.copyWith(roles: [
                       // Should use exceptAt, but it does not work for first and last index.
                       ...gameConfiguration.roles.skipLast(gameConfiguration.roles.length - draggedIndex),
                       ...gameConfiguration.roles.skip(draggedIndex + 1),
