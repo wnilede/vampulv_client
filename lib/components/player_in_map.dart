@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/player.dart';
-import 'package:vampulv/player_summary.dart';
+import 'package:vampulv/game_logic/player.dart';
+import 'package:vampulv/components/player_summary.dart';
 
 class PlayerInMap extends ConsumerWidget {
   final Player player;

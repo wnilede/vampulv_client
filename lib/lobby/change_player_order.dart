@@ -7,9 +7,9 @@ import 'package:vampulv/lobby/edit_player.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_sender.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/player_configuration.dart';
+import 'package:vampulv/game_logic/player_configuration.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/user_maps/circular_layout.dart';
+import 'package:vampulv/components/circular_layout.dart';
 
 class ChangePlayerOrderMap extends ConsumerStatefulWidget {
   const ChangePlayerOrderMap({super.key});

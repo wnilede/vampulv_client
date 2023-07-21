@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vampulv/player_configuration.dart';
-import 'package:vampulv/roles/role_type.dart';
+import 'package:vampulv/game_logic/player_configuration.dart';
+import 'package:vampulv/game_logic/role_type.dart';
 
 part 'game_configuration.freezed.dart';
 part 'game_configuration.g.dart';

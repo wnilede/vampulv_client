@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:vampulv/game.dart';
+import 'package:vampulv/game_logic/game.dart';
 import 'package:vampulv/input_handlers/confirm_child_input_handlers.dart';
-import 'package:vampulv/network/player_input.dart';
-import 'package:vampulv/player.dart';
+import 'package:vampulv/game_logic/player_input.dart';
+import 'package:vampulv/game_logic/player.dart';
 import 'package:vampulv/roles/card_turner.dart';
 import 'package:vampulv/roles/cupid.dart';
 import 'package:vampulv/roles/hoodler.dart';
 import 'package:vampulv/roles/hunter.dart';
 import 'package:vampulv/roles/priest.dart';
 import 'package:vampulv/roles/seer.dart';
-import 'package:vampulv/roles/standard_input_handlers.dart';
+import 'package:vampulv/game_logic/standard_input_handlers.dart';
 import 'package:vampulv/roles/vampulv.dart';
 import 'package:vampulv/roles/witch.dart';
 

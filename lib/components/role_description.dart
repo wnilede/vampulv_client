@@ -1,9 +1,9 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_provider.dart';
-import 'package:vampulv/roles/role.dart';
-import 'package:vampulv/roles/role_type.dart';
+import 'package:vampulv/game_logic/game_provider.dart';
+import 'package:vampulv/game_logic/role.dart';
+import 'package:vampulv/game_logic/role_type.dart';
 
 class RoleTypeDescription extends StatelessWidget {
   final RoleType role;

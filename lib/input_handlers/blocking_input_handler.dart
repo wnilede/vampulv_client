@@ -1,8 +1,8 @@
-import 'package:vampulv/game.dart';
+import 'package:vampulv/game_logic/game.dart';
 import 'package:vampulv/game_view/nothing_to_do_widget.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/network/player_input.dart';
-import 'package:vampulv/player.dart';
+import 'package:vampulv/game_logic/player_input.dart';
+import 'package:vampulv/game_logic/player.dart';
 
 class BlockingInputHandler extends InputHandler {
   BlockingInputHandler()

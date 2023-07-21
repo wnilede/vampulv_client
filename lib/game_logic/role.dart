@@ -1,7 +1,7 @@
-import 'package:vampulv/game.dart';
-import 'package:vampulv/player.dart';
-import 'package:vampulv/roles/event.dart';
-import 'package:vampulv/roles/role_type.dart';
+import 'package:vampulv/game_logic/game.dart';
+import 'package:vampulv/game_logic/player.dart';
+import 'package:vampulv/game_logic/event.dart';
+import 'package:vampulv/game_logic/role_type.dart';
 
 abstract class Role {
   List<RoleReaction> reactions;

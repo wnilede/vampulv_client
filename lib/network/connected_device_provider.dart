@@ -1,9 +1,9 @@
 import 'package:darq/darq.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/game_logic/game_provider.dart';
 import 'package:vampulv/network/connected_device.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/player.dart';
+import 'package:vampulv/game_logic/player.dart';
 
 part 'connected_device_provider.g.dart';
 

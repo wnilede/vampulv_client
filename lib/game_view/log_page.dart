@@ -1,10 +1,10 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_provider.dart';
-import 'package:vampulv/list_item.dart';
+import 'package:vampulv/game_logic/game_provider.dart';
+import 'package:vampulv/components/list_item.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
-import 'package:vampulv/player.dart';
+import 'package:vampulv/game_logic/player.dart';
 
 class LogPage extends ConsumerWidget {
   final Widget? drawer;

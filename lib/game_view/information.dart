@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/list_item.dart';
-import 'package:vampulv/lobby/configuration_summary.dart';
+import 'package:vampulv/components/list_item.dart';
+import 'package:vampulv/components/configuration_summary.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/player_summary.dart';
-import 'package:vampulv/role_card_view.dart';
+import 'package:vampulv/components/player_summary.dart';
+import 'package:vampulv/components/role_card_view.dart';
 
 class Information extends ConsumerWidget {
   final Widget drawer;

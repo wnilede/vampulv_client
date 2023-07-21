@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/game_logic/game_provider.dart';
 import 'package:vampulv/game_view/nothing_to_do_widget.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 

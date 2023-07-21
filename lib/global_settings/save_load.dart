@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vampulv/cheating_indicator.dart';
+import 'package:vampulv/components/cheating_indicator.dart';
 import 'package:vampulv/global_settings/saved_games_list.dart';
-import 'package:vampulv/global_settings/shared_preferences_provider.dart';
+import 'package:vampulv/utility/shared_preferences_provider.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
 

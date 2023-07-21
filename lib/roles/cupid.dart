@@ -1,14 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:darq/darq.dart';
-import 'package:vampulv/game.dart';
+import 'package:vampulv/game_logic/game.dart';
 import 'package:vampulv/input_handlers/input_handler.dart';
-import 'package:vampulv/log_entry.dart';
-import 'package:vampulv/player.dart';
-import 'package:vampulv/roles/role.dart';
-import 'package:vampulv/roles/role_type.dart';
-import 'package:vampulv/roles/standard_events.dart';
-import 'package:vampulv/user_maps/user_map.dart';
+import 'package:vampulv/game_logic/log_entry.dart';
+import 'package:vampulv/game_logic/player.dart';
+import 'package:vampulv/game_logic/role.dart';
+import 'package:vampulv/game_logic/role_type.dart';
+import 'package:vampulv/game_logic/standard_events.dart';
+import 'package:vampulv/components/player_map.dart';
 
 class Cupid extends Role {
   static const int numberOfTargets = 2;

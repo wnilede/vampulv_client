@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/lobby/choose_roles.dart';
-import 'package:vampulv/lobby/configuration_summary.dart';
+import 'package:vampulv/components/configuration_summary.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/player_configuration.dart';
+import 'package:vampulv/game_logic/player_configuration.dart';
 import 'package:vampulv/lobby/change_player_order.dart';
 
 class Lobby extends ConsumerStatefulWidget {

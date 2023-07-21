@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vampulv/game_view/log_page.dart';
-import 'package:vampulv/player.dart';
-import 'package:vampulv/role_card_view.dart';
+import 'package:vampulv/game_logic/player.dart';
+import 'package:vampulv/components/role_card_view.dart';
 
 class PlayerSummary extends StatelessWidget {
   final Player player;

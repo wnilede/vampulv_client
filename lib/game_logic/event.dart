@@ -1,4 +1,4 @@
-import 'package:vampulv/roles/standard_events.dart';
+import 'package:vampulv/game_logic/standard_events.dart';
 import 'package:vampulv/roles/vampulv.dart';
 
 abstract class Event {

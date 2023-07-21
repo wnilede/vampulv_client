@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
-import 'package:vampulv/user_maps/user_map.dart';
+import 'package:vampulv/components/player_map.dart';
 
 class ChangeControlledPlayer extends ConsumerWidget {
   final Widget drawer;

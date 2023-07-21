@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:darq/darq.dart';
-import 'package:vampulv/player.dart';
-import 'package:vampulv/roles/event.dart';
-import 'package:vampulv/roles/rule.dart';
-import 'package:vampulv/roles/standard_events.dart';
-import 'package:vampulv/roles/standard_input_handlers.dart';
+import 'package:vampulv/game_logic/player.dart';
+import 'package:vampulv/game_logic/event.dart';
+import 'package:vampulv/game_logic/rule.dart';
+import 'package:vampulv/game_logic/standard_events.dart';
+import 'package:vampulv/game_logic/standard_input_handlers.dart';
 
 class StandardRule extends Rule {
   StandardRule()

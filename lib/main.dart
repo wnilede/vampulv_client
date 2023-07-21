@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
-import 'package:vampulv/game_provider.dart';
+import 'package:vampulv/game_logic/game_provider.dart';
 import 'package:vampulv/game_view/game_view.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/synchronized_data_provider.dart';
-import 'package:vampulv/not_connected.dart';
+import 'package:vampulv/components/not_connected.dart';
 
 import 'lobby/create_game_view.dart';
 

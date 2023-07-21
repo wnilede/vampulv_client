@@ -1,5 +1,5 @@
-import 'package:vampulv/roles/role.dart';
-import 'package:vampulv/roles/role_type.dart';
+import 'package:vampulv/game_logic/role.dart';
+import 'package:vampulv/game_logic/role_type.dart';
 
 class Lycan extends Role {
   Lycan() : super(type: RoleType.lycan);

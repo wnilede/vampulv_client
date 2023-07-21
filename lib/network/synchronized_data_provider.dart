@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:darq/darq.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vampulv/network/connected_device.dart';
-import 'package:vampulv/game_configuration.dart';
+import 'package:vampulv/game_logic/game_configuration.dart';
 import 'package:vampulv/network/connected_device_provider.dart';
 import 'package:vampulv/network/message_bodies/change_device_controls_body.dart';
 import 'package:vampulv/network/message_sender_provider.dart';
 import 'package:vampulv/network/network_message.dart';
 import 'package:vampulv/network/network_message_type.dart';
-import 'package:vampulv/network/saved_game.dart';
+import 'package:vampulv/game_logic/saved_game.dart';
 import 'package:vampulv/network/synchronized_data.dart';
 
 part 'synchronized_data_provider.g.dart';
