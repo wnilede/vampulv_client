@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:darq/darq.dart';
 
+import '../input_handlers/confirm_child_input_handlers.dart';
 import 'event.dart';
 import 'player.dart';
 import 'rule.dart';
@@ -68,14 +69,24 @@ class StandardRule extends Rule {
                   .map((dyingPlayer) => DieEvent(playerId: dyingPlayer.id, appliedMorning: false)),
             ],
           ),
-          // Set player field when die event is sent.
+          // Set player field and notify everyone when die event is sent.
           RuleReaction<DieEvent>(
             priority: 0,
             onApply: (event, game) {
-              final player = game.playerFromId(event.playerId);
+              final dyingPlayer = game.playerFromId(event.playerId);
               return [
-                game.copyWithPlayer(player.copyWith(alive: false)),
-                '${player.name} dog.',
+                ...game.alivePlayers.map((player) {
+                  return player.id == dyingPlayer.id
+                      ? player.copyWith(
+                          alive: false,
+                          unhandledInputHandlers:
+                              player.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText('Du dog!')).toList())
+                      : player.copyWith(
+                          unhandledInputHandlers: player.unhandledInputHandlers
+                              .append(EarlyConfirmChildInputHandler.withText('${dyingPlayer.name} dog!'))
+                              .toList());
+                }),
+                '${dyingPlayer.name} dog.',
               ];
             },
           ),
