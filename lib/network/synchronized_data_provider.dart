@@ -19,9 +19,6 @@ part 'synchronized_data_provider.g.dart';
 class CSynchronizedData extends _$CSynchronizedData {
   @override
   SynchronizedData build() {
-    final messageSender = ref.watch(cMessageSenderProvider);
-    messageSender.sendString('Change room:default');
-    ref.watch(cMessageSenderProvider.notifier).subscribe(applyChange);
     return SynchronizedData(game: SavedGame(configuration: GameConfiguration(randomSeed: Random().nextInt(1 << 32 - 1))));
   }
 

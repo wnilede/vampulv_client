@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'change_server.dart';
 import 'save_load.dart';
 
 class GlobalSettings extends StatelessWidget {
@@ -16,14 +17,23 @@ class GlobalSettings extends StatelessWidget {
       body: ListView(
         children: [
           MaterialButton(
-            onPressed: () async {
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChangeServer()),
+              );
+            },
+            child: const Text('Ändra server'),
+          ),
+          MaterialButton(
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SaveLoad()),
               );
             },
             child: const Text('Spara och öppna spel'),
-          )
+          ),
         ],
       ),
     );

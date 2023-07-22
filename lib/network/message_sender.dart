@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,13 +17,17 @@ part 'message_sender.freezed.dart';
 @freezed
 class MessageSender with _$MessageSender {
   factory MessageSender({
-    WebSocketSink? sink,
-    Stream<dynamic>? stream,
-    required final Ref ref,
+    required String? error,
+    required WebSocketSink? sink,
+    required Ref ref,
   }) = _MessageSender;
+  factory MessageSender.connected(WebSocketSink sink, Ref ref) => MessageSender(error: null, sink: sink, ref: ref);
+  factory MessageSender.loading(Ref ref) => MessageSender(error: null, sink: null, ref: ref);
+  factory MessageSender.error(String error, Ref ref) => MessageSender(error: error, sink: null, ref: ref);
   const MessageSender._();
 
-  bool get isConnected => sink != null && stream != null;
+  bool get isConnected => sink != null;
+  bool get isConnecting => sink == null && error == null;
 
   void sendChange(NetworkMessage event) {
     if (event.timestamp == null) {

@@ -1,6 +1,6 @@
 enum NetworkMessageType {
   setDevices(isGameChange: false),
-  setIdentifier(isGameChange: false),
+  setIdentifier(isSynchronizedDataChange: false, isGameChange: false),
   setGameConfiguration(isGameChange: false),
   changeDeviceControls(isGameChange: false),
   setSynchronizedData(isGameChange: false),
