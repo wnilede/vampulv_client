@@ -21,6 +21,7 @@ class LogPage extends ConsumerWidget {
       appBar: AppBar(title: const Text('Historik')),
       drawer: drawer,
       body: ListView(
+        reverse: true,
         children: game!.log
             .where((logEntry) =>
                 logEntry.playerVisibleTo == null || //
