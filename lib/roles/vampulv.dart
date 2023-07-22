@@ -52,7 +52,7 @@ class VampulvRule extends Rule {
                       ? 'Du är den enda vampulven!'
                       : otherVampulvsNames.length == 1
                           ? 'Den andra vampulven är ${otherVampulvsNames.single}!'
-                          : 'De andra vampulverna är ${otherVampulvsNames.listNicely}!';
+                          : 'De andra vampulverna är ${otherVampulvsNames.listedNicely}!';
                   return [
                     messageFor.copyWith(
                         unhandledInputHandlers:

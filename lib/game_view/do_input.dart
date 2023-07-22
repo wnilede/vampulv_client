@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../game_logic/game_provider.dart';
 import '../network/connected_device_provider.dart';
+import 'game_finished.dart';
 import 'nothing_to_do_widget.dart';
 
 class DoInput extends ConsumerWidget {
@@ -13,17 +14,9 @@ class DoInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controlledPlayer = ref.watch(controlledPlayerProvider)!;
-    if (ref.watch(cGameProvider.select((game) => game!.isFinished))) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Spelet är slut')),
-        drawer: drawer,
-        body: Center(
-          child: Text(
-            controlledPlayer.isWinner ? 'Du vann!' : 'Du förlorade!',
-            style: Theme.of(context).textTheme.displaySmall,
-          ),
-        ),
-      );
+    final gameIsFinished = ref.watch(cGameProvider.select((game) => game!.isFinished));
+    if (gameIsFinished) {
+      return GameFinished(drawer: drawer);
     }
     final inputHandler = controlledPlayer.currentInputHandler;
     return Scaffold(

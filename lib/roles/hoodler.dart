@@ -61,7 +61,7 @@ class HoodlerTargetsInputHandler extends InputHandler {
             setTargets(targets);
             return targets.isEmpty
                 ? 'Det fanns ingen kvar för din hoodler att välja, så du uppfyller vinstvillkoret automatiskt.'
-                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listNicely} för din hoodler.';
+                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listedNicely} för din hoodler.';
           },
           widget: PlayerMap(
             numberSelected: numberOfTargets,
