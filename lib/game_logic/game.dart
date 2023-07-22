@@ -39,14 +39,21 @@ class Game with _$Game {
   const Game._();
 
   factory Game.fromConfiguration(GameConfiguration configuration) {
-    assert(configuration.roles.length >= configuration.players.length * configuration.rolesPerPlayer,
-        'There are not enough roles for all players.');
+    assert(configuration.problems.isEmpty);
     final randomGenerator = Xorshift32(configuration.randomSeed);
-    final players = <Player>[];
-    final shuffledRoles = configuration.roles.map((roleType) => roleType.produceRole()).randomize(randomGenerator).toList();
 
-    // Every image for a specific role is used the same number of times, except for some which are used once more than the rest. Which these images are is randomized.
-    for (final roleOfType in shuffledRoles.groupBy((role) => role.type)) {
+    // Shuffle the roles while guaranteeing that the forced roles will be used
+    final shuffledOrdinaryRoles = configuration.ordinaryRoles.randomize(randomGenerator).toList();
+    final ordinaryRolesUsed = configuration.players.length * configuration.rolesPerPlayer - configuration.forcedRoles.length;
+    final allRolesShuffled = configuration.forcedRoles
+        .followedBy(shuffledOrdinaryRoles.take(ordinaryRolesUsed))
+        .randomize(randomGenerator)
+        .followedBy(shuffledOrdinaryRoles.skip(ordinaryRolesUsed))
+        .map((roleType) => roleType.produceRole())
+        .toList();
+
+    // Give every role an image. Every image for a specific role is used the same number of times, except for some which are used once more than the rest. Which these images are are randomized.
+    for (final roleOfType in allRolesShuffled.groupBy((role) => role.type)) {
       List<int> usedOnceLess = [];
       for (final role in roleOfType) {
         if (usedOnceLess.isEmpty) {
@@ -57,25 +64,28 @@ class Game with _$Game {
       }
     }
 
+    // Create the players with the shuffled roles
+    final players = <Player>[];
     for (int i = 0; i < configuration.players.length; i++) {
       players.add(Player(
         configuration: configuration.players[i],
-        roles: shuffledRoles
-            .sublist(
-              configuration.rolesPerPlayer * i,
-              configuration.rolesPerPlayer * (i + 1),
-            )
-            .toList(),
+        roles: allRolesShuffled.sublist(
+          configuration.rolesPerPlayer * i,
+          configuration.rolesPerPlayer * (i + 1),
+        ),
         maxLives: configuration.maxLives,
         lives: configuration.maxLives,
       ));
     }
+
+    // Start the first night and return the game
     return Game(
       configuration: configuration,
       randomGenerator: randomGenerator,
       players: players,
-      rolesInDeck: shuffledRoles.sublist(configuration.rolesPerPlayer * configuration.players.length),
-      rules: configuration.roles //
+      rolesInDeck: allRolesShuffled.skip(configuration.forcedRoles.length + ordinaryRolesUsed).toList(),
+      rules: allRolesShuffled
+          .map((role) => role.type)
           .distinct()
           .map((role) => role.produceRule())
           .nonNulls

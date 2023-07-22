@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../components/configuration_summary.dart';
 import '../game_logic/player_configuration.dart';
 import '../network/message_sender_provider.dart';
 import '../network/synchronized_data_provider.dart';
 import 'change_player_order.dart';
 import 'choose_roles.dart';
+import 'other_settings.dart';
 
 class Lobby extends ConsumerStatefulWidget {
   final Widget drawer;
@@ -45,7 +45,7 @@ class _LobbyState extends ConsumerState<Lobby> {
                 children: [
                   ChangePlayerOrderMap(),
                   ChooseRoles(),
-                  ConfigurationSummary(),
+                  OtherSettings(),
                 ],
               ),
             ),
@@ -53,14 +53,13 @@ class _LobbyState extends ConsumerState<Lobby> {
               children: [
                 Expanded(
                   child: MaterialButton(
-                    onPressed: gameConfiguration.players.length * gameConfiguration.rolesPerPlayer > gameConfiguration.roles.length ||
-                            gameConfiguration.players.length < 3
-                        ? null
-                        : () {
+                    onPressed: gameConfiguration.problems.isEmpty
+                        ? () {
                             ref.read(cMessageSenderProvider).sendSynchronizedData(
                                   ref.read(cSynchronizedDataProvider).copyWith.game(hasBegun: true),
                                 );
-                          },
+                          }
+                        : null,
                     child: const Text('Starta'),
                   ),
                 ),

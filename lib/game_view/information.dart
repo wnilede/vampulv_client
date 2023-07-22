@@ -16,7 +16,8 @@ class Information extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(controlledPlayerProvider);
-    final roles = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.configuration.roles));
+    final forcedRoles = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.configuration.forcedRoles));
+    final ordinaryRoles = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.configuration.ordinaryRoles));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Information'),
@@ -44,20 +45,38 @@ class Information extends ConsumerWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const ConfigurationSummary(),
-                Text(
-                  'Roller som är med',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                SizedBox(
-                  height: 100,
-                  child: Center(
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      children: roles.map((role) => RoleTypeCardView(role)).toList(),
+                if (forcedRoles.isNotEmpty)
+                  Text(
+                    'Roller som är med',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                if (forcedRoles.isNotEmpty)
+                  SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        children: forcedRoles.map((role) => RoleTypeCardView(role)).toList(),
+                      ),
                     ),
                   ),
-                ),
+                if (ordinaryRoles.isNotEmpty)
+                  Text(
+                    'Roller som kanske är med',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                if (ordinaryRoles.isNotEmpty)
+                  SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        children: ordinaryRoles.map((role) => RoleTypeCardView(role)).toList(),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

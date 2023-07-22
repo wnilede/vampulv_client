@@ -33,7 +33,7 @@ class _GameSettingsState extends ConsumerState<GameSettings> {
               padding: const EdgeInsets.all(6),
               child: TextFormField(
                 controller: livesController,
-                decoration: const InputDecoration(labelText: 'Liv'),
+                decoration: const InputDecoration(labelText: 'Liv', counterText: ''),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
@@ -58,7 +58,7 @@ class _GameSettingsState extends ConsumerState<GameSettings> {
               padding: const EdgeInsets.all(6),
               child: TextFormField(
                 controller: rolesController,
-                decoration: const InputDecoration(labelText: 'Roller'),
+                decoration: const InputDecoration(labelText: 'Roller', counterText: ''),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../lobby/game_settings.dart';
 import '../network/synchronized_data_provider.dart';
 
 class ConfigurationSummary extends ConsumerWidget {
@@ -9,25 +8,11 @@ class ConfigurationSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final configuration = ref.watch(gameConfigurationProvider);
-    final gameHasBegun = ref.watch(cSynchronizedDataProvider.select((sd) => sd.game.hasBegun));
-    return ListView(
-      shrinkWrap: true,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         _ValueSummary(label: 'Antal liv från början', value: configuration.maxLives.toString()),
         _ValueSummary(label: 'Antal roller per spelare', value: configuration.rolesPerPlayer.toString()),
-        if (!gameHasBegun)
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: ElevatedButton(
-              onPressed: (() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const GameSettings()),
-                );
-              }),
-              child: const Text('Ändra'),
-            ),
-          )
       ],
     );
   }
