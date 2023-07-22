@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
@@ -91,9 +92,11 @@ class _SaveLoadState extends ConsumerState<SaveLoad> {
                     onPressed: savedGames.games.containsKey(nameText)
                         ? () {
                             final synchronizedData = ref.read(cSynchronizedDataProvider);
+                            final game = savedGames.games[nameText]!;
                             ref.read(cMessageSenderProvider).sendSynchronizedData(
                                   synchronizedData.copyWith(
-                                    game: savedGames.games[nameText]!,
+                                    // This is so that it is possible to save configurations before the game has started and not get the same roles when every time when loading. If the game has already begun on the other hand, the same seed must be used because otherwise the saved PlayerInputs would not match.
+                                    game: game.hasBegun ? game : game.copyWith.configuration(randomSeed: Random().nextInt(1 << 32 - 1)),
                                     connectedDevices:
                                         synchronizedData.connectedDevices.map((device) => device.copyWith(controlledPlayerId: null)).toList(),
                                   ),
