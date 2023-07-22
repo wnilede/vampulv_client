@@ -40,7 +40,7 @@ class PlayerInMap extends ConsumerWidget {
                 );
               }
             : null,
-        onTap: selectedLevel == SelectedLevel.selectable ? onSelect : null,
+        onTap: selectedLevel == SelectedLevel.selectable || selectedLevel == SelectedLevel.selected ? onSelect : null,
         borderRadius: BorderRadius.circular(100),
         child: FractionallySizedBox(
           widthFactor: math.sqrt1_2,
