@@ -80,6 +80,7 @@ class Game with _$Game {
           .map((role) => role.produceRule())
           .nonNulls
           .append(StandardRule())
+          .append(NightSummaryRule())
           .toList(),
     ) //
         ._runUntilInput()

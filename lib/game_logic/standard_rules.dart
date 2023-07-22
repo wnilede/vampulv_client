@@ -135,3 +135,44 @@ class StandardRule extends Rule {
           ),
         ]);
 }
+
+class NightSummaryRule extends Rule {
+  List<int?> playersLives = [];
+
+  NightSummaryRule() {
+    // Save states before the night starts to compare with later.
+    reactions.add(RuleReaction<NightBeginsEvent>(
+      priority: 50,
+      onApply: (event, game) {
+        playersLives = game.players.map((player) => player.alive ? player.lives : null).toList();
+      },
+    ));
+    // Show everyone the summary.
+    reactions.add(RuleReaction<DayBeginsEvent>(
+      priority: -40,
+      onApply: (event, game) {
+        final livesChanges = <String>[];
+        for (int i = 0; i < game.players.length; i++) {
+          if (playersLives[i] == null || !game.players[i].alive) {
+            break;
+          }
+          final livesLost = playersLives[i]! - game.players[i].lives;
+          if (livesLost > 0) {
+            livesChanges.add('${game.players[i].name} skadades $livesLost liv');
+          }
+          if (livesLost < 0) {
+            livesChanges.add('${game.players[i].name} helades ${-livesLost} liv');
+          }
+        }
+        return [
+          ...game.alivePlayers.map((player) => player.copyWith(
+              unhandledInputHandlers: player.unhandledInputHandlers
+                  .append(EarlyConfirmChildInputHandler.withText(
+                      livesChanges.isEmpty ? 'Ingen skadades under natten!' : livesChanges.map((change) => '$change under natten!').join('\n')))
+                  .toList())),
+          if (livesChanges.isNotEmpty) 'Spelares livs förändrades under natten${livesChanges.map((change) => '\n - $change.').join()}',
+        ];
+      },
+    ));
+  }
+}

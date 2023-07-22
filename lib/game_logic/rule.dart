@@ -3,7 +3,8 @@ import 'game.dart';
 
 abstract class Rule {
   List<RuleReaction> reactions;
-  Rule({this.reactions = const []});
+
+  Rule({List<RuleReaction>? reactions}) : reactions = reactions ?? [];
 }
 
 class RuleReaction<T extends Event> {
