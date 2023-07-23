@@ -20,10 +20,16 @@ void main() {
   };
 
   // Configure root logger
-  Logger.root.level = kDebugMode ? Level.INFO : Level.INFO;
+  Logger.root.level = kDebugMode ? Level.FINE : Level.INFO;
   Logger.root.onRecord.listen((record) {
-    // ignore: avoid_print
-    print('${record.level.name}: ${record.time}: ${record.message}');
+    final title = '${record.level.name}: ${record.loggerName}: ${record.time}:';
+    if (record.message.contains('\n')) {
+      // ignore: avoid_print
+      print('$title\n    ${record.message.replaceAll('\n', '\n    ')}');
+    } else {
+      // ignore: avoid_print
+      print('$title: ${record.message}');
+    }
   });
 
   // Start app

@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../game_logic/game_configuration.dart';
 import '../game_logic/player_input.dart';
-import '../utility/logger_providers.dart';
+import '../utility/loggers.dart';
 import 'connected_device_provider.dart';
 import 'message_bodies/change_device_controls_body.dart';
 import 'network_message.dart';
@@ -30,7 +29,6 @@ class MessageSender with _$MessageSender {
 
   bool get isConnected => sink != null;
   bool get isConnecting => sink == null && error == null;
-  Logger get _logger => ref.read(networkLoggerProvider);
 
   void sendChange(NetworkMessage event) {
     if (event.timestamp == null) {
@@ -40,7 +38,7 @@ class MessageSender with _$MessageSender {
   }
 
   void sendString(String message) {
-    _logger.fine("Sending message '$message' to server.");
+    Loggers.network.fine("Sending message '$message' to server.");
     if (sink != null) {
       sink!.add(message);
     }

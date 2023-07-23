@@ -55,4 +55,7 @@ abstract class InputHandler {
   }) {
     assert(typeOrder.contains(runtimeType), "Cannot instanciate InputHandler of type '$runtimeType' because it is not in the typeOrder field.");
   }
+
+  Map<String, dynamic> toJson() => {'title': title, 'description': description, 'type': runtimeType.toString()};
+  factory InputHandler.fromJson(Map<String, dynamic> json) => throw UnsupportedError('Cannot deserialize InputHandler.');
 }

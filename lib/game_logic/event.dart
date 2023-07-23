@@ -15,6 +15,9 @@ abstract class Event {
     assert(!appliedMorning || typeOrder.contains(runtimeType),
         "Cannot instanciate Event because it have appliedMorning set to false, and it's subtype '$runtimeType' is not in the typeOrder field.");
   }
+
+  Map<String, dynamic> toJson() => {'type': runtimeType.toString()};
+  factory Event.fromJson(Map<String, dynamic> json) => throw UnsupportedError('Cannot deserialize Event.');
 }
 
 enum EventResult {

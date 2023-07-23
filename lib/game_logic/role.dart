@@ -14,6 +14,9 @@ abstract class Role {
   String getImageName(Game game, Player owner) => '${type.name}$image';
   Map<String, String> getDisplayableProperties(Game game, Player owner) => {};
   Role({required this.type, List<RoleReaction>? reactions}) : reactions = reactions ?? [];
+
+  Map<String, dynamic> toJson() => {'type': type.name};
+  factory Role.fromJson(Map<String, dynamic> json) => throw UnsupportedError('Cannot deserialize Role.');
 }
 
 class RoleReaction<T extends Event> {

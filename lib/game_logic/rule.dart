@@ -5,6 +5,9 @@ abstract class Rule {
   List<RuleReaction> reactions;
 
   Rule({List<RuleReaction>? reactions}) : reactions = reactions ?? [];
+
+  Map<String, dynamic> toJson() => {'type': runtimeType.toString()};
+  factory Rule.fromJson(Map<String, dynamic> json) => throw UnsupportedError('Cannot deserialize Rule.');
 }
 
 class RuleReaction<T extends Event> {

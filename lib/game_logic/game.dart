@@ -1,13 +1,13 @@
 import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logging/logging.dart';
-import 'package:xrandom/xrandom.dart';
 
 import '../input_handlers/input_handler.dart';
 import '../network/message_bodies/propose_lynching_body.dart';
 import '../network/message_bodies/set_done_lynching_body.dart';
 import '../network/network_message.dart';
 import '../network/network_message_type.dart';
+import '../utility/loggers.dart';
+import '../utility/summarize_difference_jsons.dart';
 import 'event.dart';
 import 'game_configuration.dart';
 import 'log_entry.dart';
@@ -16,17 +16,19 @@ import 'player_input.dart';
 import 'role.dart';
 import 'rule.dart';
 import 'saved_game.dart';
+import 'serializable_random.dart';
 import 'standard_events.dart';
 import 'standard_rules.dart';
 
 part 'game.freezed.dart';
+part 'game.g.dart';
 
 /// A position in a game of vampulv. A list of events and a configuration should be enough to recreate a game from scratch.
 @freezed
 class Game with _$Game {
   const factory Game({
     required GameConfiguration configuration,
-    required Xorshift32 randomGenerator,
+    required SerializableRandom randomGenerator,
     required List<Player> players,
     required List<Role> rolesInDeck,
     @Default([]) List<Rule> rules,
@@ -39,9 +41,11 @@ class Game with _$Game {
 
   const Game._();
 
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+
   factory Game.fromConfiguration(GameConfiguration configuration) {
     assert(configuration.problems.isEmpty);
-    final randomGenerator = Xorshift32(configuration.randomSeed);
+    final randomGenerator = SerializableRandom(configuration.randomSeed);
 
     // Shuffle the roles while guaranteeing that the forced roles will be used
     final shuffledOrdinaryRoles = configuration.ordinaryRoles.randomize(randomGenerator).toList();
@@ -116,6 +120,7 @@ class Game with _$Game {
         throw UnimplementedError("Cannot yet handle network messages of type '${message.type.name}'.");
       }
     }
+    Loggers.game.fine(() => 'NetworkMessages applied. Diff in game:\n${summaryObjectDiff(this, newGame)}');
     return newGame;
   }
 
@@ -129,7 +134,7 @@ class Game with _$Game {
     // If the input is invalid we silently ignore it.
     if (inputHandler == null || //
         input.playerInputNumber != caller.handledInputs) return this;
-    return _applyResultFromApplyer(inputHandler.resultApplyer(input, this, caller), input.ownerId)
+    final result = _applyResultFromApplyer(inputHandler.resultApplyer(input, this, caller), input.ownerId)
         .game
         .copyWithPlayerModification(
             input.ownerId,
@@ -138,10 +143,11 @@ class Game with _$Game {
                   handledInputs: player.handledInputs + 1,
                 ))
         ._runUntilInput();
+    Loggers.game.finer(() => 'Player input applied. Diff in game:\n${summaryObjectDiff(this, result)}');
+    return result;
   }
 
   Game _applyEventOnly(Event event) {
-    Logger('Game').fine("Applying event of type '${event.runtimeType}'");
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,
@@ -179,6 +185,7 @@ class Game with _$Game {
         playerReactionPairs.removeAt(0);
       }
     }
+    Loggers.game.finer(() => "Event of type '${event.runtimeType}' applied. Diff in game:\n${summaryObjectDiff(this, resultingGame.game)}");
     return resultingGame.game;
   }
 
@@ -195,40 +202,43 @@ class Game with _$Game {
   ///
   /// Returns the new game and whether the event was cancelled.
   _ApplyResultResult _applyResultFromApplyer(dynamic result, int? callerId) {
+    Game? newGame;
+    bool canceled = false;
     if (result == null) {
-      return _ApplyResultResult(this);
+      newGame = this;
     }
     if (result == EventResult.cancel) {
-      return _ApplyResultResult(this, canceled: true);
+      newGame = this;
+      canceled = true;
     }
     if (result is InputHandler) {
       if (callerId == null) {
         throw UnsupportedError('Cannot apply InputHandler without an owner.');
       }
       final caller = playerFromId(callerId);
-      return _ApplyResultResult(copyWithPlayer(caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList())));
+      newGame = copyWithPlayer(caller.copyWith(unhandledInputHandlers: caller.unhandledInputHandlers.append(result).toList()));
     }
     if (result is Player) {
-      return _ApplyResultResult(copyWithPlayer(result));
+      newGame = copyWithPlayer(result);
     }
     if (result is String) {
       // If String, what we actually want to do is add a LogEntry.
       result = LogEntry(value: result, playerVisibleTo: callerId);
     }
     if (result is LogEntry) {
-      return _ApplyResultResult(copyWith(log: log.append(result).toList()));
+      newGame = copyWith(log: log.append(result).toList());
     }
     if (result is Event) {
       if (result.appliedMorning) {
-        return _ApplyResultResult(copyWith(unhandledEvents: unhandledEvents.append(result).toList()));
+        newGame = copyWith(unhandledEvents: unhandledEvents.append(result).toList());
       } else {
-        return _ApplyResultResult(applyEvent(result));
+        newGame = applyEvent(result);
       }
     }
     if (result is Game) {
-      return _ApplyResultResult(result);
+      newGame = result;
     }
-    if (result is Iterable) {
+    if (result is Iterable && newGame == null) {
       _ApplyResultResult gameSoFar = _ApplyResultResult(this);
       for (final partResult in result) {
         gameSoFar = gameSoFar.game._applyResultFromApplyer(partResult, callerId);
@@ -236,8 +246,12 @@ class Game with _$Game {
       }
       return gameSoFar;
     }
-    throw UnsupportedError(
-        "When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).name}'}, the returned type was '${result.runtimeType}'.");
+    if (newGame == null) {
+      throw UnsupportedError(
+          "When applying result ${callerId == null ? 'without an owner' : 'with owner ${playerFromId(callerId).name}'}, the returned type was '${result.runtimeType}'.");
+    }
+    Loggers.game.finer(() => 'Result from applyer applied. Diff in game:\n${summaryObjectDiff(this, newGame)}');
+    return _ApplyResultResult(newGame, canceled: canceled);
   }
 
   Game _runUntilInput() {

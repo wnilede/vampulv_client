@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:darq/darq.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../game_logic/game_configuration.dart';
 import '../game_logic/saved_game.dart';
+import '../utility/summarize_difference_jsons.dart';
 import 'connected_device.dart';
 import 'connected_device_provider.dart';
 import 'message_bodies/change_device_controls_body.dart';
@@ -26,6 +28,7 @@ class CSynchronizedData extends _$CSynchronizedData {
     if (!event.type.isSynchronizedDataChange) {
       return;
     }
+    final stateBefore = state;
     if (event.type.isGameChange) {
       // Should we sort them by timestamp here?
       state = state.copyWith.game(events: [
@@ -73,6 +76,8 @@ class CSynchronizedData extends _$CSynchronizedData {
       default:
         throw ArgumentError.value(event.type.name);
     }
+    Logger('SynchronizedData')
+        .fine(() => 'Network message of type ${event.type} handled. Diff in synchronized data:\n${summaryObjectDiff(stateBefore, state)}');
   }
 }
 

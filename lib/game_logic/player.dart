@@ -5,6 +5,7 @@ import 'player_configuration.dart';
 import 'role.dart';
 
 part 'player.freezed.dart';
+part 'player.g.dart';
 
 @freezed
 class Player with _$Player {
@@ -22,7 +23,7 @@ class Player with _$Player {
     @Default(false) bool lynchingDone,
     @Default(0) int handledInputs,
   }) = _Player;
-
+  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
   const Player._();
 
   InputHandler? get currentInputHandler => unhandledInputHandlers.isEmpty

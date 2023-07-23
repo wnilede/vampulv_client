@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../utility/logger_providers.dart';
+import '../utility/loggers.dart';
 import 'connected_device_provider.dart';
 import 'connection_settings.dart';
 import 'message_sender.dart';
@@ -42,14 +41,12 @@ class CMessageSender extends _$CMessageSender {
     return MessageSender.loading(ref);
   }
 
-  Logger get _logger => ref.read(networkLoggerProvider);
-
   void _connectWithSettings(ConnectionSettings settings) {
     // Create a new connection with the new address
-    _logger.info('Connecting as client');
+    Loggers.network.info('Connecting as client');
     final channel = WebSocketChannel.connect(Uri.parse(settings.adress));
     channel.ready.then((_) {
-      _logger.info('Connected successfully');
+      Loggers.network.info('Connected successfully');
       channel.stream.listen(
         (data) {
           // Try to convert the messages recieved to NetworkMessages and forward them to where they are needed
@@ -57,21 +54,21 @@ class CMessageSender extends _$CMessageSender {
           try {
             parsedData = NetworkMessage.fromJson(json.decode(data));
           } on FormatException {
-            _logger.warning("Data '$data' could not be parsed.");
+            Loggers.network.warning("Data '$data' could not be parsed.");
             return;
           }
-          _logger.fine("Data '$data' recieved and parsed sucessfully.");
+          Loggers.network.fine("Data '$data' recieved and parsed sucessfully.");
           if (parsedData.type == NetworkMessageType.setIdentifier) {
             ref.read(connectedDeviceIdentifierProvider.notifier).setValue(int.parse(parsedData.message));
           } else if (parsedData.type.isSynchronizedDataChange) {
             ref.read(cSynchronizedDataProvider.notifier).applyChange(parsedData);
           } else {
-            _logger.warning("Did not know where to forward data '$data' so it is ignored.");
+            Loggers.network.warning("Did not know where to forward data '$data' so it is ignored.");
           }
         },
         onError: _handleErrorFromStream,
         onDone: () {
-          _logger.info('Websocket disconnected.');
+          Loggers.network.info('Websocket disconnected.');
           state = MessageSender.error('Förlorade anslutningen till servern.', ref);
         },
       );
@@ -86,14 +83,14 @@ class CMessageSender extends _$CMessageSender {
 
   void _handleErrorFromStream(Object error, StackTrace stackTrace) {
     if (error is TimeoutException) {
-      _logger.info('Could not connect: timeout');
+      Loggers.network.info('Could not connect: timeout');
       state = MessageSender.error('Servern tog för lång tid på sig att svara.', ref);
     } else if (error is SocketException) {
-      _logger.info('Could not connect: ${error.message}');
+      Loggers.network.info('Could not connect: ${error.message}');
       state = MessageSender.error('Kunde inte ansluta till servern.', ref);
     } else {
       // We do not know what kind of error it is, so we are rethrowing it
-      _logger.severe('An unhandled error occured in the websocket stream. Error object: $error. Stack trace: $stackTrace.');
+      Loggers.network.severe('An unhandled error occured in the websocket stream. Error object: $error. Stack trace: $stackTrace.');
       throw error;
     }
   }
