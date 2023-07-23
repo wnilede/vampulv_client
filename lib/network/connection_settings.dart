@@ -17,7 +17,7 @@ class ConnectionSettings with _$ConnectionSettings {
 @Riverpod(keepAlive: true)
 class CConnectionSettings extends _$CConnectionSettings {
   @override
-  ConnectionSettings build() => ConnectionSettings(adress: 'ws://192.168.8.119:6353', room: 'default');
+  ConnectionSettings build() => ConnectionSettings(adress: 'ws://192.168.8.117:6353', room: 'default');
 
   void setState(ConnectionSettings value) {
     state = value;

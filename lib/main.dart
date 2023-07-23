@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 import 'components/not_connected.dart';
@@ -10,11 +12,21 @@ import 'network/message_sender_provider.dart';
 import 'network/synchronized_data_provider.dart';
 
 void main() {
+  // Apparently makes the exceptions better for some reason
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
+
+  // Configure root logger
+  Logger.root.level = kDebugMode ? Level.INFO : Level.INFO;
+  Logger.root.onRecord.listen((record) {
+    // ignore: avoid_print
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  // Start app
   runApp(const ProviderScope(child: MainApp()));
 }
 

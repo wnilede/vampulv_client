@@ -1,5 +1,6 @@
 import 'package:darq/darq.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 import 'package:xrandom/xrandom.dart';
 
 import '../input_handlers/input_handler.dart';
@@ -140,6 +141,7 @@ class Game with _$Game {
   }
 
   Game _applyEventOnly(Event event) {
+    Logger('Game').fine("Applying event of type '${event.runtimeType}'");
     final ruleReactions = rules
         .map(
           (rule) => rule.reactions,
@@ -177,7 +179,6 @@ class Game with _$Game {
         playerReactionPairs.removeAt(0);
       }
     }
-    print("Event '${event.runtimeType}' applied");
     return resultingGame.game;
   }
 
