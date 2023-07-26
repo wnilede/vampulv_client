@@ -23,6 +23,7 @@ class ChangeControlledPlayer extends ConsumerWidget {
           numberSelected: 1,
           canChooseFewer: true,
           deadPlayersSelectable: true,
+          canSelectSelf: false,
         ),
       );
 }

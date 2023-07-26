@@ -75,7 +75,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     final players = ref.watch(cGameProvider.select((game) => game!.players));
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
-    selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id) != null).toList();
+    selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id) == null).toList();
     Widget descriptionText = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -101,8 +101,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     );
     return LayoutBuilder(builder: (context, constraints) {
       final buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
-      final rotationCurrent =
-          controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
+      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
       final Widget playersWidget = CircularLayout(
           largerChildren: true,
           rotationOffset: rotationCurrent,
@@ -130,7 +129,9 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                         });
                       } else if (widget.numberSelected == 1) {
                         setState(() {
-                          selectedIndices = [i];
+                          selectedIndices = [
+                            i
+                          ];
                         });
                       } else {
                         setState(() {
@@ -176,8 +177,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                   onPressed: hasSelectedEnough
                       ? () {
                           if (widget.onDone == null) {
-                            ref.read(cMessageSenderProvider).sendPlayerInput(
-                                selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'));
+                            ref.read(cMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'));
                           } else {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }
