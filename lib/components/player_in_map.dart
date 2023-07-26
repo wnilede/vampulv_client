@@ -11,8 +11,9 @@ class PlayerInMap extends ConsumerWidget {
   final Player player;
   final SelectedLevel selectedLevel;
   final void Function()? onSelect;
+  final String? reasonForbidden;
 
-  const PlayerInMap(this.player, {required this.selectedLevel, required this.onSelect, super.key});
+  const PlayerInMap(this.player, {required this.selectedLevel, this.reasonForbidden, required this.onSelect, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +41,14 @@ class PlayerInMap extends ConsumerWidget {
                 );
               }
             : null,
-        onTap: selectedLevel == SelectedLevel.selectable || selectedLevel == SelectedLevel.selected ? onSelect : null,
+        onTap: selectedLevel == SelectedLevel.selectable || selectedLevel == SelectedLevel.selected
+            ? onSelect
+            : () {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(reasonForbidden ?? selectedLevel.presentableReason),
+                ));
+              },
         borderRadius: BorderRadius.circular(100),
         child: FractionallySizedBox(
           widthFactor: math.sqrt1_2,
@@ -75,8 +83,12 @@ class PlayerInMap extends ConsumerWidget {
 }
 
 enum SelectedLevel {
-  selected,
-  selectable,
-  selectableButMax,
-  forbidden,
+  selected('Spelaren är redan vald.'),
+  selectable('Du kan välja spelaren.'),
+  selectableButMax('Du kan inte välja fler spelare.'),
+  forbidden('Du kan inte välja denna spelare.');
+
+  final String presentableReason;
+
+  const SelectedLevel(this.presentableReason);
 }

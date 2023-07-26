@@ -30,6 +30,7 @@ class PlayerMap extends ConsumerStatefulWidget {
   final bool canSelectSelf;
   final List<int> selectablePlayerFilter;
   final bool filterIsWhitelist;
+  final String? reasonForbidden;
   final void Function()? onCancel;
 
   PlayerMap({
@@ -43,6 +44,7 @@ class PlayerMap extends ConsumerStatefulWidget {
     this.canSelectSelf = true,
     this.selectablePlayerFilter = const [],
     this.filterIsWhitelist = false,
+    this.reasonForbidden,
     required this.onDone,
     Key? key,
   }) : super(key: key ?? (description == null ? null : Key(description)));
@@ -50,10 +52,18 @@ class PlayerMap extends ConsumerStatefulWidget {
   @override
   ConsumerState<PlayerMap> createState() => _UserMapState();
 
-  bool playerIsSelectable(Player player, int? controlledPlayerId) =>
-      (player.alive || deadPlayersSelectable) &&
-      (player.id != controlledPlayerId || canSelectSelf) &&
-      (selectablePlayerFilter.any((id) => id == player.id) == filterIsWhitelist);
+  String? playerIsSelectable(Player player, int? controlledPlayerId) {
+    if (player.id == controlledPlayerId && !canSelectSelf) {
+      return 'Du kan inte välja dig själv.';
+    }
+    if (!player.alive && !deadPlayersSelectable) {
+      return 'Du kan inte välja döda personer.';
+    }
+    if ((selectablePlayerFilter.any((id) => id == player.id) != filterIsWhitelist)) {
+      return reasonForbidden;
+    }
+    return null;
+  }
 }
 
 class _UserMapState extends ConsumerState<PlayerMap> {
@@ -65,7 +75,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     final players = ref.watch(cGameProvider.select((game) => game!.players));
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
-    selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id)).toList();
+    selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id) != null).toList();
     Widget descriptionText = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -97,35 +107,40 @@ class _UserMapState extends ConsumerState<PlayerMap> {
           largerChildren: true,
           rotationOffset: rotationCurrent,
           inside: descriptionText,
-          children: List.generate(
-              players.length,
-              (i) => widget.playerAppearance == null
-                  ? PlayerInMap(
-                      players[i],
-                      selectedLevel: selectedIndices.contains(i)
-                          ? SelectedLevel.selected
-                          : widget.playerIsSelectable(players[i], controlledPlayer?.id)
-                              ? (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1 || selectedIndices.contains(i))
-                                  ? SelectedLevel.selectable
-                                  : SelectedLevel.selectableButMax
-                              : SelectedLevel.forbidden,
-                      onSelect: () {
-                        if (selectedIndices.contains(i)) {
-                          setState(() {
-                            selectedIndices.remove(i);
-                          });
-                        } else if (widget.numberSelected == 1) {
-                          setState(() {
-                            selectedIndices = [i];
-                          });
-                        } else {
-                          setState(() {
-                            selectedIndices.add(i);
-                          });
-                        }
-                      },
-                    )
-                  : widget.playerAppearance!(players[i])));
+          children: List.generate(players.length, (i) {
+            late final SelectedLevel selectedLevel;
+            if (selectedIndices.contains(i)) {
+              selectedLevel = SelectedLevel.selected;
+            } else if (widget.playerIsSelectable(players[i], controlledPlayer?.id) != null) {
+              selectedLevel = SelectedLevel.forbidden;
+            } else if (selectedIndices.length < widget.numberSelected || widget.numberSelected == 1) {
+              selectedLevel = SelectedLevel.selectable;
+            } else {
+              selectedLevel = SelectedLevel.selectableButMax;
+            }
+            return widget.playerAppearance == null
+                ? PlayerInMap(
+                    players[i],
+                    selectedLevel: selectedLevel,
+                    reasonForbidden: widget.playerIsSelectable(players[i], controlledPlayer?.id),
+                    onSelect: () {
+                      if (selectedIndices.contains(i)) {
+                        setState(() {
+                          selectedIndices.remove(i);
+                        });
+                      } else if (widget.numberSelected == 1) {
+                        setState(() {
+                          selectedIndices = [i];
+                        });
+                      } else {
+                        setState(() {
+                          selectedIndices.add(i);
+                        });
+                      }
+                    },
+                  )
+                : widget.playerAppearance!(players[i]);
+          }));
       return Flex(
         direction: buttonsBelow ? Axis.vertical : Axis.horizontal,
         children: [

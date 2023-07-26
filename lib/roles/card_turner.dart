@@ -99,6 +99,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
             },
             filterIsWhitelist: restrictions == CardTurnerRestrictions.onePlayerCanBeSameForced && role.seeingPlayerId == null ||
                 restrictions == CardTurnerRestrictions.canSelectSelf && role.seeingPlayerId == null && role.seenPlayerId != null,
+            reasonForbidden: 'Du kan inte välja samma spelare två nätter i rad.',
             onDone: null,
           ),
           resultApplyer: (input, game, string) {
@@ -150,6 +151,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
                 CardTurnerRestrictions.cannotUsePower => throw ArgumentError.value(restrictions),
               },
             ],
+            reasonForbidden: 'Du kan inte välja samma spelare två nätter i rad.',
             onDone: null,
           ),
           resultApplyer: (input, game, string) {

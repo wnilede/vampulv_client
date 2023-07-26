@@ -56,6 +56,7 @@ class NothingToDoWidget extends ConsumerWidget {
                 },
                 numberSelected: 1,
                 selectablePlayerFilter: controlledPlayer.previouslyProposed,
+                reasonForbidden: 'Du kan bara föreslå varje spelare för lynching en gång per dag.',
               ));
   }
 }

@@ -40,6 +40,7 @@ class PriestTargetInputHandler extends InputHandler {
             selectablePlayerFilter: [
               if (lastProtected != null) lastProtected,
             ],
+            reasonForbidden: 'Du kan inte skydda samma spelare som förra natten.',
             onDone: null,
           ),
         );
