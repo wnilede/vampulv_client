@@ -88,6 +88,9 @@ class CMessageSender extends _$CMessageSender {
     } else if (error is SocketException) {
       Loggers.network.info('Could not connect: ${error.message}');
       state = MessageSender.error('Kunde inte ansluta till servern.', ref);
+    } else if (error is WebSocketChannelException) {
+      Loggers.network.info('Could not connect: ${error.message}');
+      state = MessageSender.error('Kunde inte ansluta till servern.', ref);
     } else {
       // We do not know what kind of error it is, so we are rethrowing it
       Loggers.network.severe('An unhandled error occured in the websocket stream. Error object: $error. Stack trace: $stackTrace.');
