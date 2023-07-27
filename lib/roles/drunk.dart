@@ -16,7 +16,6 @@ class Drunk extends Villager {
     reactions.add(
       RoleReaction<NightBeginsEvent>(
         priority: 60,
-        worksAfterDeath: true,
         onApply: (event, game, player) => game.dayNumber >= nightActivated
             ? LateConfirmChildInputHandler.withText(
                 'Det visar sig att en av dina roller var fyllot, förklädd som en vanlig bybo! Du kommer nu att få nya roller.',
