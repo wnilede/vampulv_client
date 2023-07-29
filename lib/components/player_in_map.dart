@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../game_logic/player.dart';
 import '../network/connected_device_provider.dart';
+import 'context_aware_text.dart';
 import 'player_summary.dart';
 
 class PlayerInMap extends ConsumerWidget {
@@ -46,7 +47,7 @@ class PlayerInMap extends ConsumerWidget {
             : () {
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(reasonForbidden ?? selectedLevel.presentableReason),
+                  content: ContextAwareText(reasonForbidden ?? selectedLevel.presentableReason),
                 ));
               },
         borderRadius: BorderRadius.circular(100),

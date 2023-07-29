@@ -43,14 +43,17 @@ class Hoodler extends Role {
       ? {
           'Hoodlade': 'Inga spelare valda än',
         }
-      : targets!.indexed.toMap((indexTarget) => MapEntry('Hoodlad ${indexTarget.$1}', game.playerFromId(indexTarget.$2).name));
+      : targets!.indexed.toMap(
+          (indexTarget) => MapEntry('Hoodlad ${indexTarget.$1 + 1}', game.playerFromId(indexTarget.$2).name),
+          modifiable: true,
+        );
 }
 
 class HoodlerTargetsInputHandler extends InputHandler {
   HoodlerTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
           title: 'Hoodler',
-          description: 'Välj spelare för hoodlern',
+          description: 'Välj spelare för &hoodler',
           resultApplyer: (input, game, player) {
             final targets = input.message == 'none'
                 ? <int>[]
@@ -60,12 +63,12 @@ class HoodlerTargetsInputHandler extends InputHandler {
                     .toList();
             setTargets(targets);
             return targets.isEmpty
-                ? 'Det fanns ingen kvar för din hoodler att välja, så du uppfyller vinstvillkoret automatiskt.'
-                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listedNicelyAnd} för din hoodler.';
+                ? 'Det fanns ingen kvar för din &hoodler att välja, så du uppfyller vinstvillkoret automatiskt.'
+                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listedNicelyAnd} för din &hoodler.';
           },
           widget: PlayerMap(
             numberSelected: numberOfTargets,
-            description: 'Välj spelare att använda hoodlern på',
+            description: 'Välj spelare att använda &hoodler på',
             canSelectSelf: false,
             onDone: null,
           ),

@@ -32,7 +32,7 @@ class HunterTargetInputHandler extends InputHandler {
   HunterTargetInputHandler()
       : super(
           title: 'Jägare',
-          description: 'Välj spelare att skjuta med jägaren',
+          description: 'Välj spelare att skjuta med &hunter',
           resultApplyer: (input, game, player) {
             final shoot = game.playerFromId(int.parse(input.message));
             return [
@@ -43,22 +43,22 @@ class HunterTargetInputHandler extends InputHandler {
                         unhandledInputHandlers: other.unhandledInputHandlers
                             .exclude(other.unhandledInputHandlers.firstWhere((handler) => handler is HunterBlockingInputHanlder))
                             .append(EarlyConfirmChildInputHandler.withText(
-                                '${player.name} dör, men var en jägare, och skjuter ${shoot.name}, som därför förlorar ett liv!'))
+                                '${player.name} dör, men var en &hunter, och skjuter ${shoot.name}, som därför förlorar ett liv!'))
                             .toList(),
                       ))
                   .toList(),
               HurtEvent(playerId: shoot.id, appliedMorning: false),
-              LogEntry(value: '${player.name} skjuter ${shoot.name} med en jägare.', playerVisibleTo: null),
+              LogEntry(value: '${player.name} skjuter ${shoot.name} med en &hunter.', playerVisibleTo: null),
             ];
           },
           widget: PlayerMap(
             numberSelected: 1,
-            description: 'Välj spelare att använda jägaren på',
+            description: 'Välj spelare att använda &hunter på',
             onDone: null,
           ),
         );
 }
 
 class HunterBlockingInputHanlder extends BlockingInputHandler {
-  HunterBlockingInputHanlder() : super(description: 'Vänta på att jägare ska skjuta någon');
+  HunterBlockingInputHanlder() : super(description: 'Vänta på att &hunter ska skjuta någon');
 }

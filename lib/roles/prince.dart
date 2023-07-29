@@ -26,11 +26,11 @@ class Prince extends Role {
                   unhandledInputHandlers: otherPlayer.unhandledInputHandlers
                       .append(
                         EarlyConfirmChildInputHandler.withText(
-                            '${player.name} skulle ha blivit lynchad, men hade en prins och klarade sig därför!'),
+                            '${player.name} skulle ha blivit lynchad, men hade en &prince och klarade sig därför!'),
                       )
                       .toList()))
               .toList(),
-          LogEntry(value: '${player.name} använde sin prins för att undvika att bli lynchad.', playerVisibleTo: null),
+          LogEntry(value: '${player.name} använde sin &prince för att undvika att bli lynchad.', playerVisibleTo: null),
           EventResult.cancel,
         ];
       },

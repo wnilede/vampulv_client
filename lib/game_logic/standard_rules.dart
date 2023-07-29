@@ -154,7 +154,7 @@ class NightSummaryRule extends Rule {
         final livesChanges = <String>[];
         for (int i = 0; i < game.players.length; i++) {
           if (playersLives[i] == null || !game.players[i].alive) {
-            break;
+            continue;
           }
           final livesLost = playersLives[i]! - game.players[i].lives;
           if (livesLost > 0) {

@@ -1,5 +1,4 @@
 import 'package:darq/darq.dart';
-import 'package:flutter/material.dart';
 
 import '../components/player_map.dart';
 import '../game_logic/event.dart';
@@ -49,16 +48,16 @@ class VampulvRule extends Rule {
                       .map((vampulv) => vampulv.name)
                       .toList();
                   final message = otherVampulvsNames.isEmpty
-                      ? 'Du är den enda vampulven!'
+                      ? 'Du är den enda vampulven&vampulv!'
                       : otherVampulvsNames.length == 1
-                          ? 'Den andra vampulven är ${otherVampulvsNames.single}!'
-                          : 'De andra vampulverna är ${otherVampulvsNames.listedNicelyAnd}!';
+                          ? 'Den andra vampulven&vampulv är ${otherVampulvsNames.single}!'
+                          : 'De andra vampulverna&vampulv är ${otherVampulvsNames.listedNicelyAnd}!';
                   return [
                     messageFor.copyWith(
                         unhandledInputHandlers:
                             messageFor.unhandledInputHandlers.append(EarlyConfirmChildInputHandler.withText(message)).toList()),
                     LogEntry(
-                      value: 'Du såg vilka som var vampulver:${[
+                      value: 'Du såg vilka som var vampulver&vampulv:${[
                         'du själv',
                         ...otherVampulvsNames,
                       ].map((name) => '\n - $name').join()}',
@@ -100,7 +99,7 @@ class VampulvTargetInputHandler extends InputHandler {
   VampulvTargetInputHandler({required void Function(int?) setResult})
       : super(
           title: 'Vampulv',
-          description: 'Välj spelare att attackera med vampulv',
+          description: 'Välj spelare att attackera med &vampulv',
           resultApplyer: (input, game, player) {
             setResult(int.tryParse(input.message));
             final vampulvs = game.alivePlayers.where((player) => player.roles.any((role) => role is Vampulv)).toList();
@@ -119,22 +118,20 @@ class VampulvTargetInputHandler extends InputHandler {
                 .randomSubset(1, game.randomGenerator)
                 .single;
             final resultSummary =
-                'Vampulverna attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).name}!\n${vampulvs //
+                'Vampulverna&Vampulv attackerade ${mostVotedForId == null ? 'ingen' : game.playerFromId(mostVotedForId).name}!\n${vampulvs //
                     .map(
                       (player) => '${player.name} röstade på ${player.roles.whereType<Vampulv>() //
                           .map((role) => role.playerIdAttacked == null //
                               ? 'att inte attackera någon' //
-                              : game.playerFromId(role.playerIdAttacked!).name).join(' och ')}',
+                              : game.playerFromId(role.playerIdAttacked!).name) //
+                          .listedNicelyAnd}',
                     ).join('\n')}';
             return [
               ...vampulvs.map((vampulv) => [
                     vampulv.copyWith(
                         unhandledInputHandlers: vampulv.unhandledInputHandlers
                             .where((handler) => handler is! VampulvBlockingInputHandler)
-                            .append(EarlyConfirmChildInputHandler(
-                              description: 'Se resultat av vampulvattack',
-                              child: Center(child: Text(resultSummary, textAlign: TextAlign.center)),
-                            ))
+                            .append(EarlyConfirmChildInputHandler.withText(resultSummary))
                             .toList()),
                     LogEntry(
                       playerVisibleTo: vampulv.id,
@@ -145,7 +142,7 @@ class VampulvTargetInputHandler extends InputHandler {
             ];
           },
           widget: PlayerMap(
-            description: 'Välj vem vampulverna ska attackera',
+            description: 'Välj vem vampulverna&vampulv ska attackera',
             numberSelected: 1,
             canChooseFewer: true,
             onDone: null,
@@ -154,7 +151,7 @@ class VampulvTargetInputHandler extends InputHandler {
 }
 
 class VampulvBlockingInputHandler extends BlockingInputHandler {
-  VampulvBlockingInputHandler() : super(description: 'Vänta på att vampulverna ska rösta färdigt');
+  VampulvBlockingInputHandler() : super(description: 'Vänta på att vampulverna&vampulv ska rösta färdigt');
 }
 
 class VampulvHurtEvent extends HurtEvent {

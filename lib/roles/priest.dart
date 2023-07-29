@@ -25,13 +25,13 @@ class PriestTargetInputHandler extends InputHandler {
   PriestTargetInputHandler(Function(int? target) setTarget, int? lastProtected)
       : super(
           title: 'Präst',
-          description: 'Välj spelare att använda prästen på',
+          description: 'Välj spelare att använda &priest på',
           resultApplyer: (input, game, string) {
             final target = int.tryParse(input.message);
             setTarget(target);
             return target == null
-                ? 'Du valde att inte använda din präst.'
-                : 'Du använde din präst för att skydda ${game.playerFromId(target).name}.';
+                ? 'Du valde att inte använda din &priest.'
+                : 'Du använde din &priest för att skydda ${game.playerFromId(target).name}.';
           },
           widget: PlayerMap(
             description: 'Välj någon att skydda mot vampulverna',

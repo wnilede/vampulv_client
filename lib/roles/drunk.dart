@@ -18,13 +18,13 @@ class Drunk extends Villager {
         priority: 60,
         onApply: (event, game, player) => game.dayNumber >= nightActivated
             ? LateConfirmChildInputHandler.withText(
-                'Det visar sig att en av dina roller var fyllot, förklädd som en vanlig bybo! Du kommer nu att få nya roller.',
+                'Det visar sig att en av dina roller var &drunk, förklädd som en vanlig &villager! Du kommer nu att få nya roller.',
                 onConfirm: (input, game, owner) {
                   final shuffledDeck = game.rolesInDeck.randomize(game.randomGenerator).toList();
                   return [
                     game.copyWith(rolesInDeck: shuffledDeck.sublist(game.configuration.rolesPerPlayer)),
                     owner.copyWith(roles: game.rolesInDeck.sublist(0, game.configuration.rolesPerPlayer)),
-                    'Fyllot aktiverades och du fick nya roller',
+                    '&Drunk aktiverades och du fick nya roller',
                   ];
                 },
               )

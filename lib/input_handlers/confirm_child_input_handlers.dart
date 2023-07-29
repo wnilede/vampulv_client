@@ -36,9 +36,11 @@ class _ConfirmChildInputHandler extends InputHandler {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Center(
-              child: ContextAwareText(
-                message,
-                textAlign: TextAlign.center,
+              child: SingleChildScrollView(
+                child: ContextAwareText(
+                  message,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

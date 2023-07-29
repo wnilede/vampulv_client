@@ -23,7 +23,7 @@ enum RoleType {
     displayName: 'Vampulv',
     summary: 'Döda alla som inte är vampulver',
     description:
-        'Spelat avslutas antingen om det endast är vampulver kvar eller om det inte är några vampulver kvar alls. I det första fallet vinner du och i det andra förlorar du[, såvida du inte också är &hoodler OR &tanner OR &lonelyPulv]. Du vet vem de andra vampulverna är[ men du vet inte om de är &lonelyPulv], och du vaknar under natten tillsammans med dem för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
+        'Spelat avslutas antingen om det endast är vampulver kvar eller om det inte är några vampulver kvar alls. I det första fallet vinner du och i det andra förlorar du[, såvida du inte också är &hoodler OR &tanner OR &lonelyPulv]. Du vet vem de andra vampulverna är[ men du vet inte om de är själviska&lonelyPulv], och du vaknar under natten tillsammans med dem för att rösta om vem ni ska attackera. En av de spelare med flest röster väljes sedan slumpmässigt och förlorar ett liv. Du får reda på vad de andra vampulverna röstade på och resultatet av slumpningen efter att du lagt din röst. Röster kan också läggas på att inte döda någon, och det räknas som en spelare vid slumpningen.',
     imageVariations: 3,
   ),
   lonelyPulv(
@@ -63,13 +63,13 @@ enum RoleType {
   lycan(
     displayName: 'Lycan',
     summary: 'Se ut som vampulv',
-    description: 'När en &seer använder sin kraft på dig så ser du ut som en vampulv.',
+    description: 'När en &seer använder sin kraft på dig så ser du ut som en &vampulv.',
   ),
   priest(
     displayName: 'Präst',
     summary: 'Skydda en spelare per natt',
     description:
-        'Varje natt väljer du om du vill aktivera din kraft och i så fall väljer du en spelare som du inte valde förra natten. Denna spelare kan inte bli skadad av vampulvernas kraft under den natten.',
+        'Varje natt väljer du om du vill aktivera din kraft och i så fall väljer du en spelare som du inte valde förra natten. Denna spelare kan inte bli skadad av vampulvernas&vampulv kraft under den natten.',
   ),
   prince(
     displayName: 'Prins',
@@ -120,7 +120,7 @@ enum RoleType {
     displayName: 'Kortvändare',
     summary: 'Visa andra andras kort',
     description:
-        'Varje natt där någon har dött det senaste dygnet väljer du två spelare. Den ena ser sedan ett slumpmässigt av den andres roller.',
+        'Varje natt där någon har dött det senaste dygnet väljer du två spelare. Den ena ser sedan en slumpmässig av den andres roller.',
   ),
   // erasurer(
   //   displayName: '10001010',
@@ -131,7 +131,7 @@ enum RoleType {
     displayName: 'Fyllo',
     summary: 'Få nya roller tredje natten',
     description:
-        'Tredje natten får du nya roller. Du vet inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en bybo.[ En &cardTurner som ser den här rollen ser dock att det är ett fyllo.]',
+        'Tredje natten får du nya roller. Du vet normalt sett inte om att du är ett fyllo fören detta händer, eftersom fyllot ser ut som en &villager.[ En &cardTurner som ser den här rollen ser dock att det är ett fyllo.]',
     imageVariations: 10, // Not really, but it uses the villagers images.
   );
 

@@ -43,7 +43,7 @@ class Cupid extends Role {
                   LogEntry(
                     playerVisibleTo: null,
                     value:
-                        'På grund av att ${game.playerFromId(event.playerId).name} dör så förlorar ${game.playerFromId(target).name} ett liv av hjärtesorg.',
+                        'På grund av att ${game.playerFromId(event.playerId).name} dör så förlorar ${game.playerFromId(target).name} ett liv av hjärtesorg&cupid.',
                   ),
                 ])
             .toList();
@@ -63,7 +63,7 @@ class CupidTargetsInputHandler extends InputHandler {
   CupidTargetsInputHandler({required void Function(List<int>) setTargets, required int numberOfTargets})
       : super(
           title: 'Cupid',
-          description: 'Välj spelare att cupida',
+          description: 'Välj spelare att cupida&cupid',
           resultApplyer: (input, game, player) {
             setTargets(input.message == 'none'
                 ? []

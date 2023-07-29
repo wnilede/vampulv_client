@@ -4,6 +4,7 @@ import '../game_logic/role.dart';
 import '../game_logic/role_type.dart';
 import '../game_logic/standard_events.dart';
 import '../input_handlers/confirm_child_input_handlers.dart';
+import '../utility/list_strings_nicely.dart';
 
 class GangMember extends Role {
   GangMember()
@@ -19,11 +20,11 @@ class GangMember extends Role {
                     .toList();
                 return [
                   EarlyConfirmChildInputHandler.withText(otherGangMemberNames.isEmpty
-                      ? 'Du är den enda gängmedlemmen!'
+                      ? 'Du är den enda gängmedlemmen&gangMember!'
                       : otherGangMemberNames.length == 1
-                          ? 'Den andra gängmedlemmen är ${otherGangMemberNames.single}!'
-                          : 'De andra gängmedlemmarna är ${otherGangMemberNames.skip(1).join(', ')} och ${otherGangMemberNames[0]}!'),
-                  'Du såg vilka som var gängmedlemmar:${[
+                          ? 'Den andra gängmedlemmen&gangMember är ${otherGangMemberNames.single}!'
+                          : 'De andra gängmedlemmarna&gangMember är ${otherGangMemberNames.listedNicelyAnd}!'),
+                  'Du såg vilka som var gängmedlemmar&gangMember:${[
                     'du själv',
                     ...otherGangMemberNames,
                   ].map((name) => '\n - $name').join()}',

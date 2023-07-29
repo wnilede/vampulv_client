@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../network/message_sender_provider.dart';
+import 'context_aware_text.dart';
 
 class BinaryChoice extends ConsumerWidget {
   final String title;
@@ -13,7 +14,7 @@ class BinaryChoice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        ContextAwareText(title, style: Theme.of(context).textTheme.titleMedium),
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => Flex(

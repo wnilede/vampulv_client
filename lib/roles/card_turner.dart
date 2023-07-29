@@ -1,6 +1,7 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 
+import '../components/context_aware_text.dart';
 import '../components/player_map.dart';
 import '../components/role_card_view.dart';
 import '../game_logic/log_entry.dart';
@@ -160,7 +161,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
 
             if (role.seenPlayerId == null) {
               role.seeingPlayerId = null;
-              return 'Du valde att inte använda din kortvändare på någon.';
+              return 'Du valde att inte använda din &cardTurner på någon.';
             }
 
             final seenPlayer = game.playerFromId(int.parse(input.message));
@@ -177,7 +178,8 @@ class CardTurnerObservedInputHandler extends InputHandler {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('Någon har använt en &cardTurner för att visa dig att en av rollerna som ${seenPlayer.name} har är',
+                                ContextAwareText(
+                                    'Någon har använt en &cardTurner för att visa dig att en av rollerna som ${seenPlayer.name} har är',
                                     textAlign: TextAlign.center),
                                 RoleTypeCardView(seenRole.type),
                               ],

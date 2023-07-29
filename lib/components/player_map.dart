@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +8,7 @@ import '../game_logic/player.dart';
 import '../network/connected_device_provider.dart';
 import '../network/message_sender_provider.dart';
 import 'circular_layout.dart';
+import 'context_aware_text.dart';
 import 'player_in_map.dart';
 
 class PlayerMap extends ConsumerStatefulWidget {
@@ -24,7 +24,9 @@ class PlayerMap extends ConsumerStatefulWidget {
   /// Function to be called when user has clicked the OK button. If null, a PlayerInput will be sent instead. The message from the user input will be a ; separated list of the ids of the players that were selected, or 'none' if no player were selected.
   final void Function(List<Player> selected)? onDone;
 
+  /// Appears in the middle of the map. Can be context dependent since it is shown in a [ContextDependentText].
   final String? description;
+
   final bool canChooseFewer;
   final bool deadPlayersSelectable;
   final bool canSelectSelf;
@@ -76,32 +78,30 @@ class _UserMapState extends ConsumerState<PlayerMap> {
     final controlledPlayer = ref.watch(controlledPlayerProvider);
     final hasSelectedEnough = widget.canChooseFewer || selectedIndices.length == widget.numberSelected;
     selectedIndices = selectedIndices.where((selected) => widget.playerIsSelectable(players[selected], controlledPlayer?.id) == null).toList();
-    Widget descriptionText = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (widget.description != null)
-          Expanded(
-            child: Center(
-              child: AutoSizeText(
+    Widget descriptionText = Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.description != null)
+              ContextAwareText(
                 widget.description!,
-                minFontSize: 8,
-                maxLines: 5,
-                wrapWords: false,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 50),
               ),
-            ),
-          ),
-        if (widget.numberSelected > 1)
-          Text(
-            '${selectedIndices.length}/${widget.numberSelected}',
-            style: TextStyle(color: hasSelectedEnough ? Colors.green[900] : Colors.red[900]),
-          ),
-      ],
+            if (widget.numberSelected > 1)
+              Text(
+                '${selectedIndices.length}/${widget.numberSelected}',
+                style: TextStyle(color: hasSelectedEnough ? Colors.green[900] : Colors.red[900]),
+              ),
+          ],
+        ),
+      ),
     );
     return LayoutBuilder(builder: (context, constraints) {
       final buttonsBelow = constraints.maxHeight >= constraints.maxWidth;
-      final rotationCurrent = controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
+      final rotationCurrent =
+          controlledPlayer == null ? .0 : -players.indexWhere((player) => player.id == controlledPlayer.id) * 2 * math.pi / players.length;
       final Widget playersWidget = CircularLayout(
           largerChildren: true,
           rotationOffset: rotationCurrent,
@@ -175,7 +175,8 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                   onPressed: hasSelectedEnough
                       ? () {
                           if (widget.onDone == null) {
-                            ref.read(cMessageSenderProvider).sendPlayerInput(selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'));
+                            ref.read(cMessageSenderProvider).sendPlayerInput(
+                                selectedIndices.isEmpty ? 'none' : selectedIndices.map((index) => players[index].id).join(';'));
                           } else {
                             widget.onDone!(selectedIndices.map((i) => players[i]).toList());
                           }

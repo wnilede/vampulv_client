@@ -23,11 +23,14 @@ class RoleTypeDescription extends StatelessWidget {
             role.displayName,
             style: theme.textTheme.headlineMedium,
           ),
-          Text(
+          ContextAwareText(
             role.summary,
             style: theme.textTheme.titleMedium,
           ),
-          ContextAwareText(role.description),
+          ContextAwareText(
+            role.description,
+            style: theme.textTheme.bodyMedium,
+          ),
         ],
       ),
     );
@@ -61,11 +64,14 @@ class RoleDescription extends ConsumerWidget {
             role.getDisplayName(game, owner),
             style: theme.textTheme.headlineMedium,
           ),
-          Text(
+          ContextAwareText(
             role.getSummary(game, owner),
             style: theme.textTheme.titleMedium,
           ),
-          ContextAwareText(role.getDescription(game, owner)),
+          ContextAwareText(
+            role.getDescription(game, owner),
+            style: theme.textTheme.bodyMedium,
+          ),
           const SizedBox(height: 8),
           ...displayableProperties.entries.map((property) => Text(
                 '${property.key}: ${property.value}',

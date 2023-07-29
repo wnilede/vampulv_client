@@ -41,7 +41,7 @@ class WitchPoisonInputHandler extends InputHandler {
   WitchPoisonInputHandler({required this.usePoison})
       : super(
           title: 'Häxa',
-          description: 'Välj spelare att förgifta med häxa',
+          description: 'Välj spelare att förgifta med &witch',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);
             if (choosen == null) {
@@ -50,11 +50,11 @@ class WitchPoisonInputHandler extends InputHandler {
             usePoison();
             return [
               HurtEvent(playerId: choosen, appliedMorning: true),
-              'Du använde din häxa för att förgifta ${game.playerFromId(choosen).name}.',
+              'Du använde din &witch för att förgifta ${game.playerFromId(choosen).name}.',
             ];
           },
           widget: PlayerMap(
-            description: 'Välj vem du vill förgifta med din häxa',
+            description: 'Välj vem du vill förgifta',
             numberSelected: 1,
             canChooseFewer: true,
             onDone: null,
@@ -68,7 +68,7 @@ class WitchHealingInputHandler extends InputHandler {
   WitchHealingInputHandler({required this.useHealing})
       : super(
           title: 'Häxa',
-          description: 'Välj spelare att hela med häxa',
+          description: 'Välj spelare att hela med &witch',
           resultApplyer: (input, game, player) {
             final choosen = int.tryParse(input.message);
             if (choosen == null) {
@@ -77,11 +77,11 @@ class WitchHealingInputHandler extends InputHandler {
             useHealing();
             return [
               HurtEvent(playerId: choosen, livesLost: -1, appliedMorning: true),
-              'Du använde din häxa för att hela ${game.playerFromId(choosen).name}.',
+              'Du använde din &witch för att hela ${game.playerFromId(choosen).name}.',
             ];
           },
           widget: PlayerMap(
-            description: 'Välj vem du vill hela med din häxa',
+            description: 'Välj vem du vill hela',
             numberSelected: 1,
             canChooseFewer: true,
             onDone: null,

@@ -11,6 +11,7 @@ class ConfirmMessage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(child: child),
         MaterialButton(

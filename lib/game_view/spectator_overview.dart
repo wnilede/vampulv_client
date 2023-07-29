@@ -38,7 +38,14 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
             children: playersOrdered
                 .map((player) => ListView(
                     children: player.unhandledInputHandlers
-                        .map<Widget>((inputHandler) => ListItem(child: ContextAwareText(inputHandler.description)))
+                        .map<Widget>(
+                          (inputHandler) => ListItem(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: ContextAwareText(inputHandler.description),
+                            ),
+                          ),
+                        )
                         .defaultIfEmpty(Text(
                           player.lynchingDone || isNight ? 'Inget kvar att göra...' : 'Väljer spelare att förseslå för lynchning',
                           textAlign: TextAlign.center,
