@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../game_logic/game_provider.dart';
 import '../game_logic/role.dart';
 import '../game_logic/role_type.dart';
+import 'context_aware_text.dart';
 
 class RoleTypeDescription extends StatelessWidget {
   final RoleType role;
@@ -13,22 +14,22 @@ class RoleTypeDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: [
-        Text(
-          role.displayName,
-          style: theme.textTheme.headlineMedium,
-        ),
-        Text(
-          role.description,
-          style: theme.textTheme.titleMedium,
-        ),
-        Text(
-          role.detailedDescription,
-          style: theme.textTheme.bodyMedium,
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Rolldetaljer')),
+      body: ListView(
+        padding: const EdgeInsets.all(8),
+        children: [
+          Text(
+            role.displayName,
+            style: theme.textTheme.headlineMedium,
+          ),
+          Text(
+            role.summary,
+            style: theme.textTheme.titleMedium,
+          ),
+          ContextAwareText(role.description),
+        ],
+      ),
     );
   }
 }
@@ -40,38 +41,38 @@ class RoleDescription extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final game = ref.watch(cGameProvider);
     if (game == null) {
       return RoleTypeDescription(role.type);
     }
+    final theme = Theme.of(context);
     final owner = game.players.firstWhereOrDefault((player) => player.roles.contains(role));
     if (owner == null) {
       return RoleTypeDescription(role.type);
     }
     final displayableProperties = role.getDisplayableProperties(game, owner);
     displayableProperties['Ägare'] = owner.name;
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: [
-        Text(
-          role.getDisplayName(game, owner),
-          style: theme.textTheme.headlineMedium,
-        ),
-        Text(
-          role.getDescription(game, owner),
-          style: theme.textTheme.titleMedium,
-        ),
-        Text(
-          role.getDetailedDescription(game, owner),
-          style: theme.textTheme.bodyMedium,
-        ),
-        const SizedBox(height: 8),
-        ...displayableProperties.entries.map((property) => Text(
-              '${property.key}: ${property.value}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            )),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Rolldetaljer')),
+      body: ListView(
+        padding: const EdgeInsets.all(8),
+        children: [
+          Text(
+            role.getDisplayName(game, owner),
+            style: theme.textTheme.headlineMedium,
+          ),
+          Text(
+            role.getSummary(game, owner),
+            style: theme.textTheme.titleMedium,
+          ),
+          ContextAwareText(role.getDescription(game, owner)),
+          const SizedBox(height: 8),
+          ...displayableProperties.entries.map((property) => Text(
+                '${property.key}: ${property.value}',
+                style: Theme.of(context).textTheme.bodyLarge,
+              )),
+        ],
+      ),
     );
   }
 }

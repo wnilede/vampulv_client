@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../components/context_aware_text.dart';
 import '../components/list_item.dart';
 import '../game_logic/game_provider.dart';
 import '../game_logic/player.dart';
@@ -38,10 +39,10 @@ class LogPage extends ConsumerWidget {
                                   : 'Från ${game.playerFromId(logEntry.playerVisibleTo!).namePossissive} historik',
                               style: Theme.of(context).textTheme.labelLarge, //.copyWith(color: Theme.of(context).colorScheme.),
                             ),
-                            Text(logEntry.value),
+                            ContextAwareText(logEntry.value),
                           ],
                         )
-                      : Text(logEntry.value),
+                      : ContextAwareText(logEntry.value),
                 ))
             .reverse()
             .toList(),

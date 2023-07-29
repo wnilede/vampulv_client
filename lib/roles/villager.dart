@@ -11,13 +11,17 @@ class Villager extends Role {
           reactions: [
             RoleReaction<ProposeLynchingEvent>(
               priority: 40,
-              onApply: (event, game, player) => player.roles.every((role) => role is Villager) ? player.copyWith(votesInLynching: 2) : null,
+              onApply: (event, game, player) =>
+                  isMayor(player) ? player.copyWith(votesInLynching: 2) : null,
             ),
           ],
         );
 
+  static bool isMayor(Player owner) =>
+      owner.roles.every((role) => role is Villager);
+
   @override
   Map<String, String> getDisplayableProperties(Game game, Player owner) => {
-        'Borgmästare': owner.roles.every((role) => role is Villager) ? 'Ja' : 'Nej',
+        'Borgmästare': isMayor(owner) ? 'Ja' : 'Nej',
       };
 }

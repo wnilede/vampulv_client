@@ -71,7 +71,7 @@ class CardTurnerObserverInputHandler extends InputHandler {
     required CardTurnerRestrictions restrictions,
   }) : super(
           title: 'Kortvändare',
-          description: 'Välj observatör för kortvändaren',
+          description: 'Välj observatör för &cardTurner',
           widget: PlayerMap(
             description: 'Välj spelaren som ska se ett av någon annans kort',
             numberSelected: 1,
@@ -129,7 +129,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
     required CardTurnerRestrictions restrictions,
   }) : super(
           title: 'Kortvändare',
-          description: 'Välj observerad för kortvändaren',
+          description: 'Välj observerad för &cardTurner',
           widget: PlayerMap(
             description: 'Välj spelaren vars ena kort ska bli sett av $seeingPlayerName',
             numberSelected: 1,
@@ -172,12 +172,12 @@ class CardTurnerObservedInputHandler extends InputHandler {
                 (seeingPlayer) => seeingPlayer.copyWith(
                     unhandledInputHandlers: seeingPlayer.unhandledInputHandlers
                         .append(LateConfirmChildInputHandler(
-                          description: 'See roll visad av kortvändare',
+                          description: 'See roll visad av &cardTurner',
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('Någon har använt en kortvändare för att visa dig att en av rollerna som ${seenPlayer.name} har är',
+                                Text('Någon har använt en &cardTurner för att visa dig att en av rollerna som ${seenPlayer.name} har är',
                                     textAlign: TextAlign.center),
                                 RoleTypeCardView(seenRole.type),
                               ],
@@ -188,9 +188,9 @@ class CardTurnerObservedInputHandler extends InputHandler {
               ),
               LogEntry(
                 playerVisibleTo: seeingPlayerId,
-                value: 'Någons kortvändare visade dig att ${seenPlayer.name} har rollen ${seenRole.type.displayName}.',
+                value: 'Någons &cardTurner visade dig att ${seenPlayer.name} har rollen ${seenRole.type.displayName}.',
               ),
-              'Din kortvändare visade $seeingPlayerName en av rollerna ägd av ${seenPlayer.name}.',
+              'Din &cardTurner visade $seeingPlayerName en av rollerna ägd av ${seenPlayer.name}.',
             ];
           },
         );

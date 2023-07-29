@@ -24,13 +24,14 @@ class SeerTargetInputHandler extends InputHandler {
   SeerTargetInputHandler()
       : super(
           title: 'Spådam',
-          description: 'Välj spelare att använda spådamen på',
+          description: 'Välj spelare att använda &seer på',
           resultApplyer: (input, game, string) {
             final seenPlayer = game.playerFromId(int.parse(input.message));
             final seenPlayerIsVampulv = seenPlayer.roles.any((role) => role is Vampulv || role is Lycan);
             return [
-              EarlyConfirmChildInputHandler.withText('${seenPlayer.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en vampulv!'),
-              'Du använde din spådam för att se att ${seenPlayer.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en vampulv.',
+              EarlyConfirmChildInputHandler.withText(
+                  '${seenPlayer.name} är ${seenPlayerIsVampulv ? '' : 'inte '}en [&vampulv OR &lonelyPulv OR &lycan]!'),
+              'Du använde din spådam för att se att ${seenPlayer.name} ${seenPlayerIsVampulv ? '' : 'inte '}var en [&vampulv OR &lonelyPulv OR &lycan].',
             ];
           },
           widget: PlayerMap(

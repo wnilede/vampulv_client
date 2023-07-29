@@ -37,9 +37,9 @@ class Drunk extends Villager {
   @override
   String getDisplayName(Game game, Player owner) => RoleType.villager.displayName;
   @override
-  String getDescription(Game game, Player owner) => RoleType.villager.description;
+  String getSummary(Game game, Player owner) => RoleType.villager.summary;
   @override
-  String getDetailedDescription(Game game, Player owner) => RoleType.villager.detailedDescription;
+  String getDescription(Game game, Player owner) => RoleType.villager.description;
   @override
   String getImageName(Game game, Player owner) => '${RoleType.villager.name}$image';
 }

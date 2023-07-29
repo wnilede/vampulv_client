@@ -57,7 +57,7 @@ class PlayerMap extends ConsumerStatefulWidget {
       return 'Du kan inte välja dig själv.';
     }
     if (!player.alive && !deadPlayersSelectable) {
-      return 'Du kan inte välja döda personer.';
+      return 'Du kan inte välja döda spelare.';
     }
     if ((selectablePlayerFilter.any((id) => id == player.id) != filterIsWhitelist)) {
       return reasonForbidden;
@@ -129,9 +129,7 @@ class _UserMapState extends ConsumerState<PlayerMap> {
                         });
                       } else if (widget.numberSelected == 1) {
                         setState(() {
-                          selectedIndices = [
-                            i
-                          ];
+                          selectedIndices = [i];
                         });
                       } else {
                         setState(() {

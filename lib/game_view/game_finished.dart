@@ -33,7 +33,7 @@ class GameFinished extends ConsumerWidget {
                 text: otherPlayers
                     .where((player) => player.id != controlledPlayer.id)
                     .map((player) =>
-                        '\n${player.name} ${player.isWinner ? 'vann' : 'förlorade'} med ${player.roles.isEmpty ? 'inga roller' : player.roles.map((role) => role.type.displayName).listedNicely}')
+                        '\n${player.name} ${player.isWinner ? 'vann' : 'förlorade'} med ${player.roles.isEmpty ? 'inga roller' : player.roles.map((role) => role.type.displayName).listedNicelyAnd}')
                     .join(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),

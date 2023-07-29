@@ -62,10 +62,7 @@ class _RoleCardView extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (BuildContext context) => Scaffold(
-                    appBar: AppBar(title: const Text('Rolldetaljer')),
-                    body: showedOnTap,
-                  ),
+                  builder: (BuildContext context) => showedOnTap,
                 ),
               );
             },

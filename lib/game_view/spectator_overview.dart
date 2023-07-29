@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../components/context_aware_text.dart';
 import '../components/list_item.dart';
 import '../game_logic/game_provider.dart';
 
@@ -37,7 +38,7 @@ class _SpectatorViewState extends ConsumerState<SpectatorOverview> {
             children: playersOrdered
                 .map((player) => ListView(
                     children: player.unhandledInputHandlers
-                        .map<Widget>((inputHandler) => ListItem(child: Text(inputHandler.description)))
+                        .map<Widget>((inputHandler) => ListItem(child: ContextAwareText(inputHandler.description)))
                         .defaultIfEmpty(Text(
                           player.lynchingDone || isNight ? 'Inget kvar att göra...' : 'Väljer spelare att förseslå för lynchning',
                           textAlign: TextAlign.center,

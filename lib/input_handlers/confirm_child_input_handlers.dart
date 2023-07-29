@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/confirm_message.dart';
+import '../components/context_aware_text.dart';
 import '../game_logic/game.dart';
 import '../game_logic/player.dart';
 import '../game_logic/player_input.dart';
@@ -35,7 +36,7 @@ class _ConfirmChildInputHandler extends InputHandler {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Center(
-              child: Text(
+              child: ContextAwareText(
                 message,
                 textAlign: TextAlign.center,
               ),

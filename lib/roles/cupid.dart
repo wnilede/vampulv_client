@@ -74,7 +74,7 @@ class CupidTargetsInputHandler extends InputHandler {
           },
           widget: PlayerMap(
             numberSelected: numberOfTargets,
-            description: 'Välj spelare att använda cupid på',
+            description: 'Välj spelare att använda &cupid på',
             onDone: null,
           ),
         );
