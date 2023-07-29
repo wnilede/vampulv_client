@@ -8,7 +8,7 @@ class LonelyPulv extends Vampulv {
   LonelyPulv() {
     type = RoleType.lonelyPulv;
     reactions.add(
-      RoleReaction<GameEndsEvent>(
+      RoleReaction<EndScoringEvent>(
           priority: 60,
           worksAfterDeath: true,
           onApply: (event, game, player) {
