@@ -174,6 +174,7 @@ enum RoleType {
 
   Rule? produceRule() => switch (this) {
         RoleType.vampulv => VampulvRule(),
+        RoleType.hoodler => HoodlerRule(),
         _ => null,
       };
 }

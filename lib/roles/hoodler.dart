@@ -7,6 +7,7 @@ import '../game_logic/game.dart';
 import '../game_logic/player.dart';
 import '../game_logic/role.dart';
 import '../game_logic/role_type.dart';
+import '../game_logic/rule.dart';
 import '../game_logic/standard_events.dart';
 import '../input_handlers/input_handler.dart';
 import '../utility/list_strings_nicely.dart';
@@ -17,18 +18,6 @@ class Hoodler extends Role {
   List<int>? targets;
 
   Hoodler() : super(type: RoleType.hoodler) {
-    reactions.add(RoleReaction<NightBeginsEvent>(
-      priority: -27,
-      worksAfterDeath: true,
-      onApply: (event, game, player) => game.dayNumber >= nightWaking && targets == null
-          ? HoodlerTargetsInputHandler(
-              setTargets: (targets) {
-                this.targets = targets;
-              },
-              numberOfTargets: math.min(numberOfTargets, game.alivePlayers.where((other) => other.id != player.id).count()),
-            )
-          : null,
-    ));
     reactions.add(RoleReaction<EndScoringEvent>(
       priority: 8,
       worksAfterDeath: true,
@@ -73,4 +62,32 @@ class HoodlerTargetsInputHandler extends InputHandler {
             onDone: null,
           ),
         );
+}
+
+class HoodlerRule extends Rule {
+  HoodlerRule()
+      : super(reactions: [
+          // This is a RuleReaction instead of a RoleReaction because it applies to everyone having at least one hoodler, and it is important that it is not run multiple times for the same player.
+          RuleReaction<NightBeginsEvent>(
+            priority: -27,
+            onApply: (event, game) => game.dayNumber >= Hoodler.nightWaking
+                ? game.players
+                    .where((player) => player.roles.any((role) => role is Hoodler && role.targets == null))
+                    .map((player) => player.copyWith(
+                        unhandledInputHandlers: player.unhandledInputHandlers
+                            .append(HoodlerTargetsInputHandler(
+                              setTargets: (targets) {
+                                for (Hoodler hoodler in player.roles.whereType<Hoodler>()) {
+                                  hoodler.targets = targets;
+                                }
+                              },
+                              numberOfTargets: math.min(
+                                Hoodler.numberOfTargets * player.roles.whereType<Hoodler>().count(),
+                                game.alivePlayers.where((other) => other.id != player.id).count(),
+                              ),
+                            ))
+                            .toList()))
+                : null,
+          )
+        ]);
 }
