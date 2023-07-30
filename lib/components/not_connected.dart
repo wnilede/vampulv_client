@@ -19,32 +19,31 @@ class NotConnected extends ConsumerWidget {
                   CircularProgressIndicator(),
                 ]
               : [
-                  Text(messageSender.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const ChangeServer()),
-                            );
-                          },
-                          child: const Text('Öppna serverinställningar'),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            ref.invalidate(cMessageSenderProvider);
-                          },
-                          child: const Text('Försök igen'),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    messageSender.error!,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    textAlign: TextAlign.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ChangeServer()),
+                        );
+                      },
+                      child: const Text('Öppna serverinställningar', textAlign: TextAlign.center),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        ref.invalidate(cMessageSenderProvider);
+                      },
+                      child: const Text('Försök igen', textAlign: TextAlign.center),
+                    ),
                   ),
                 ],
         ),
