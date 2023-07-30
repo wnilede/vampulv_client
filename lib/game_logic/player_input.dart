@@ -11,6 +11,7 @@ class PlayerInput with _$PlayerInput {
     required String message,
     required int ownerId,
     required int playerInputNumber,
+    required bool removesInputHandler,
   }) = _PlayerInput;
   factory PlayerInput.fromJson(Map<String, Object?> json) => _$PlayerInputFromJson(json);
   const PlayerInput._();
@@ -21,11 +22,13 @@ class PlayerInput with _$PlayerInput {
     required int ownerId,
     required int playerInputNumber,
     required Object body,
+    bool removesInputHandler = true,
   }) {
     return PlayerInput(
       ownerId: ownerId,
       playerInputNumber: playerInputNumber,
       message: body is String ? body : json.encode(body),
+      removesInputHandler: removesInputHandler,
     );
   }
 }

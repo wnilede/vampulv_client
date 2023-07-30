@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../game_logic/game.dart';
+import '../game_logic/lynching.dart';
 import '../game_logic/player.dart';
 import '../game_logic/player_input.dart';
-import '../game_logic/standard_input_handlers.dart';
 import '../roles/card_turner.dart';
 import '../roles/cupid.dart';
 import '../roles/hoodler.dart';
@@ -19,10 +19,10 @@ abstract class InputHandler {
   /// Determines in which order InputHandlers of different types are evaluated. Input handlers of the same type are evaluated in the order they were added to the player.
   static const typeOrder = [
     EarlyConfirmChildInputHandler,
+    LynchingVoteInputHandler,
     CardTurnerObservedInputHandler,
     HunterTargetInputHandler,
     HunterBlockingInputHanlder,
-    LynchingVoteInputHandler,
     CupidTargetsInputHandler,
     HoodlerTargetsInputHandler,
     VampulvTargetInputHandler,
@@ -32,7 +32,6 @@ abstract class InputHandler {
     WitchPoisonInputHandler,
     WitchHealingInputHandler,
     CardTurnerObserverInputHandler,
-    LynchingWaitingResultInputHandler,
     LateConfirmChildInputHandler,
   ];
 

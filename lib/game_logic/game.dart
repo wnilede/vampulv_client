@@ -11,6 +11,7 @@ import '../utility/summarize_difference_jsons.dart';
 import 'event.dart';
 import 'game_configuration.dart';
 import 'log_entry.dart';
+import 'lynching.dart';
 import 'player.dart';
 import 'player_input.dart';
 import 'role.dart';
@@ -96,6 +97,7 @@ class Game with _$Game {
           .nonNulls
           .append(StandardRule())
           .append(NightSummaryRule())
+          .append(LynchingRule())
           .toList(),
     ) //
         ._runUntilInput()
@@ -139,7 +141,8 @@ class Game with _$Game {
         .copyWithPlayerModification(
             input.ownerId,
             (player) => player.copyWith(
-                  unhandledInputHandlers: player.unhandledInputHandlers.exclude(inputHandler).toList(),
+                  unhandledInputHandlers:
+                      input.removesInputHandler ? player.unhandledInputHandlers.exclude(inputHandler).toList() : player.unhandledInputHandlers,
                   handledInputs: player.handledInputs + 1,
                 ))
         ._runUntilInput();

@@ -7,7 +7,6 @@ import 'event.dart';
 import 'player.dart';
 import 'rule.dart';
 import 'standard_events.dart';
-import 'standard_input_handlers.dart';
 
 class StandardRule extends Rule {
   StandardRule()
@@ -20,19 +19,12 @@ class StandardRule extends Rule {
               'Dag ${game.dayNumber} startade.',
             ],
           ),
-          // Set game night field when event is sent and reset lynchinging ability.
+          // Set game night field when event is sent
           RuleReaction<NightBeginsEvent>(
             priority: 0,
             onApply: (event, game) => [
               game.copyWith(
                 isNight: true,
-                players: game.players
-                    .map((player) => player.copyWith(
-                          lynchingDone: !player.alive,
-                          previouslyProposed: [],
-                          votesInLynching: 1,
-                        ))
-                    .toList(),
                 dayNumber: game.dayNumber + 1,
               ),
               'Natt ${game.dayNumber + 1} startade.',
@@ -88,28 +80,6 @@ class StandardRule extends Rule {
                 }),
                 '${dyingPlayer.name} dog.',
               ];
-            },
-          ),
-          // Add input handlers for voting when lynching is proposed.
-          RuleReaction<ProposeLynchingEvent>(
-            priority: 0,
-            onApply: (event, game) {
-              Player proposed = game.playerFromId(event.proposedId);
-              Player proposer = game.playerFromId(event.proposerId);
-              return game.alivePlayers.map(
-                (player) {
-                  if (player.id == proposer.id) {
-                    player = player.copyWith(previouslyProposed: player.previouslyProposed.append(proposed.id).toList());
-                  }
-                  return player.copyWith(
-                    lynchingVote: null,
-                    unhandledInputHandlers: player.unhandledInputHandlers
-                        .append(LynchingVoteInputHandler(proposer: proposer, proposed: proposed))
-                        .append(LynchingWaitingResultInputHandler())
-                        .toList(),
-                  );
-                },
-              ).toList();
             },
           ),
           // Set game field when GameEndsEvent is sent.

@@ -51,7 +51,7 @@ class MessageSender with _$MessageSender {
     ));
   }
 
-  void sendPlayerInput(Object value) {
+  void sendPlayerInput(Object value, {bool removesInputHandler = true}) {
     final player = ref.read(controlledPlayerProvider);
     if (player == null) return;
     sendChange(NetworkMessage.fromObject(
@@ -60,6 +60,7 @@ class MessageSender with _$MessageSender {
         ownerId: player.id,
         playerInputNumber: player.handledInputs,
         body: value,
+        removesInputHandler: removesInputHandler,
       ),
     ));
   }
