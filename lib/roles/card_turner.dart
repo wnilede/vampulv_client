@@ -165,7 +165,7 @@ class CardTurnerObservedInputHandler extends InputHandler {
             }
 
             final seenPlayer = game.playerFromId(int.parse(input.message));
-            final seenRole = seenPlayer.roles[game.randomGenerator.nextInt(seenPlayer.roles.length)];
+            final seenRole = seenPlayer.roles.isEmpty ? null : seenPlayer.roles[game.randomGenerator.nextInt(seenPlayer.roles.length)];
 
             return [
               game.copyWithPlayerModification(
@@ -179,9 +179,9 @@ class CardTurnerObservedInputHandler extends InputHandler {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ContextAwareText(
-                                    'Någon har använt en &cardTurner för att visa dig att en av rollerna som ${seenPlayer.name} har är',
+                                    'Någon har använt en &cardTurner för att visa dig att ${seenRole == null ? '${seenPlayer.name} inte har någon roll' : 'en av rollerna som ${seenPlayer.name} har är'}',
                                     textAlign: TextAlign.center),
-                                RoleTypeCardView(seenRole.type),
+                                if (seenRole != null) RoleTypeCardView(seenRole.type),
                               ],
                             ),
                           ),
@@ -190,7 +190,8 @@ class CardTurnerObservedInputHandler extends InputHandler {
               ),
               LogEntry(
                 playerVisibleTo: seeingPlayerId,
-                value: 'Någons &cardTurner visade dig att ${seenPlayer.name} har rollen ${seenRole.type.displayName}.',
+                value:
+                    'Någons &cardTurner visade dig att ${seenPlayer.name} ${seenRole == null ? 'inte har någon roll.' : 'har rollen &${seenRole.type.name}.'}',
               ),
               'Din &cardTurner visade $seeingPlayerName en av rollerna ägd av ${seenPlayer.name}.',
             ];
