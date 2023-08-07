@@ -10,6 +10,7 @@ import '../game_logic/role.dart';
 import '../game_logic/role_type.dart';
 import '../game_logic/standard_events.dart';
 import '../input_handlers/input_handler.dart';
+import '../utility/list_strings_nicely.dart';
 
 class Cupid extends Role {
   static const int numberOfTargets = 2;
@@ -19,15 +20,17 @@ class Cupid extends Role {
   Cupid() : super(type: RoleType.cupid) {
     reactions.add(RoleReaction<NightBeginsEvent>(
       priority: -23,
-      worksAfterDeath: false,
-      onApply: (event, game, player) => game.dayNumber >= nightWaking && targets == null
-          ? CupidTargetsInputHandler(
-              setTargets: (targets) {
-                this.targets = targets;
-              },
-              numberOfTargets: math.min(numberOfTargets, game.alivePlayers.count()),
-            )
-          : null,
+      onApply: (event, game, player) {
+        final numberAllowedTargets = math.min(numberOfTargets, game.alivePlayers.count());
+        return game.dayNumber >= nightWaking && targets == null
+            ? CupidTargetsInputHandler(
+                setTargets: (targets) {
+                  this.targets = targets;
+                },
+                numberOfTargets: numberAllowedTargets == 1 ? 0 : numberAllowedTargets,
+              )
+            : null;
+      },
     ));
     reactions.add(RoleReaction<DieEvent>(
       priority: 8,
@@ -65,12 +68,16 @@ class CupidTargetsInputHandler extends InputHandler {
           title: 'Cupid',
           description: 'Välj spelare att cupida&cupid',
           resultApplyer: (input, game, player) {
-            setTargets(input.message == 'none'
-                ? []
+            final targets = input.message == 'none'
+                ? <int>[]
                 : input.message //
                     .split(';')
                     .map((stringId) => int.parse(stringId))
-                    .toList());
+                    .toList();
+            setTargets(targets);
+            return targets.isEmpty
+                ? 'Det fanns inte kvar nog med spelare för din &cupid att välja.'
+                : 'Du valde ${targets.map((target) => game.playerFromId(target).name).listedNicelyAnd} för din &cupid.';
           },
           widget: PlayerMap(
             numberSelected: numberOfTargets,
