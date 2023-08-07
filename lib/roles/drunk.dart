@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:darq/darq.dart';
 
 import '../game_logic/game.dart';
@@ -21,9 +23,13 @@ class Drunk extends Villager {
                 'Det visar sig att en av dina roller var &drunk, förklädd som en vanlig &villager! Du kommer nu att få nya roller.',
                 onConfirm: (input, game, owner) {
                   final shuffledDeck = game.rolesInDeck.randomize(game.randomGenerator).toList();
+                  final numberNewRoles = math.min(shuffledDeck.length, game.configuration.rolesPerPlayer);
                   return [
-                    game.copyWith(rolesInDeck: shuffledDeck.sublist(game.configuration.rolesPerPlayer)),
-                    owner.copyWith(roles: game.rolesInDeck.sublist(0, game.configuration.rolesPerPlayer)),
+                    game.copyWith(rolesInDeck: shuffledDeck.sublist(numberNewRoles)),
+                    owner.copyWith(roles: [
+                      ...owner.roles.randomize(game.randomGenerator).take(game.configuration.rolesPerPlayer - numberNewRoles),
+                      ...game.rolesInDeck.take(numberNewRoles),
+                    ]),
                     '&Drunk aktiverades och du fick nya roller',
                   ];
                 },
